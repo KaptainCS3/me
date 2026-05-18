@@ -36,4 +36,18 @@ export const WINDOW_CONFIGS: Record<string, WindowConfig> = {
     h: 360,
     content: "terminal",
   },
+  "about-os": {
+    title: "About PortfolioOS",
+    icon: "ℹ️",
+    w: 420,
+    h: 300,
+    content: "about-os",
+  },
+  "resume-viewer": {
+    title: "Resume.pdf",
+    icon: "📄",
+    w: 700,
+    h: 550,
+    content: "resume-viewer",
+  },
 }

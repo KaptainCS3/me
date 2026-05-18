@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useRef, useCallback } from "react"
+import { useState, useRef, useCallback, useEffect } from "react"
 import type { WindowConfig } from "@/types/portfolio"
 import { WindowContent } from "./WindowContent"
 
@@ -10,6 +10,8 @@ interface WindowProps {
   pos: { x: number; y: number }
   zIndex: number
   isMinimized: boolean
+  isFocused: boolean
+  zoomSignal: number
   onClose: () => void
   onMinimize: () => void
   onFocus: () => void
@@ -52,6 +54,8 @@ export function Window({
   pos,
   zIndex,
   isMinimized,
+  isFocused,
+  zoomSignal,
   onClose,
   onMinimize,
   onFocus,
@@ -60,6 +64,14 @@ export function Window({
   const [position, setPosition] = useState(pos)
   const [size] = useState({ w: config.w, h: config.h })
   const [isMaximized, setIsMaximized] = useState(false)
+  const prevZoom = useRef(zoomSignal)
+
+  useEffect(() => {
+    if (isFocused && zoomSignal !== prevZoom.current) {
+      setIsMaximized((m) => !m)
+      prevZoom.current = zoomSignal
+    }
+  }, [zoomSignal, isFocused])
 
   const onMouseDown = useCallback(
     (e: React.MouseEvent) => {

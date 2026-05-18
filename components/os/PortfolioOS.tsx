@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useRef, useCallback } from "react"
+import { useState, useRef, useCallback, useEffect, useMemo } from "react"
 import { useTime } from "@/hooks/useTime"
 import { useWallpaper } from "@/hooks/useWallpaper"
 import { WINDOW_CONFIGS } from "@/data/windowConfigs"
@@ -12,7 +12,8 @@ import { Window } from "./Window"
 import { DockItem } from "./DockItem"
 import { ContextMenu } from "./ContextMenu"
 import { WallpaperPicker } from "./WallpaperPicker"
-import type { WindowState } from "@/types/portfolio"
+import { FileInfoModal } from "./FileInfoModal"
+import type { WindowState, DesktopItem } from "@/types/portfolio"
 
 const DOCK_BOTTOM_GAP = 10
 
@@ -22,11 +23,37 @@ export default function PortfolioOS() {
   const desktopRef = useRef<HTMLDivElement>(null)
   const dockTimeoutRef = useRef<number | null>(null)
   const dockHoveredRef = useRef(false)
+  const actionRef = useRef<((action: string) => void) | null>(null)
   const [windows, setWindows] = useState<Record<string, WindowState>>({})
   const [zCounter, setZCounter] = useState(10)
+  const [focusedWindow, setFocusedWindow] = useState<string | null>(null)
+  const [zoomSignal, setZoomSignal] = useState(0)
   const [contextMenu, setContextMenu] = useState<{ x: number; y: number } | null>(null)
   const [showWallpaperPicker, setShowWallpaperPicker] = useState(false)
   const [dockVisible, setDockVisible] = useState(false)
+  const [fileInfoItem, setFileInfoItem] = useState<DesktopItem | null>(null)
+
+  const DEFAULT_DESKTOP_ITEMS: DesktopItem[] = useMemo(
+    () => [
+      {
+        id: "resume",
+        icon: "📄",
+        label: "Resume.pdf",
+        x: 32,
+        y: 32,
+      },
+      {
+        id: "about",
+        icon: "👤",
+        label: "About.md",
+        x: 32,
+        y: 116,
+      },
+    ],
+    [],
+  )
+
+  const [desktopItems, setDesktopItems] = useState<DesktopItem[]>(DEFAULT_DESKTOP_ITEMS)
 
   const openWindow = useCallback(
     (id: string) => {
@@ -64,6 +91,7 @@ export default function PortfolioOS() {
       delete n[id]
       return n
     })
+    setFocusedWindow((f) => (f === id ? null : f))
   }
 
   const minimizeWindow = (id: string) => {
@@ -71,12 +99,215 @@ export default function PortfolioOS() {
   }
 
   const focusWindow = (id: string) => {
+    setFocusedWindow(id)
     setZCounter((z) => {
       const newZ = z + 1
       setWindows((w) => ({ ...w, [id]: { ...w[id], z: newZ } }))
       return newZ
     })
   }
+
+  const handleMenuAction = useCallback(
+    (action: string) => {
+      switch (action) {
+        case "new-window":
+          openWindow("about")
+          break
+        case "close-window":
+          if (focusedWindow) closeWindow(focusedWindow)
+          break
+        case "change-wallpaper":
+          setShowWallpaperPicker(true)
+          break
+        case "toggle-dock":
+          setDockVisible((v) => !v)
+          if (dockTimeoutRef.current) clearTimeout(dockTimeoutRef.current)
+          break
+        case "fullscreen":
+          document.documentElement.requestFullscreen()
+          break
+        case "minimize":
+        case "hide":
+          if (focusedWindow) minimizeWindow(focusedWindow)
+          break
+        case "zoom":
+          if (focusedWindow) setZoomSignal((s) => s + 1)
+          break
+        case "about-os":
+          openWindow("about-os")
+          break
+        case "github":
+          window.open("https://github.com/kaptaincs3", "_blank")
+          break
+        case "quit":
+          Object.keys(windows).forEach((id) => closeWindow(id))
+          break
+        case "cycle-windows": {
+          const ids = Object.keys(windows)
+          if (ids.length === 0) break
+          const idx = focusedWindow ? ids.indexOf(focusedWindow) : -1
+          const next = ids[(idx + 1) % ids.length]
+          focusWindow(next)
+          break
+        }
+        case "open-about":
+          openWindow("about")
+          break
+        case "open-projects":
+          openWindow("projects")
+          break
+        case "open-skills":
+          openWindow("skills")
+          break
+        case "open-contact":
+          openWindow("contact")
+          break
+        case "open-terminal":
+          openWindow("terminal")
+          break
+      }
+    },
+    [focusedWindow, openWindow, windows],
+  )
+
+  const handleDropFiles = useCallback(
+    (files: FileList, dropX: number, dropY: number) => {
+      const newItems: DesktopItem[] = Array.from(files).map((file, i) => {
+        const id = `dropped-${Date.now()}-${i}`
+        const icon = file.type.startsWith("image/")
+          ? "🖼️"
+          : file.type === "application/pdf"
+            ? "📄"
+            : "📁"
+        const item: DesktopItem = {
+          id,
+          icon,
+          label: file.name,
+          x: dropX + i * 20,
+          y: dropY + i * 20,
+          fileMeta: {
+            name: file.name,
+            size: file.size,
+            type: file.type,
+          },
+        }
+        if (file.type.startsWith("image/")) {
+          const reader = new FileReader()
+          reader.onload = () => {
+            setDesktopItems((prev) =>
+              prev.map((di) =>
+                di.id === id && reader.result
+                  ? { ...di, fileMeta: { ...di.fileMeta!, dataUrl: reader.result as string } }
+                  : di,
+              ),
+            )
+          }
+          reader.readAsDataURL(file)
+        }
+        return item
+      })
+      setDesktopItems((prev) => [...prev, ...newItems])
+    },
+    [],
+  )
+
+  const handleMoveItem = useCallback((id: string, x: number, y: number) => {
+    setDesktopItems((prev) =>
+      prev.map((item) => (item.id === id ? { ...item, x, y } : item)),
+    )
+  }, [])
+
+  const handleDesktopIconClick = useCallback(
+    (id: string) => {
+      if (id === "resume") {
+        openWindow("resume-viewer")
+        return
+      }
+      if (id === "about") {
+        openWindow("about")
+        return
+      }
+      if (id.startsWith("dropped-")) {
+        const item = desktopItems.find((di) => di.id === id)
+        if (item) setFileInfoItem(item)
+      }
+    },
+    [openWindow, desktopItems],
+  )
+
+  actionRef.current = handleMenuAction
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const mod = e.metaKey || e.ctrlKey
+      if (!mod) return
+      e.stopImmediatePropagation()
+      const act = actionRef.current
+      if (!act) return
+      switch (e.key.toLowerCase()) {
+        case "n":
+          e.preventDefault()
+          act("new-window")
+          break
+        case "w":
+          e.preventDefault()
+          act("close-window")
+          break
+        case "m":
+          e.preventDefault()
+          act("minimize")
+          break
+        case "h":
+          e.preventDefault()
+          act("hide")
+          break
+        case "q":
+          e.preventDefault()
+          act("quit")
+          break
+        case "d":
+          if (e.altKey) {
+            e.preventDefault()
+            act("toggle-dock")
+          }
+          break
+        case ",":
+          e.preventDefault()
+          act("change-wallpaper")
+          break
+        case "`":
+          e.preventDefault()
+          act("cycle-windows")
+          break
+        case "0":
+          e.preventDefault()
+          act("about-os")
+          break
+        case "1":
+          e.preventDefault()
+          act("open-about")
+          break
+        case "2":
+          e.preventDefault()
+          act("open-projects")
+          break
+        case "3":
+          e.preventDefault()
+          act("open-skills")
+          break
+        case "4":
+          e.preventDefault()
+          act("open-contact")
+          break
+        case "5":
+          e.preventDefault()
+          act("open-terminal")
+          break
+      }
+    }
+    document.addEventListener("keydown", onKey, { capture: true })
+    return () => document.removeEventListener("keydown", onKey, { capture: true })
+  }, [])
 
   const handleContextMenu = useCallback((e: React.MouseEvent) => {
     e.preventDefault()
@@ -161,15 +392,26 @@ export default function PortfolioOS() {
         }}
       />
 
-      <MenuBar dateStr={dateStr} timeStr={timeStr} />
-      <DesktopIcons />
-
+      <MenuBar
+        dateStr={dateStr}
+        timeStr={timeStr}
+        onAction={handleMenuAction}
+        focusedWindow={focusedWindow}
+        openWindows={Object.keys(windows)}
+        onFocusWindow={focusWindow}
+      />
       <WelcomeOverlay visible={Object.keys(windows).length === 0} />
 
       <div
         ref={desktopRef}
         className="absolute top-6.5 left-0 right-0 bottom-0"
       >
+        <DesktopIcons
+          items={desktopItems}
+          onMoveItem={handleMoveItem}
+          onDropFiles={handleDropFiles}
+          onItemClick={handleDesktopIconClick}
+        />
         {Object.entries(windows).map(([id, state]) => (
           <Window
             key={id}
@@ -178,6 +420,8 @@ export default function PortfolioOS() {
             pos={state.pos}
             zIndex={state.z}
             isMinimized={state.minimized}
+            isFocused={id === focusedWindow}
+            zoomSignal={zoomSignal}
             onClose={() => closeWindow(id)}
             onMinimize={() => minimizeWindow(id)}
             onFocus={() => focusWindow(id)}
@@ -232,6 +476,13 @@ export default function PortfolioOS() {
           onSelect={setWallpaper}
           onReset={resetWallpaper}
           onClose={() => setShowWallpaperPicker(false)}
+        />
+      )}
+
+      {fileInfoItem && (
+        <FileInfoModal
+          item={fileInfoItem}
+          onClose={() => setFileInfoItem(null)}
         />
       )}
     </div>

@@ -42,3 +42,19 @@ export interface WallpaperPreset {
   name: string
   value: string
 }
+
+export interface FileMeta {
+  name: string
+  size: number
+  type: string
+  dataUrl?: string
+}
+
+export interface DesktopItem {
+  id: string
+  icon: string
+  label: string
+  x: number
+  y: number
+  fileMeta?: FileMeta
+}
