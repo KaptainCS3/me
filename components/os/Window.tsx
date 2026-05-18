@@ -16,6 +16,36 @@ interface WindowProps {
   desktopRef: React.RefObject<HTMLDivElement | null>
 }
 
+function TrafficBtn({
+  color,
+  hoverColor,
+  icon,
+  onClick,
+}: {
+  color: string
+  hoverColor: string
+  icon: string
+  onClick: () => void
+}) {
+  const [hovered, setHovered] = useState(false)
+
+  return (
+    <button
+      onClick={onClick}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      className="w-3 h-3 rounded-full border-none cursor-pointer flex items-center justify-center transition-[filter] duration-150 hover:brightness-125"
+      style={{ background: color }}
+    >
+      {hovered && (
+        <span className="text-[7px] font-bold" style={{ color: hoverColor }}>
+          {icon}
+        </span>
+      )}
+    </button>
+  )
+}
+
 export function Window({
   id,
   config,
@@ -58,8 +88,6 @@ export function Window({
     [position, size, isMaximized, onFocus, desktopRef],
   )
 
-  if (isMinimized) return null
-
   return (
     <div
       style={{
@@ -67,10 +95,11 @@ export function Window({
         top: isMaximized ? 0 : position.y,
         left: isMaximized ? 0 : position.x,
         width: isMaximized ? "100%" : size.w,
-        height: isMaximized ? "calc(100% - 72px)" : size.h,
+        height: isMaximized ? "100%" : size.h,
         zIndex,
         borderRadius: isMaximized ? 0 : 12,
         overflow: "hidden",
+        display: isMinimized ? "none" : undefined,
       }}
       className="border border-[#1e3a4a]/50 shadow-[0_32px_80px_rgba(0,0,0,0.7),0_0_0_0.5px_#0a2030] flex flex-col"
       onMouseDown={onFocus}
@@ -80,17 +109,23 @@ export function Window({
         className="h-9 flex items-center px-3 cursor-default select-none shrink-0 bg-[#0d1f2d] border-b border-[#1e3a4a]/50"
       >
         <div className="flex gap-[7px] mr-3">
-          <button
+          <TrafficBtn
+            color="#ff5f57"
+            hoverColor="#400"
+            icon="✕"
             onClick={onClose}
-            className="w-3 h-3 rounded-full bg-[#ff5f57] border-none cursor-pointer transition-[filter] duration-150 hover:brightness-125"
           />
-          <button
+          <TrafficBtn
+            color="#febc2e"
+            hoverColor="#400"
+            icon="−"
             onClick={onMinimize}
-            className="w-3 h-3 rounded-full bg-[#febc2e] border-none cursor-pointer"
           />
-          <button
+          <TrafficBtn
+            color="#28c840"
+            hoverColor="#040"
+            icon="⤢"
             onClick={() => setIsMaximized((m) => !m)}
-            className="w-3 h-3 rounded-full bg-[#28c840] border-none cursor-pointer"
           />
         </div>
         <span className="text-xs text-[#6b8fa0] flex-1 text-center">

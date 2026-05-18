@@ -36,3 +36,9 @@ export interface WindowState {
   minimized: boolean
   z: number
 }
+
+export interface WallpaperPreset {
+  id: string
+  name: string
+  value: string
+}

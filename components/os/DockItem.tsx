@@ -15,7 +15,7 @@ export function DockItem({ app, isOpen, onClick }: DockItemProps) {
   return (
     <div className="flex flex-col items-center relative">
       {hovered && (
-        <div className="absolute bottom-[65px] bg-black/75 backdrop-blur-md text-white text-[11px] px-2.5 py-1 rounded-md whitespace-nowrap border border-[#1e3a4a]/50 pointer-events-none">
+        <div className="absolute bottom-16.25 bg-black/75 backdrop-blur-md text-white text-[11px] px-2.5 py-1 rounded-md whitespace-nowrap border border-[#1e3a4a]/50 pointer-events-none">
           {app.label}
         </div>
       )}
@@ -27,9 +27,7 @@ export function DockItem({ app, isOpen, onClick }: DockItemProps) {
       >
         {app.icon}
       </button>
-      {isOpen && (
-        <div className="w-1 h-1 rounded-full bg-[#34d399] mt-0.5" />
-      )}
+      {isOpen && <div className="w-1 h-1 rounded-full bg-[#34d399] mt-0.5" />}
     </div>
-  )
+  );
 }
