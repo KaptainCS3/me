@@ -84,7 +84,7 @@ const VIRTUAL_FS: Record<string, { type: "file" | "dir"; content?: string; child
     const exp = RESUME.experience.map((e) => `  ${e.role} @ ${e.company} (${e.period})`).join("\n")
     return `${RESUME.name} — ${RESUME.title}\n\nLanguages: ${RESUME.languages.join(", ")}\nTools: ${RESUME.tools.join(", ")}\nLearning: ${RESUME.currentlyLearning.join(", ")}\n\nExperience:\n${exp}\n\nEducation: ${RESUME.education[0].degree} — ${RESUME.education[0].institution}`
   })() },
-  "/home/kaptain/projects.json": { type: "file", content: (() => {
+  "/home/appelgryn/projects.json": { type: "file", content: (() => {
     const p = PROJECTS.map((pr) => {
       let out = `${pr.name}\n  Tech: ${pr.tech.join(", ")}\n  ${pr.desc}`
       if (pr.stack) out += `\n  Stack: ${pr.stack.join(", ")}`
@@ -93,7 +93,7 @@ const VIRTUAL_FS: Record<string, { type: "file" | "dir"; content?: string; child
     }).join("\n\n")
     return p
   })() },
-  "/home/kaptain/skills.json": { type: "file", content: (() => {
+  "/home/appelgryn/skills.json": { type: "file", content: (() => {
     return SKILLS.map((s) => `${s.cat}: ${s.items.join(", ")}`).join("\n")
   })() },
   "/home/appelgryn/contact.md": { type: "file", content: `Email: ${RESUME.email}\nLinkedIn: ${RESUME.linkedin}\nGitHub: ${RESUME.github}\nTwitter: @KaptainCS3` },
@@ -117,9 +117,9 @@ for (const s of SKILLS) {
 }
 
 function resolvePath(raw: string): string {
-  let p = raw.replace(/^~/, "/home/appelgryn")
-  if (!p.startsWith("/")) p = "/home/appelgryn/" + p
-  p = p.replace(/\/+$/, "") || "/home/appelgryn"
+  let p = raw.replace(/^~/, ENV.HOME)
+  if (!p.startsWith("/")) p = ENV.PWD + "/" + p
+  p = p.replace(/\/+$/, "") || ENV.HOME
   return p
 }
 
@@ -412,6 +412,21 @@ export function buildCommands(): Map<string, Command> {
   })
 
   reg({
+    name: "cd",
+    desc: "Change directory",
+    usage: "cd [path]",
+    handler(args) {
+      const target = args[0] || ENV.HOME
+      const resolved = resolvePath(target)
+      const node = getNode(resolved)
+      if (!node) return lines(`cd: ${target}: No such file or directory`)
+      if (node.type !== "dir") return lines(`cd: ${target}: Not a directory`)
+      ENV.PWD = resolved
+      return lines("")
+    },
+  })
+
+  reg({
     name: "pwd",
     desc: "Print working directory",
     usage: "pwd",
@@ -434,7 +449,8 @@ export function buildCommands(): Map<string, Command> {
     desc: "Show how long the system has been running",
     usage: "uptime",
     handler() {
-      const mins = Math.floor((Date.now() - (typeof performance !== "undefined" ? performance.timing?.navigationStart ?? 0 : 0)) / 60000)
+      const navStart = typeof performance !== "undefined" ? (performance.timeOrigin ?? Date.now()) : Date.now()
+      const mins = Math.floor((Date.now() - navStart) / 60000)
       const h = Math.floor(mins / 60)
       const m = mins % 60
       const users = Object.keys(VIRTUAL_FS).length

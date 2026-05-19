@@ -24,7 +24,7 @@ export function AboutOSContent() {
       </p>
 
       <div className="mt-5 pt-4 border-t border-[#1e3a4a]/50 w-full text-[10px] text-[#4a6b7a]">
-        Built by KaptainCS3 &middot; Open source on GitHub
+        Built by KaptainCS3 &middot; <a href="https://github.com/kaptaincs3/portoflio" target="_blank" rel="noopener noreferrer" className="underline hover:text-[#6b8fa0]">Open source on GitHub</a>
       </div>
     </div>
   )
