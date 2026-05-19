@@ -3,13 +3,19 @@
 import { useState, useRef, useEffect, useMemo } from "react"
 import { TERMINAL_LINES } from "@/data/terminalLines"
 import { buildCommands } from "@/data/commands"
-import type { TerminalLine } from "@/types/portfolio"
+import { useTerminalStore } from "@/stores/terminalStore"
 
 export function TerminalContent({ onClose }: { onClose?: () => void }) {
-  const [lines, setLines] = useState<TerminalLine[]>([TERMINAL_LINES[0]])
-  const [idx, setIdx] = useState(1)
+  const lines = useTerminalStore((s) => s.lines)
+  const idx = useTerminalStore((s) => s.idx)
+  const history = useTerminalStore((s) => s.history)
+  const addBootLine = useTerminalStore((s) => s.addBootLine)
+  const addLine = useTerminalStore((s) => s.addLine)
+  const addLines = useTerminalStore((s) => s.addLines)
+  const setLines = useTerminalStore((s) => s.setLines)
+  const pushHistory = useTerminalStore((s) => s.pushHistory)
+
   const [input, setInput] = useState("")
-  const [history, setHistory] = useState<string[]>([])
   const [histIdx, setHistIdx] = useState(-1)
   const endRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -18,12 +24,11 @@ export function TerminalContent({ onClose }: { onClose?: () => void }) {
   useEffect(() => {
     if (idx < TERMINAL_LINES.length - 1) {
       const t = setTimeout(() => {
-        setLines((l) => [...l, TERMINAL_LINES[idx]])
-        setIdx((i) => i + 1)
+        addBootLine(TERMINAL_LINES[idx])
       }, 420)
       return () => clearTimeout(t)
     }
-  }, [idx])
+  }, [idx, addBootLine])
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth" })
@@ -44,10 +49,7 @@ export function TerminalContent({ onClose }: { onClose?: () => void }) {
         setInput(completions[0])
       } else if (completions.length > 1) {
         const unique = [...new Set(completions.map((c) => c.split(" ")[0]))]
-        setLines((l) => [
-          ...l,
-          { out: unique.join("  ") },
-        ])
+        addLine({ out: unique.join("  ") })
       }
       return
     }
@@ -80,8 +82,8 @@ export function TerminalContent({ onClose }: { onClose?: () => void }) {
 
     if (!cmd) return
 
-    setLines((l) => [...l, { ps: true, cmd }])
-    setHistory((h) => [...h, cmd])
+    addLine({ ps: true, cmd })
+    pushHistory(cmd)
     setHistIdx(-1)
     setInput("")
 
@@ -101,17 +103,16 @@ export function TerminalContent({ onClose }: { onClose?: () => void }) {
 
     const command = commands.get(name)
     if (!command) {
-      setLines((l) => [...l, { out: `bash: ${name}: command not found` }])
+      addLine({ out: `bash: ${name}: command not found` })
       return
     }
 
     if (args.includes("--help")) {
-      setLines((l) => [...l, ...command.handler(["--help"])])
+      addLines(command.handler(["--help"]))
       return
     }
 
-    const output = command.handler(args)
-    setLines((l) => [...l, ...output])
+    addLines(command.handler(args))
   }
 
   return (

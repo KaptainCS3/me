@@ -1,10 +1,11 @@
 "use client"
 
-import { useState, useRef, useCallback, useEffect, useMemo } from "react"
+import { useState, useRef, useCallback, useEffect } from "react"
 import { useTime } from "@/hooks/useTime"
 import { useWallpaper } from "@/hooks/useWallpaper"
 import { WINDOW_CONFIGS } from "@/data/windowConfigs"
 import { DOCK_APPS } from "@/data/dockApps"
+import { useAppStore } from "@/stores/appStore"
 import { MenuBar } from "./MenuBar"
 import { DesktopIcons } from "./DesktopIcons"
 import { WelcomeOverlay } from "./WelcomeOverlay"
@@ -13,17 +14,13 @@ import { DockItem } from "./DockItem"
 import { ContextMenu } from "./ContextMenu"
 import { WallpaperPicker } from "./WallpaperPicker"
 import { FileInfoModal } from "./FileInfoModal"
-import type { WindowState, DesktopItem } from "@/types/portfolio"
+import type { DesktopItem } from "@/types/portfolio"
 
 const DOCK_BOTTOM_GAP = 10
 const GRID_SIZE = 84
 
 function snapToGrid(val: number): number {
   return Math.round(val / GRID_SIZE) * GRID_SIZE
-}
-
-function gridKey(x: number, y: number): string {
-  return `${snapToGrid(x)},${snapToGrid(y)}`
 }
 
 export default function PortfolioOS() {
@@ -33,9 +30,21 @@ export default function PortfolioOS() {
   const dockTimeoutRef = useRef<number | null>(null)
   const dockHoveredRef = useRef(false)
   const actionRef = useRef<((action: string) => void) | null>(null)
-  const [windows, setWindows] = useState<Record<string, WindowState>>({})
-  const [zCounter, setZCounter] = useState(10)
-  const [focusedWindow, setFocusedWindow] = useState<string | null>(null)
+
+  const windows = useAppStore((s) => s.windows)
+  const focusedWindow = useAppStore((s) => s.focusedWindow)
+  const desktopItems = useAppStore((s) => s.desktopItems)
+  const addWindow = useAppStore((s) => s.addWindow)
+  const removeWindow = useAppStore((s) => s.removeWindow)
+  const setWindowMinimized = useAppStore((s) => s.setWindowMinimized)
+  const setFocusedWindow = useAppStore((s) => s.setFocusedWindow)
+  const focusWindow = useAppStore((s) => s.focusWindow)
+  const getNextZ = useAppStore((s) => s.getNextZ)
+  const setDesktopItems = useAppStore((s) => s.setDesktopItems)
+  const mergeDesktopItems = useAppStore((s) => s.mergeDesktopItems)
+  const moveDesktopItem = useAppStore((s) => s.moveDesktopItem)
+  const updateDesktopItem = useAppStore((s) => s.updateDesktopItem)
+
   const [zoomSignal, setZoomSignal] = useState(0)
   const [contextMenu, setContextMenu] = useState<{ x: number; y: number } | null>(null)
   const [showWallpaperPicker, setShowWallpaperPicker] = useState(false)
@@ -55,78 +64,38 @@ export default function PortfolioOS() {
     if (isMobile) setDockVisible(true)
   }, [isMobile])
 
-  const DEFAULT_DESKTOP_ITEMS: DesktopItem[] = useMemo(
-    () => [
-      {
-        id: "resume",
-        icon: "📄",
-        label: "Resume.pdf",
-        x: 0,
-        y: 32,
-      },
-      {
-        id: "about",
-        icon: "👤",
-        label: "About.md",
-        x: 0,
-        y: 116,
-      },
-    ],
-    [],
-  )
-
-  const [desktopItems, setDesktopItems] = useState<DesktopItem[]>(DEFAULT_DESKTOP_ITEMS)
-
   const openWindow = useCallback(
     (id: string) => {
-      setZCounter((z) => {
-        const newZ = z + 1
-        setWindows((w) => {
-          if (w[id]) {
-            return { ...w, [id]: { ...w[id], minimized: false, z: newZ } }
-          }
-          const dw = desktopRef.current?.offsetWidth || 800
-          const dh = desktopRef.current?.offsetHeight || 600
-          const cfg = WINDOW_CONFIGS[id]
-          if (!cfg) return w
-          return {
-            ...w,
-            [id]: {
-              pos: {
-                x: Math.max(20, Math.floor(dw / 2 - cfg.w / 2) + Object.keys(w).length * 24),
-                y: Math.max(20, Math.floor(dh / 3 - cfg.h / 3) + Object.keys(w).length * 24),
-              },
-              minimized: false,
-              z: newZ,
-            },
-          }
+      const cfg = WINDOW_CONFIGS[id]
+      if (!cfg) return
+      const existing = windows[id]
+      if (existing) {
+        focusWindow(id)
+        setWindowMinimized(id, false)
+      } else {
+        const dw = desktopRef.current?.offsetWidth || 800
+        const dh = desktopRef.current?.offsetHeight || 600
+        const windowCount = Object.keys(windows).length
+        const z = getNextZ()
+        addWindow(id, {
+          pos: {
+            x: Math.max(20, Math.floor(dw / 2 - cfg.w / 2) + windowCount * 24),
+            y: Math.max(20, Math.floor(dh / 3 - cfg.h / 3) + windowCount * 24),
+          },
+          minimized: false,
+          z,
         })
-        return newZ
-      })
+      }
     },
-    [],
+    [windows, getNextZ, addWindow, focusWindow, setWindowMinimized],
   )
 
   const closeWindow = (id: string) => {
-    setWindows((w) => {
-      const n = { ...w }
-      delete n[id]
-      return n
-    })
-    setFocusedWindow((f) => (f === id ? null : f))
+    removeWindow(id)
   }
 
   const minimizeWindow = (id: string) => {
-    setWindows((w) => ({ ...w, [id]: { ...w[id], minimized: true } }))
-  }
-
-  const focusWindow = (id: string) => {
-    setFocusedWindow(id)
-    setZCounter((z) => {
-      const newZ = z + 1
-      setWindows((w) => ({ ...w, [id]: { ...w[id], z: newZ } }))
-      return newZ
-    })
+    setWindowMinimized(id, true)
   }
 
   const handleMenuAction = useCallback(
@@ -196,10 +165,8 @@ export default function PortfolioOS() {
     (files: FileList, dropX: number, dropY: number) => {
       const sx = snapToGrid(dropX)
       const sy = snapToGrid(dropY)
-      const droppedIds: string[] = []
       const newItems: DesktopItem[] = Array.from(files).map((file, i) => {
         const id = `dropped-${Date.now()}-${i}`
-        droppedIds.push(id)
         const icon = file.type.startsWith("image/")
           ? "🖼️"
           : file.type === "application/pdf"
@@ -220,46 +187,24 @@ export default function PortfolioOS() {
         if (file.type.startsWith("image/")) {
           const reader = new FileReader()
           reader.onload = () => {
-            setDesktopItems((prev) =>
-              prev.map((di) =>
-                di.id === id && reader.result
-                  ? { ...di, fileMeta: { ...di.fileMeta!, dataUrl: reader.result as string } }
-                  : di,
-              ),
-            )
+            if (reader.result) {
+              updateDesktopItem(id, {
+                fileMeta: { name: file.name, size: file.size, type: file.type, dataUrl: reader.result as string },
+              })
+            }
           }
           reader.readAsDataURL(file)
         }
         return item
       })
-      setDesktopItems((prev) => {
-        const existingCells = new Set(prev.map((di) => gridKey(di.x, di.y)))
-        return [
-          ...prev,
-          ...newItems.filter((ni) => {
-            const cell = gridKey(ni.x, ni.y)
-            if (existingCells.has(cell)) return false
-            existingCells.add(cell)
-            return true
-          }),
-        ]
-      })
+      mergeDesktopItems(newItems)
     },
-    [],
+    [mergeDesktopItems, updateDesktopItem],
   )
 
   const handleMoveItem = useCallback((id: string, x: number, y: number) => {
-    setDesktopItems((prev) => {
-      const sx = snapToGrid(x)
-      const sy = snapToGrid(y)
-      const cell = gridKey(sx, sy)
-      const taken = prev.some(
-        (item) => item.id !== id && gridKey(item.x, item.y) === cell,
-      )
-      if (taken) return prev
-      return prev.map((item) => (item.id === id ? { ...item, x: sx, y: sy } : item))
-    })
-  }, [])
+    moveDesktopItem(id, x, y)
+  }, [moveDesktopItem])
 
   const handleDesktopIconClick = useCallback(
     (id: string) => {
