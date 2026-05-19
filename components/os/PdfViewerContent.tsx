@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useRef, useEffect } from "react"
 import { Document, Page, pdfjs } from "react-pdf"
 
 pdfjs.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs"
@@ -9,6 +9,17 @@ export function PdfViewerContent() {
   const [numPages, setNumPages] = useState(0)
   const [pageNumber, setPageNumber] = useState(1)
   const [scale, setScale] = useState(1)
+  const [pageWidth, setPageWidth] = useState<number | null>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const el = containerRef.current
+    if (!el) return
+    const measure = () => setPageWidth(Math.max(100, el.clientWidth - 32))
+    measure()
+    window.addEventListener("resize", measure)
+    return () => window.removeEventListener("resize", measure)
+  }, [])
 
   const onLoadSuccess = ({ numPages: pages }: { numPages: number }) => {
     setNumPages(pages)
@@ -57,7 +68,7 @@ export function PdfViewerContent() {
           </button>
         </div>
       </div>
-      <div className="flex-1 overflow-auto p-4 flex flex-col items-center gap-4">
+      <div ref={containerRef} className="flex-1 overflow-auto p-4 flex flex-col items-center gap-4 min-w-0">
         <Document
           file="/resume.pdf"
           onLoadSuccess={onLoadSuccess}
@@ -74,7 +85,7 @@ export function PdfViewerContent() {
             <Page
               key={i + 1}
               pageNumber={i + 1}
-              scale={scale}
+              width={pageWidth ? Math.round(pageWidth * scale) : undefined}
               renderTextLayer={false}
               renderAnnotationLayer={false}
               className="shadow-lg"

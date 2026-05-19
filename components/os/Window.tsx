@@ -12,6 +12,7 @@ interface WindowProps {
   isMinimized: boolean
   isFocused: boolean
   zoomSignal: number
+  isMobile?: boolean
   onClose: () => void
   onMinimize: () => void
   onFocus: () => void
@@ -56,6 +57,7 @@ export function Window({
   isMinimized,
   isFocused,
   zoomSignal,
+  isMobile,
   onClose,
   onMinimize,
   onFocus,
@@ -162,7 +164,7 @@ export function Window({
         top: isMaximized ? 0 : position.y,
         left: isMaximized ? 0 : position.x,
         width: isMaximized ? "100%" : size.w,
-        height: isMaximized ? "100%" : size.h,
+        height: isMaximized ? (isMobile ? "calc(100% - 90px)" : "100%") : size.h,
         zIndex,
         borderRadius: isMaximized ? 0 : 12,
         overflow: "hidden",

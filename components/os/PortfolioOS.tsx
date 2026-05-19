@@ -493,6 +493,7 @@ export default function PortfolioOS() {
             isMinimized={state.minimized}
             isFocused={id === focusedWindow}
             zoomSignal={zoomSignal}
+            isMobile={isMobile}
             onClose={() => closeWindow(id)}
             onMinimize={() => minimizeWindow(id)}
             onFocus={() => focusWindow(id)}
