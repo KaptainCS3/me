@@ -16,6 +16,15 @@ import { FileInfoModal } from "./FileInfoModal"
 import type { WindowState, DesktopItem } from "@/types/portfolio"
 
 const DOCK_BOTTOM_GAP = 10
+const GRID_SIZE = 84
+
+function snapToGrid(val: number): number {
+  return Math.round(val / GRID_SIZE) * GRID_SIZE
+}
+
+function gridKey(x: number, y: number): string {
+  return `${snapToGrid(x)},${snapToGrid(y)}`
+}
 
 export default function PortfolioOS() {
   const time = useTime()
@@ -39,14 +48,14 @@ export default function PortfolioOS() {
         id: "resume",
         icon: "📄",
         label: "Resume.pdf",
-        x: 32,
+        x: 0,
         y: 32,
       },
       {
         id: "about",
         icon: "👤",
         label: "About.md",
-        x: 32,
+        x: 0,
         y: 116,
       },
     ],
@@ -172,8 +181,12 @@ export default function PortfolioOS() {
 
   const handleDropFiles = useCallback(
     (files: FileList, dropX: number, dropY: number) => {
+      const sx = snapToGrid(dropX)
+      const sy = snapToGrid(dropY)
+      const droppedIds: string[] = []
       const newItems: DesktopItem[] = Array.from(files).map((file, i) => {
         const id = `dropped-${Date.now()}-${i}`
+        droppedIds.push(id)
         const icon = file.type.startsWith("image/")
           ? "🖼️"
           : file.type === "application/pdf"
@@ -183,8 +196,8 @@ export default function PortfolioOS() {
           id,
           icon,
           label: file.name,
-          x: dropX + i * 20,
-          y: dropY + i * 20,
+          x: sx + i * GRID_SIZE,
+          y: sy + i * GRID_SIZE,
           fileMeta: {
             name: file.name,
             size: file.size,
@@ -206,15 +219,33 @@ export default function PortfolioOS() {
         }
         return item
       })
-      setDesktopItems((prev) => [...prev, ...newItems])
+      setDesktopItems((prev) => {
+        const existingCells = new Set(prev.map((di) => gridKey(di.x, di.y)))
+        return [
+          ...prev,
+          ...newItems.filter((ni) => {
+            const cell = gridKey(ni.x, ni.y)
+            if (existingCells.has(cell)) return false
+            existingCells.add(cell)
+            return true
+          }),
+        ]
+      })
     },
     [],
   )
 
   const handleMoveItem = useCallback((id: string, x: number, y: number) => {
-    setDesktopItems((prev) =>
-      prev.map((item) => (item.id === id ? { ...item, x, y } : item)),
-    )
+    setDesktopItems((prev) => {
+      const sx = snapToGrid(x)
+      const sy = snapToGrid(y)
+      const cell = gridKey(sx, sy)
+      const taken = prev.some(
+        (item) => item.id !== id && gridKey(item.x, item.y) === cell,
+      )
+      if (taken) return prev
+      return prev.map((item) => (item.id === id ? { ...item, x: sx, y: sy } : item))
+    })
   }, [])
 
   const handleDesktopIconClick = useCallback(

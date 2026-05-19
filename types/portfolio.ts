@@ -10,6 +10,8 @@ export interface Project {
   desc: string
   color: string
   accent: string
+  stack?: string[]
+  skills?: string[]
 }
 
 export interface SkillCategory {
@@ -21,6 +23,7 @@ export interface TerminalLine {
   ps?: boolean
   cmd?: string
   out?: string
+  color?: string
 }
 
 export interface WindowConfig {

@@ -46,6 +46,30 @@ export function ProjectsContent() {
               ))}
             </div>
             <p className="text-sm leading-relaxed text-[#a8c4d0]">{PROJECTS[active].desc}</p>
+            {PROJECTS[active].stack && (
+              <div className="mt-3">
+                <p className="text-xs text-[#34d399] mb-1">Stack:</p>
+                <div className="flex flex-wrap gap-1">
+                  {PROJECTS[active].stack!.map((s) => (
+                    <span key={s} className="text-xs px-2 py-0.5 rounded bg-[#0d1f16] text-[#6b8fa0] border border-[#1e3a2a]/50">
+                      {s}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+            {PROJECTS[active].skills && (
+              <div className="mt-3">
+                <p className="text-xs text-[#60a5fa] mb-1">Skills:</p>
+                <div className="flex flex-wrap gap-1">
+                  {PROJECTS[active].skills!.map((s) => (
+                    <span key={s} className="text-xs px-2 py-0.5 rounded bg-[#0d1f16] text-[#6b8fa0] border border-[#1e3a2a]/50">
+                      {s}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
             <div
               className="mt-4 p-3 rounded-lg text-xs text-[#6b8fa0]"
               style={{

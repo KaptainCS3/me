@@ -1,10 +1,10 @@
 "use client"
 
 const CONTACTS = [
-  { icon: "✉️", label: "Email", value: "hello@kaptaincs3.dev", color: "#60a5fa" },
-  { icon: "💼", label: "LinkedIn", value: "/in/kaptaincs3", color: "#34d399" },
+  { icon: "✉️", label: "Email", value: "mbiapplegryn@gmail.com", color: "#60a5fa" },
+  { icon: "💼", label: "LinkedIn", value: "linkedin.com/in/leonard-appelgryn", color: "#34d399" },
   { icon: "🐙", label: "GitHub", value: "github.com/kaptaincs3", color: "#c084fc" },
-  { icon: "💬", label: "WhatsApp", value: "+237 6XX XXX XXX", color: "#25d366" },
+  { icon: "🐦", label: "Twitter", value: "@KaptainCS3", color: "#1da1f2" },
 ]
 
 export function ContactContent() {
