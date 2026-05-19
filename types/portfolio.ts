@@ -12,6 +12,11 @@ export interface Project {
   accent: string
   stack?: string[]
   skills?: string[]
+  url?: string
+  github?: string
+  period?: string
+  metrics?: string[]
+  context?: string
 }
 
 export interface SkillCategory {

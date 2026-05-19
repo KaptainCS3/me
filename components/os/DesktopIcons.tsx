@@ -1,6 +1,6 @@
 "use client"
 
-import { useRef, useState, useCallback } from "react"
+import { useRef, useState, useCallback, useEffect } from "react"
 import type { DesktopItem } from "@/types/portfolio"
 
 interface DesktopIconsProps {
@@ -22,6 +22,15 @@ function getFileIcon(type: string): string {
 export function DesktopIcons({ items, onMoveItem, onDropFiles, onItemClick }: DesktopIconsProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const [dragOver, setDragOver] = useState(false)
+  const [isTouch, setIsTouch] = useState(false)
+
+  useEffect(() => {
+    const mq = window.matchMedia("(pointer: coarse)")
+    setIsTouch(mq.matches)
+    const handler = (e: MediaQueryListEvent) => setIsTouch(e.matches)
+    mq.addEventListener("change", handler)
+    return () => mq.removeEventListener("change", handler)
+  }, [])
 
   const handleDragStart = useCallback(
     (e: React.DragEvent, id: string) => {
@@ -78,9 +87,9 @@ export function DesktopIcons({ items, onMoveItem, onDropFiles, onItemClick }: De
       {items.map((item) => (
         <div
           key={item.id}
-          draggable
+          draggable={!isTouch}
           onDragStart={(e) => handleDragStart(e, item.id)}
-          onDoubleClick={() => onItemClick(item.id)}
+          onClick={() => onItemClick(item.id)}
           className="absolute flex flex-col items-center gap-0.5 cursor-pointer group"
           style={{ left: item.x, top: item.y, width: 56 }}
         >

@@ -41,6 +41,19 @@ export default function PortfolioOS() {
   const [showWallpaperPicker, setShowWallpaperPicker] = useState(false)
   const [dockVisible, setDockVisible] = useState(false)
   const [fileInfoItem, setFileInfoItem] = useState<DesktopItem | null>(null)
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 640px)")
+    setIsMobile(mq.matches)
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches)
+    mq.addEventListener("change", handler)
+    return () => mq.removeEventListener("change", handler)
+  }, [])
+
+  useEffect(() => {
+    if (isMobile) setDockVisible(true)
+  }, [isMobile])
 
   const DEFAULT_DESKTOP_ITEMS: DesktopItem[] = useMemo(
     () => [
@@ -378,6 +391,30 @@ export default function PortfolioOS() {
     day: "numeric",
   })
 
+  const effectiveDockVisible = isMobile || dockVisible
+
+  const longPressTimer = useRef<number | null>(null)
+
+  const handleTouchStart = useCallback(() => {
+    longPressTimer.current = window.setTimeout(() => {
+      setContextMenu({ x: 0, y: 0 })
+    }, 600)
+  }, [])
+
+  const handleTouchEnd = useCallback(() => {
+    if (longPressTimer.current) {
+      clearTimeout(longPressTimer.current)
+      longPressTimer.current = null
+    }
+  }, [])
+
+  const handleTouchMove = useCallback(() => {
+    if (longPressTimer.current) {
+      clearTimeout(longPressTimer.current)
+      longPressTimer.current = null
+    }
+  }, [])
+
   return (
     <div
       className="w-full h-screen min-h-150 relative overflow-hidden select-none"
@@ -435,7 +472,10 @@ export default function PortfolioOS() {
 
       <div
         ref={desktopRef}
-        className="absolute top-6.5 left-0 right-0 bottom-0"
+        className={`absolute top-6.5 left-0 right-0 bottom-0 ${isMobile ? "overflow-y-auto" : ""}`}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+        onTouchMove={handleTouchMove}
       >
         <DesktopIcons
           items={desktopItems}
@@ -465,7 +505,7 @@ export default function PortfolioOS() {
         onMouseEnter={showDock}
         onMouseLeave={hideDock}
         style={{
-          transform: dockVisible ? "translateY(0)" : "translateY(120%)",
+          transform: effectiveDockVisible ? "translateY(0)" : "translateY(120%)",
           transition: "transform 0.35s cubic-bezier(0.4, 0, 0.2, 1)",
           bottom: DOCK_BOTTOM_GAP,
         }}

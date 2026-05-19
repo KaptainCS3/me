@@ -201,8 +201,8 @@ export function MenuBar({
       </div>
 
       <div className="flex gap-3 items-center">
-        <span className="text-[11px] text-white/50">🇨🇲 Yaoundé</span>
-        <span className="text-[11px] text-white/70">{dateStr}</span>
+        <span className="hidden sm:inline text-[11px] text-white/50">🇨🇲 Yaoundé</span>
+        <span className="hidden sm:inline text-[11px] text-white/70">{dateStr}</span>
         <span className="text-xs font-medium text-white/90">{timeStr}</span>
       </div>
     </div>

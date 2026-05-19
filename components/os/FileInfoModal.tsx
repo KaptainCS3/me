@@ -21,16 +21,18 @@ export function FileInfoModal({ item, onClose }: FileInfoModalProps) {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose()
     }
-    const handleClickOutside = (e: MouseEvent) => {
+    const handleClickOutside = (e: Event) => {
       if (dialogRef.current && !dialogRef.current.contains(e.target as Node)) {
         onClose()
       }
     }
     document.addEventListener("keydown", handleEscape)
     document.addEventListener("mousedown", handleClickOutside)
+    document.addEventListener("touchstart", handleClickOutside, { passive: true })
     return () => {
       document.removeEventListener("keydown", handleEscape)
       document.removeEventListener("mousedown", handleClickOutside)
+      document.removeEventListener("touchstart", handleClickOutside)
     }
   }, [onClose])
 
@@ -40,7 +42,7 @@ export function FileInfoModal({ item, onClose }: FileInfoModalProps) {
     <div className="fixed inset-0 z-[10001] flex items-center justify-center bg-black/40 backdrop-blur-sm">
       <div
         ref={dialogRef}
-        className="w-[340px] rounded-xl overflow-hidden shadow-[0_32px_80px_rgba(0,0,0,0.7)] border border-white/10"
+        className="w-[90vw] max-w-[340px] rounded-xl overflow-hidden shadow-[0_32px_80px_rgba(0,0,0,0.7)] border border-white/10"
         style={{ background: "rgba(15, 20, 30, 0.95)" }}
       >
         <div className="flex items-center justify-between px-5 py-3 border-b border-white/8">

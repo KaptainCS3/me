@@ -11,8 +11,8 @@ export const WINDOW_CONFIGS: Record<string, WindowConfig> = {
   projects: {
     title: "Projects — ~/portfolio",
     icon: "📁",
-    w: 620,
-    h: 480,
+    w: 700,
+    h: 540,
     content: "projects",
   },
   skills: {
@@ -26,7 +26,7 @@ export const WINDOW_CONFIGS: Record<string, WindowConfig> = {
     title: "Contact",
     icon: "✉️",
     w: 400,
-    h: 340,
+    h: 380,
     content: "contact",
   },
   terminal: {

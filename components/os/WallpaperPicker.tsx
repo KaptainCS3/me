@@ -19,16 +19,18 @@ export function WallpaperPicker({ current, onSelect, onReset, onClose }: Wallpap
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose()
     }
-    const handleClickOutside = (e: MouseEvent) => {
+    const handleClickOutside = (e: Event) => {
       if (dialogRef.current && !dialogRef.current.contains(e.target as Node)) {
         onClose()
       }
     }
     document.addEventListener("keydown", handleEscape)
     document.addEventListener("mousedown", handleClickOutside)
+    document.addEventListener("touchstart", handleClickOutside, { passive: true })
     return () => {
       document.removeEventListener("keydown", handleEscape)
       document.removeEventListener("mousedown", handleClickOutside)
+      document.removeEventListener("touchstart", handleClickOutside)
     }
   }, [onClose])
 
@@ -48,7 +50,7 @@ export function WallpaperPicker({ current, onSelect, onReset, onClose }: Wallpap
     <div className="fixed inset-0 z-[10001] flex items-center justify-center bg-black/40 backdrop-blur-sm">
       <div
         ref={dialogRef}
-        className="w-[420px] max-h-[520px] rounded-xl overflow-hidden shadow-[0_32px_80px_rgba(0,0,0,0.7)] border border-white/10"
+        className="w-[90vw] max-w-[420px] max-h-[85vh] rounded-xl overflow-hidden shadow-[0_32px_80px_rgba(0,0,0,0.7)] border border-white/10"
         style={{ background: "rgba(15, 20, 30, 0.95)" }}
       >
         <div className="flex items-center justify-between px-5 py-3 border-b border-white/8">
@@ -61,14 +63,14 @@ export function WallpaperPicker({ current, onSelect, onReset, onClose }: Wallpap
           </button>
         </div>
 
-        <div className="p-5 overflow-y-auto max-h-[380px] space-y-4">
+        <div className="p-5 overflow-y-auto max-h-[60vh] space-y-4">
           <p className="text-xs text-[#6b8fa0]">Presets</p>
           <div className="grid grid-cols-2 gap-3">
             {WALLPAPER_PRESETS.map((preset) => (
               <button
                 key={preset.id}
                 onClick={() => onSelect(preset.value)}
-                className={`relative h-20 rounded-lg overflow-hidden border-2 transition-all cursor-pointer ${
+                className={`relative h-16 sm:h-20 rounded-lg overflow-hidden border-2 transition-all cursor-pointer ${
                   isPresetActive(preset)
                     ? "border-[#34d399] ring-1 ring-[#34d399]/30"
                     : "border-transparent hover:border-white/20"
