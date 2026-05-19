@@ -340,9 +340,12 @@ export default function PortfolioOS() {
 
   const longPressTimer = useRef<number | null>(null)
 
-  const handleTouchStart = useCallback(() => {
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    const touch = e.touches[0]
+    const x = touch.clientX
+    const y = touch.clientY
     longPressTimer.current = window.setTimeout(() => {
-      setContextMenu({ x: 0, y: 0 })
+      setContextMenu({ x, y })
     }, 600)
   }, [])
 
@@ -451,11 +454,11 @@ export default function PortfolioOS() {
         onMouseEnter={showDock}
         onMouseLeave={hideDock}
         style={{
-          transform: effectiveDockVisible ? "translateY(0)" : "translateY(120%)",
+          transform: `translateX(-50%) ${effectiveDockVisible ? "translateY(0)" : "translateY(120%)"}`,
           transition: "transform 0.35s cubic-bezier(0.4, 0, 0.2, 1)",
           bottom: DOCK_BOTTOM_GAP,
         }}
-        className="absolute left-1/2 -translate-x-1/2 bg-white/7 backdrop-blur-2xl border border-white/12 rounded-[18px] px-4 py-2 flex items-end gap-2.5 z-[9999] shadow-[0_8px_32px_rgba(0,0,0,0.5)]"
+        className="absolute left-1/2 bg-white/7 backdrop-blur-2xl border border-white/12 rounded-[18px] px-4 py-2 flex items-end gap-2.5 z-[9999] shadow-[0_8px_32px_rgba(0,0,0,0.5)]"
       >
         {DOCK_APPS.map((app) => (
           <DockItem
