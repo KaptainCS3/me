@@ -2,7 +2,7 @@ import type { TerminalLine } from "@/types/portfolio"
 
 export const TERMINAL_LINES: TerminalLine[] = [
   { ps: true, cmd: "whoami" },
-  { out: "Mbi Enow Leonard Appelgryn — Software Engineer, Buea, CM 🇨🇲" },
+  { out: "Mbi Enow Leonard Appelgryn — Software Engineer, Buea, CM ", flag: "cm" },
   { ps: true, cmd: "ls projects/" },
   { out: "CHA/  CADI/  GlobalBush/  IELTSPrep/" },
   { ps: true, cmd: "cat stack.json" },

@@ -3,7 +3,7 @@ import { PROJECTS } from "./projects"
 import { SKILLS } from "./skills"
 import { RESUME } from "./about"
 
-type CmdHandler = (args: string[]) => TerminalLine[]
+type CmdHandler = (args: string[]) => TerminalLine[] | Promise<TerminalLine[]>
 
 interface Command {
   name: string
@@ -13,15 +13,33 @@ interface Command {
   aliases?: string[]
 }
 
-function lines(...items: (string | { text: string; color?: string })[]): TerminalLine[] {
+function lines(...items: (string | { text: string; color?: string } | TerminalLine)[]): TerminalLine[] {
   return items.map((item) => {
     if (typeof item === "string") return { out: item }
-    return { out: item.text, color: item.color }
+    if ("text" in item) return { out: item.text, color: item.color }
+    return item
   })
 }
 
 function col(text: string, color: string): { text: string; color: string } {
   return { text, color }
+}
+
+function wrapText(text: string, maxWidth: number): string[] {
+  const words = text.split(" ")
+  const lines: string[] = []
+  let current = ""
+  for (const word of words) {
+    const next = current ? `${current} ${word}` : word
+    if (next.length > maxWidth && current) {
+      lines.push(current)
+      current = word
+    } else {
+      current = next
+    }
+  }
+  if (current) lines.push(current)
+  return lines
 }
 
 function showHelp(name: string, commands: Map<string, Command>): TerminalLine[] {
@@ -37,16 +55,7 @@ function showHelp(name: string, commands: Map<string, Command>): TerminalLine[] 
   return result
 }
 
-const FORTUNES = [
-  "There are only two hard things in Computer Science: cache invalidation and naming things.",
-  "Before software can be reusable it first has to be usable.",
-  "The best way to get a project done faster is to start sooner.",
-  "Simplicity is prerequisite for reliability.",
-  "Any fool can write code that a computer can understand. Good programmers write code that humans can understand.",
-  "Fix the cause, not the symptom.",
-  "Optimism is an occupational hazard of programming: feedback is the treatment.",
-  "When debugging, novices insert corrective code; experts remove defective code.",
-]
+
 
 const COW = `\
    ╱  ────  ╲
@@ -165,7 +174,8 @@ export function buildCommands(): Map<string, Command> {
       return lines(
         RESUME.name,
         col(RESUME.title, "#34d399"),
-        col("Buea, Cameroon 🇨🇲", "#60a5fa"),
+        col("Buea, Cameroon ", "#60a5fa"),
+        { out: "", flag: "cm" },
         "",
         `Languages:  ${RESUME.languages.join(", ")}`,
         `Tools:      ${RESUME.tools.join(", ")}`,
@@ -265,16 +275,26 @@ export function buildCommands(): Map<string, Command> {
 
   reg({
     name: "fortune",
-    desc: "Display a random programming wisdom",
+    desc: "Display a random advice",
     usage: "fortune",
-    handler() {
-      const q = FORTUNES[Math.floor(Math.random() * FORTUNES.length)]
-      const w = [
-        col("  ╭──────────────────────────────────────╮", "#60a5fa"),
-        col(`  │ ${q.padEnd(40).slice(0, 40)} │`, "#60a5fa"),
-        col("  ╰──────────────────────────────────────╯", "#60a5fa"),
-      ]
-      return w.map((l) => ({ out: l.text, color: l.color }))
+    async handler() {
+      try {
+        const res = await fetch("/api/fortune")
+        const data = await res.json()
+        const q = data.advice
+        const maxW = 40
+        const wrapped = wrapText(q, maxW)
+        const boxW = maxW + 2
+        const border = "─".repeat(boxW)
+        const result = [
+          col(`  ╭${border}╮`, "#60a5fa"),
+          ...wrapped.map((l) => col(`  │ ${l.padEnd(maxW)} │`, "#60a5fa")),
+          col(`  ╰${border}╯`, "#60a5fa"),
+        ]
+        return result.map((l) => ({ out: l.text, color: l.color }))
+      } catch {
+        return lines(col("Failed to fetch advice. The oracle is offline.", "#ef4444"))
+      }
     },
   })
 

@@ -40,7 +40,7 @@ export function TerminalContent({ onClose }: { onClose?: () => void }) {
     return all.filter((c) => c.startsWith(partial)).slice(0, 20)
   }
 
-  const handleCmd = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleCmd = async (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Tab") {
       e.preventDefault()
       const partial = input.trim()
@@ -108,11 +108,11 @@ export function TerminalContent({ onClose }: { onClose?: () => void }) {
     }
 
     if (args.includes("--help")) {
-      addLines(command.handler(["--help"]))
+      addLines(await command.handler(["--help"]))
       return
     }
 
-    addLines(command.handler(args))
+    addLines(await command.handler(args))
   }
 
   return (
@@ -129,9 +129,17 @@ export function TerminalContent({ onClose }: { onClose?: () => void }) {
             <div
               key={i}
               className="whitespace-pre-wrap break-all"
-              style={line.out === "" ? { height: "0.25rem" } : line.color ? { color: line.color } : { color: "#60a5fa" }}
+              style={line.out === "" && !line.flag ? { height: "0.25rem" } : line.color ? { color: line.color } : { color: "#60a5fa" }}
             >
-              {line.out || "\u00A0"}
+              {line.out || ""}
+              {line.flag && (
+                <img
+                  src={`https://flagcdn.com/w20/${line.flag}.png`}
+                  alt={line.flag.toUpperCase()}
+                  className="inline-block w-4 h-3 align-text-bottom ml-0.5"
+                />
+              )}
+              {!line.out && !line.flag && "\u00A0"}
             </div>
           ) : null,
         )}

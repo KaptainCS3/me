@@ -29,6 +29,7 @@ export interface TerminalLine {
   cmd?: string
   out?: string
   color?: string
+  flag?: string
 }
 
 export interface WindowConfig {
