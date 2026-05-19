@@ -145,7 +145,7 @@ export function Window({
         </span>
       </div>
       <div className="flex-1 overflow-hidden bg-[#0a1520]">
-        <WindowContent id={id} />
+        <WindowContent id={id} onClose={onClose} />
       </div>
     </div>
   )

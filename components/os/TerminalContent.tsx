@@ -5,7 +5,7 @@ import { TERMINAL_LINES } from "@/data/terminalLines"
 import { buildCommands } from "@/data/commands"
 import type { TerminalLine } from "@/types/portfolio"
 
-export function TerminalContent() {
+export function TerminalContent({ onClose }: { onClose?: () => void }) {
   const [lines, setLines] = useState<TerminalLine[]>([TERMINAL_LINES[0]])
   const [idx, setIdx] = useState(1)
   const [input, setInput] = useState("")
@@ -85,8 +85,13 @@ export function TerminalContent() {
     setHistIdx(-1)
     setInput("")
 
-    if (cmd === "clear") {
+    if (cmd === "clear" || cmd === "cls") {
       setLines([])
+      return
+    }
+
+    if (cmd === "exit") {
+      onClose?.()
       return
     }
 

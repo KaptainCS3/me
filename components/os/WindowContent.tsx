@@ -9,9 +9,10 @@ import { PdfViewerContent } from "./PdfViewerContent"
 
 interface WindowContentProps {
   id: string
+  onClose?: () => void
 }
 
-export const WindowContent: FC<WindowContentProps> = ({ id }) => {
+export const WindowContent: FC<WindowContentProps> = ({ id, onClose }) => {
   switch (id) {
     case "about":
       return <AboutContent />
@@ -22,7 +23,7 @@ export const WindowContent: FC<WindowContentProps> = ({ id }) => {
     case "contact":
       return <ContactContent />
     case "terminal":
-      return <TerminalContent />
+      return <TerminalContent onClose={onClose} />
     case "about-os":
       return <AboutOSContent />
     case "resume-viewer":
