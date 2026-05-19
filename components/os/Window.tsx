@@ -37,11 +37,11 @@ function TrafficBtn({
       onClick={onClick}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className="w-5 h-5 sm:w-3 sm:h-3 rounded-full border-none cursor-pointer flex items-center justify-center transition-[filter] duration-150 hover:brightness-125"
+      className="w-7 h-7 sm:w-3 sm:h-3 rounded-full border-none cursor-pointer flex items-center justify-center transition-[filter] duration-150 hover:brightness-125"
       style={{ background: color }}
     >
       {hovered && (
-        <span className="text-[10px] sm:text-[7px] font-bold" style={{ color: hoverColor }}>
+        <span className="text-sm sm:text-[7px] font-bold leading-none" style={{ color: hoverColor }}>
           {icon}
         </span>
       )}

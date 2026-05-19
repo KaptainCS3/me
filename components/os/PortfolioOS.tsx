@@ -37,10 +37,8 @@ export default function PortfolioOS() {
   const addWindow = useAppStore((s) => s.addWindow)
   const removeWindow = useAppStore((s) => s.removeWindow)
   const setWindowMinimized = useAppStore((s) => s.setWindowMinimized)
-  const setFocusedWindow = useAppStore((s) => s.setFocusedWindow)
   const focusWindow = useAppStore((s) => s.focusWindow)
   const getNextZ = useAppStore((s) => s.getNextZ)
-  const setDesktopItems = useAppStore((s) => s.setDesktopItems)
   const mergeDesktopItems = useAppStore((s) => s.mergeDesktopItems)
   const moveDesktopItem = useAppStore((s) => s.moveDesktopItem)
   const updateDesktopItem = useAppStore((s) => s.updateDesktopItem)
@@ -50,19 +48,19 @@ export default function PortfolioOS() {
   const [showWallpaperPicker, setShowWallpaperPicker] = useState(false)
   const [dockVisible, setDockVisible] = useState(false)
   const [fileInfoItem, setFileInfoItem] = useState<DesktopItem | null>(null)
-  const [isMobile, setIsMobile] = useState(false)
+  const [isMobile, setIsMobile] = useState(
+    typeof window !== "undefined" ? window.matchMedia("(max-width: 640px)").matches : false,
+  )
 
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 640px)")
-    setIsMobile(mq.matches)
-    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches)
+    const handler = (e: MediaQueryListEvent) => {
+      setIsMobile(e.matches)
+      if (e.matches) setDockVisible(true)
+    }
     mq.addEventListener("change", handler)
     return () => mq.removeEventListener("change", handler)
   }, [])
-
-  useEffect(() => {
-    if (isMobile) setDockVisible(true)
-  }, [isMobile])
 
   const openWindow = useCallback(
     (id: string) => {
@@ -224,7 +222,9 @@ export default function PortfolioOS() {
     [openWindow, desktopItems],
   )
 
-  actionRef.current = handleMenuAction
+  useEffect(() => {
+    actionRef.current = handleMenuAction
+  })
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -365,7 +365,7 @@ export default function PortfolioOS() {
 
   return (
     <div
-      className="w-full h-screen min-h-150 relative overflow-hidden select-none"
+      className="w-full h-dvh min-h-dvh relative overflow-hidden select-none"
       onContextMenu={handleContextMenu}
       onMouseMove={handleMouseMove}
       style={{
@@ -456,9 +456,9 @@ export default function PortfolioOS() {
         style={{
           transform: `translateX(-50%) ${effectiveDockVisible ? "translateY(0)" : "translateY(120%)"}`,
           transition: "transform 0.35s cubic-bezier(0.4, 0, 0.2, 1)",
-          bottom: DOCK_BOTTOM_GAP,
+          bottom: `calc(${DOCK_BOTTOM_GAP}px + env(safe-area-inset-bottom, 0px))`,
         }}
-        className="absolute left-1/2 bg-white/7 backdrop-blur-2xl border border-white/12 rounded-[18px] px-4 py-2 flex items-end gap-2.5 z-[9999] shadow-[0_8px_32px_rgba(0,0,0,0.5)]"
+        className="absolute left-1/2 bg-white/7 backdrop-blur-2xl border border-white/12 rounded-[18px] px-4 py-2 flex items-end gap-2.5 z-9999 shadow-[0_8px_32px_rgba(0,0,0,0.5)]"
       >
         {DOCK_APPS.map((app) => (
           <DockItem
