@@ -1,18 +1,27 @@
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
-import type { WindowState, DesktopItem } from "@/types/portfolio"
+import type { WindowState, DesktopItem, VfsNode } from "@/types/portfolio"
 
 const DEFAULT_DESKTOP_ITEMS: DesktopItem[] = [
-  { id: "resume", icon: "📄", label: "Resume.pdf", x: 0, y: 32 },
-  { id: "about", icon: "👤", label: "About.md", x: 0, y: 116 },
+  { id: "resume", icon: "📄", label: "Resume.pdf", x: 0, y: 32, fileMeta: {type: 'application/pdf', name: 'resume.pdf', size: 1028}},
+  { id: "about", icon: "👤", label: "About.md", x: 0, y: 116, fileMeta: {type: 'md', name: 'about.md', size: 512}},
 ]
 
 interface AppStore {
+  // Existing state
   windows: Record<string, WindowState>
   zCounter: number
   focusedWindow: string | null
   desktopItems: DesktopItem[]
 
+  // New state
+  isBooted: boolean
+  accentColor: string
+  themeMode: "dark" | "light" | "matrix" | "retro"
+  isMuted: boolean
+  vfs: Record<string, VfsNode>
+
+  // Existing actions
   addWindow: (id: string, state: WindowState) => void
   removeWindow: (id: string) => void
   setWindowPos: (id: string, pos: { x: number; y: number }) => void
@@ -24,6 +33,14 @@ interface AppStore {
   mergeDesktopItems: (items: DesktopItem[]) => void
   moveDesktopItem: (id: string, x: number, y: number) => void
   updateDesktopItem: (id: string, update: Partial<DesktopItem>) => void
+
+  // New actions
+  setIsBooted: (booted: boolean) => void
+  setAccentColor: (color: string) => void
+  setThemeMode: (mode: "dark" | "light" | "matrix" | "retro") => void
+  setIsMuted: (muted: boolean) => void
+  setVfs: (vfs: Record<string, VfsNode>) => void
+  updateVfsNode: (path: string, node: VfsNode) => void
 }
 
 function gridKey(x: number, y: number): string {
@@ -37,6 +54,12 @@ export const useAppStore = create<AppStore>()(
       zCounter: 10,
       focusedWindow: null,
       desktopItems: DEFAULT_DESKTOP_ITEMS,
+
+      isBooted: false,
+      accentColor: "#34d399",
+      themeMode: "dark",
+      isMuted: false,
+      vfs: {},
 
       addWindow: (id, state) =>
         set((s) => ({ windows: { ...s.windows, [id]: state } })),
@@ -124,6 +147,14 @@ export const useAppStore = create<AppStore>()(
             item.id === id ? { ...item, ...update } : item,
           ),
         })),
+
+      setIsBooted: (isBooted) => set({ isBooted }),
+      setAccentColor: (accentColor) => set({ accentColor }),
+      setThemeMode: (themeMode) => set({ themeMode }),
+      setIsMuted: (isMuted) => set({ isMuted }),
+      setVfs: (vfs) => set({ vfs }),
+      updateVfsNode: (path, node) =>
+        set((s) => ({ vfs: { ...s.vfs, [path]: node } })),
     }),
     {
       name: "portfolio-app-state",
@@ -137,6 +168,10 @@ export const useAppStore = create<AppStore>()(
             ? { name: item.fileMeta.name, size: item.fileMeta.size, type: item.fileMeta.type }
             : undefined,
         })),
+        accentColor: state.accentColor,
+        themeMode: state.themeMode,
+        isMuted: state.isMuted,
+        vfs: state.vfs,
       }),
     },
   ),

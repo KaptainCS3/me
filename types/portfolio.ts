@@ -59,6 +59,12 @@ export interface FileMeta {
   dataUrl?: string
 }
 
+export interface VfsNode {
+  type: "file" | "dir"
+  content?: string
+  children?: string[]
+}
+
 export interface DesktopItem {
   id: string
   icon: string

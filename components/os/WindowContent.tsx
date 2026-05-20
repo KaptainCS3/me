@@ -6,6 +6,8 @@ import { ContactContent } from "./ContactContent"
 import { TerminalContent } from "./TerminalContent"
 import { AboutOSContent } from "./AboutOSContent"
 import { PdfViewerContent } from "./PdfViewerContent"
+import { SettingsContent } from "./SettingsContent"
+import { SourceViewerContent } from "./SourceViewerContent"
 
 interface WindowContentProps {
   id: string
@@ -24,6 +26,10 @@ export const WindowContent: FC<WindowContentProps> = ({ id, onClose }) => {
       return <ContactContent />
     case "terminal":
       return <TerminalContent onClose={onClose} />
+    case "settings":
+      return <SettingsContent />
+    case "source-viewer":
+      return <SourceViewerContent />
     case "about-os":
       return <AboutOSContent />
     case "resume-viewer":

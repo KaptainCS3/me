@@ -6,4 +6,5 @@ export const DOCK_APPS: DockApp[] = [
   { id: "skills", icon: "⚡", label: "Skills" },
   { id: "contact", icon: "✉️", label: "Contact" },
   { id: "terminal", icon: "🖥️", label: "Terminal" },
+  // { id: "settings", icon: "⚙️", label: "Settings" },
 ]

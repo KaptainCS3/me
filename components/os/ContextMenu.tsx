@@ -34,7 +34,7 @@ export function ContextMenu({ x, y, items, onClose }: ContextMenuProps) {
   return (
     <div
       ref={menuRef}
-      className="fixed z-[10000] min-w-[180px] rounded-lg overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.6)] border border-white/10 backdrop-blur-2xl"
+      className="fixed z-10000 min-w-45 rounded-lg overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.6)] border border-white/10 backdrop-blur-2xl"
       style={{
         left: x,
         top: y,

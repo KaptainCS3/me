@@ -8,13 +8,15 @@ import { DOCK_APPS } from "@/data/dockApps"
 import { useAppStore } from "@/stores/appStore"
 import { MenuBar } from "./MenuBar"
 import { DesktopIcons } from "./DesktopIcons"
-import { WelcomeOverlay } from "./WelcomeOverlay"
+import { WelcomeOverlay, BootOverlay } from "./BootOverlay"
 import { Window } from "./Window"
 import { DockItem } from "./DockItem"
 import { ContextMenu } from "./ContextMenu"
 import { WallpaperPicker } from "./WallpaperPicker"
 import { FileInfoModal } from "./FileInfoModal"
+import { Spotlight } from "./Spotlight"
 import type { DesktopItem } from "@/types/portfolio"
+import { INITIAL_VFS } from "@/data/initialVfs"
 
 const DOCK_BOTTOM_GAP = 10
 const GRID_SIZE = 84
@@ -43,9 +45,39 @@ export default function PortfolioOS() {
   const moveDesktopItem = useAppStore((s) => s.moveDesktopItem)
   const updateDesktopItem = useAppStore((s) => s.updateDesktopItem)
 
+  const vfs = useAppStore((s) => s.vfs)
+  const setVfs = useAppStore((s) => s.setVfs)
+  const themeMode = useAppStore((s) => s.themeMode)
+  const accentColor = useAppStore((s) => s.accentColor)
+
+  useEffect(() => {
+    if (Object.keys(vfs).length === 0) {
+      setVfs(INITIAL_VFS)
+    }
+  }, [vfs, setVfs])
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", themeMode)
+  }, [themeMode])
+
+  useEffect(() => {
+    document.documentElement.style.setProperty("--accent", accentColor)
+    // Create a soft version of the accent color
+    if (accentColor.startsWith("#")) {
+      const r = parseInt(accentColor.slice(1, 3), 16)
+      const g = parseInt(accentColor.slice(3, 5), 16)
+      const b = parseInt(accentColor.slice(5, 7), 16)
+      document.documentElement.style.setProperty("--accent-soft", `rgba(${r}, ${g}, ${b}, 0.1)`)
+    } else {
+      const soft = accentColor.replace("rgb", "rgba").replace(")", ", 0.1)")
+      document.documentElement.style.setProperty("--accent-soft", soft)
+    }
+  }, [accentColor])
+
   const [zoomSignal, setZoomSignal] = useState(0)
   const [contextMenu, setContextMenu] = useState<{ x: number; y: number } | null>(null)
   const [showWallpaperPicker, setShowWallpaperPicker] = useState(false)
+  const [showSpotlight, setShowSpotlight] = useState(false)
   const [dockVisible, setDockVisible] = useState(false)
   const [fileInfoItem, setFileInfoItem] = useState<DesktopItem | null>(null)
   const [isMobile, setIsMobile] = useState(
@@ -121,6 +153,9 @@ export default function PortfolioOS() {
           break
         case "zoom":
           if (focusedWindow) setZoomSignal((s) => s + 1)
+          break
+        case "open-settings":
+          openWindow("settings")
           break
         case "about-os":
           openWindow("about-os")
@@ -229,6 +264,13 @@ export default function PortfolioOS() {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const mod = e.metaKey || e.ctrlKey
+
+      if (mod && e.key.toLowerCase() === "k") {
+        e.preventDefault()
+        setShowSpotlight(true)
+        return
+      }
+
       if (!mod) return
       e.stopImmediatePropagation()
       const act = actionRef.current
@@ -416,6 +458,7 @@ export default function PortfolioOS() {
         openWindows={Object.keys(windows)}
         onFocusWindow={focusWindow}
       />
+      <BootOverlay />
       <WelcomeOverlay visible={Object.keys(windows).length === 0} />
 
       <div
@@ -458,7 +501,7 @@ export default function PortfolioOS() {
           transition: "transform 0.35s cubic-bezier(0.4, 0, 0.2, 1)",
           bottom: `calc(${DOCK_BOTTOM_GAP}px + env(safe-area-inset-bottom, 0px))`,
         }}
-        className="absolute left-1/2 bg-white/7 backdrop-blur-2xl border border-white/12 rounded-[18px] px-4 py-2 flex items-end gap-2.5 z-9999 shadow-[0_8px_32px_rgba(0,0,0,0.5)]"
+        className="absolute left-1/2 bg-white/7 backdrop-blur-2xl border border-white/12 rounded-[18px] px-4 py-4 flex items-end gap-2.5 z-9999 shadow-[0_8px_32px_rgba(0,0,0,0.5)]"
       >
         {DOCK_APPS.map((app) => (
           <DockItem
@@ -505,6 +548,12 @@ export default function PortfolioOS() {
           onClose={() => setFileInfoItem(null)}
         />
       )}
+
+      <Spotlight 
+        isOpen={showSpotlight} 
+        onClose={() => setShowSpotlight(false)} 
+        onOpenApp={openWindow}
+      />
     </div>
   )
 }

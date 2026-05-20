@@ -1,7 +1,7 @@
 "use client"
 
 import { useRef, useState, useCallback, useEffect } from "react"
-import type { DesktopItem } from "@/types/portfolio"
+import type { DesktopItem} from "@/types/portfolio"
 
 interface DesktopIconsProps {
   items: DesktopItem[]
@@ -10,12 +10,12 @@ interface DesktopIconsProps {
   onItemClick: (id: string) => void
 }
 
-function getFileIcon(type: string): string {
-  if (type.startsWith("image/")) return "🖼️"
-  if (type.startsWith("text/")) return "📝"
-  if (type === "application/pdf") return "📄"
-  if (type.startsWith("video/")) return "🎬"
-  if (type.startsWith("audio/")) return "🎵"
+function getFileIcon(icons: DesktopItem)  {
+  if (icons?.fileMeta?.type.startsWith("image/")) return "🖼️"
+  if (icons?.fileMeta?.type.startsWith("text/")) return "📝"
+  if (icons.fileMeta?.type === "application/pdf") return "📄"
+  if (icons?.fileMeta?.type.startsWith("video/")) return "🎬"
+  if (icons?.fileMeta?.type.startsWith("audio/")) return "🎵"
   return "📁"
 }
 
@@ -94,9 +94,9 @@ export function DesktopIcons({ items, onMoveItem, onDropFiles, onItemClick }: De
           style={{ left: item.x, top: item.y, width: 56 }}
         >
           <div className="w-11 h-11 rounded-lg bg-white/7 border border-white/10 flex items-center justify-center text-2xl group-hover:bg-white/12 group-hover:border-white/20 transition-colors">
-            {item.icon}
+            {getFileIcon(item)}
           </div>
-          <span className="text-[10px] text-white/70 text-center leading-tight [text-shadow:0_1px_3px_rgba(0,0,0,0.8)] break-words max-w-[56px]">
+          <span className="text-[10px] text-white/70 text-center leading-tight [text-shadow:0_1px_3px_rgba(0,0,0,0.8)] wrap-break-word max-w-14">
             {item.label}
           </span>
         </div>

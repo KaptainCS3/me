@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react"
 import { WINDOW_CONFIGS } from "@/data/windowConfigs"
+import Image from "next/image"
 
 interface MenuItemDef {
   label: string
@@ -31,6 +32,7 @@ const STATIC_MENUS: MenuGroup[] = [
       { label: "New Window", shortcut: "⌘N", action: "new-window" },
       { label: "Close Window", shortcut: "⌘W", action: "close-window" },
       "separator",
+      { label: "System Settings...", action: "open-settings" },
       { label: "Change Wallpaper...", action: "change-wallpaper" },
     ],
   },
@@ -202,8 +204,8 @@ export function MenuBar({
 
       <div className="flex gap-3 items-center">
         <span className="hidden sm:inline text-[11px] text-white/50">
-          <img src="https://flagcdn.com/w20/cm.png" alt="CM" className="inline-block w-4 h-3 align-text-bottom mr-1" />
-          Yaoundé
+          <Image src="https://flagcdn.com/w20/cm.png" alt="CM" className="inline-block w-4 h-3 align-text-bottom mr-1" width={100} height={100} />
+          Douala
         </span>
         <span className="hidden sm:inline text-[11px] text-white/70">{dateStr}</span>
         <span className="text-xs font-medium text-white/90">{timeStr}</span>

@@ -3,6 +3,7 @@
 import { useState, useRef, useCallback, useEffect } from "react"
 import type { WindowConfig } from "@/types/portfolio"
 import { WindowContent } from "./WindowContent"
+import { useAppStore } from "@/stores/appStore"
 
 interface WindowProps {
   id: string
@@ -37,11 +38,11 @@ function TrafficBtn({
       onClick={onClick}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className="w-7 h-7 sm:w-3 sm:h-3 rounded-full border-none cursor-pointer flex items-center justify-center transition-[filter] duration-150 hover:brightness-125"
+      className="w-4 h-4 sm:w-3 sm:h-3 rounded-full border-none cursor-pointer flex items-center justify-center transition-[filter] duration-150 hover:brightness-125"
       style={{ background: color }}
     >
       {hovered && (
-        <span className="text-sm sm:text-[7px] font-bold leading-none" style={{ color: hoverColor }}>
+        <span className="text-[10px] sm:text-[7px] font-bold leading-none" style={{ color: hoverColor }}>
           {icon}
         </span>
       )}
@@ -201,6 +202,19 @@ export function Window({
         <span className="text-xs text-[#6b8fa0] flex-1 text-center truncate mx-2">
           {config.icon} {config.title}
         </span>
+        {id !== "source-viewer" && (
+          <button 
+            onClick={() => useAppStore.getState().addWindow("source-viewer", { 
+              pos: { x: position.x + 40, y: position.y + 40 }, 
+              minimized: false, 
+              z: useAppStore.getState().getNextZ() 
+            })}
+            className="text-[#6b8fa0] hover:text-white transition-colors cursor-pointer ml-2 text-sm font-mono"
+            title="View Source"
+          >
+            {"</>"}
+          </button>
+        )}
       </div>
       <div className="flex-1 overflow-hidden bg-[#0a1520]">
         <WindowContent id={id} onClose={onClose} />

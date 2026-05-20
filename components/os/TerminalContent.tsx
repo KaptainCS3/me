@@ -4,6 +4,7 @@ import { useState, useRef, useEffect, useMemo } from "react"
 import { TERMINAL_LINES } from "@/data/terminalLines"
 import { buildCommands } from "@/data/commands"
 import { useTerminalStore } from "@/stores/terminalStore"
+import { useAppStore } from "@/stores/appStore"
 
 export function TerminalContent({ onClose }: { onClose?: () => void }) {
   const lines = useTerminalStore((s) => s.lines)
@@ -19,7 +20,9 @@ export function TerminalContent({ onClose }: { onClose?: () => void }) {
   const [histIdx, setHistIdx] = useState(-1)
   const endRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
-  const commands = useMemo(() => buildCommands(), [])
+  const vfs = useAppStore((s) => s.vfs)
+  const updateVfsNode = useAppStore((s) => s.updateVfsNode)
+  const commands = useMemo(() => buildCommands(vfs, updateVfsNode), [vfs, updateVfsNode])
 
   useEffect(() => {
     if (idx < TERMINAL_LINES.length - 1) {
