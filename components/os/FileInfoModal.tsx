@@ -1,6 +1,8 @@
 "use client"
 
 import { useEffect, useRef } from "react"
+import { FiInfo, FiX, FiImage, FiFile, FiVideo, FiMusic, FiFolder } from "react-icons/fi"
+import type { ReactNode } from "react"
 import type { DesktopItem } from "@/types/portfolio"
 
 interface FileInfoModalProps {
@@ -12,6 +14,15 @@ function formatSize(bytes: number): string {
   if (bytes < 1024) return `${bytes} B`
   if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
+}
+
+function getFileIcon(item: DesktopItem): ReactNode {
+  if (item.fileMeta?.type.startsWith("image/")) return <FiImage size={32} />
+  if (item.fileMeta?.type.startsWith("text/")) return <FiFile size={32} />
+  if (item.fileMeta?.type === "application/pdf") return <FiFile size={32} />
+  if (item.fileMeta?.type.startsWith("video/")) return <FiVideo size={32} />
+  if (item.fileMeta?.type.startsWith("audio/")) return <FiMusic size={32} />
+  return <FiFolder size={32} />
 }
 
 export function FileInfoModal({ item, onClose }: FileInfoModalProps) {
@@ -46,12 +57,12 @@ export function FileInfoModal({ item, onClose }: FileInfoModalProps) {
         style={{ background: "rgba(15, 20, 30, 0.95)" }}
       >
         <div className="flex items-center justify-between px-5 py-3 border-b border-white/8">
-          <h2 className="text-sm font-semibold text-white">ℹ️ File Info</h2>
+          <h2 className="text-sm font-semibold text-white"><FiInfo size={16} className="inline mr-1" /> File Info</h2>
           <button
             onClick={onClose}
             className="text-white/40 hover:text-white/80 transition-colors text-lg cursor-pointer"
           >
-            ✕
+            <FiX />
           </button>
         </div>
 
@@ -68,7 +79,7 @@ export function FileInfoModal({ item, onClose }: FileInfoModalProps) {
 
           {!meta?.dataUrl && (
             <div className="flex items-center justify-center h-20 text-4xl text-[#4a6b7a]">
-              {item.icon}
+              {getFileIcon(item)}
             </div>
           )}
 

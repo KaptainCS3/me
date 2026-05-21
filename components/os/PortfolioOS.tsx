@@ -16,7 +16,7 @@ import { ContextMenu } from "./ContextMenu"
 import { WallpaperPicker } from "./WallpaperPicker"
 import { FileInfoModal } from "./FileInfoModal"
 import { Spotlight } from "./Spotlight"
-import { FiGithub } from "react-icons/fi"
+import { FiGithub, FiImage } from "react-icons/fi"
 import type { DesktopItem } from "@/types/portfolio"
 import { INITIAL_VFS } from "@/data/initialVfs"
 
@@ -203,10 +203,10 @@ export default function PortfolioOS() {
       const newItems: DesktopItem[] = Array.from(files).map((file, i) => {
         const id = `dropped-${Date.now()}-${i}`
         const icon = file.type.startsWith("image/")
-          ? "🖼️"
+          ? ""
           : file.type === "application/pdf"
-            ? "📄"
-            : "📁"
+            ? ""
+            : ""
         const item: DesktopItem = {
           id,
           icon,
@@ -516,7 +516,8 @@ export default function PortfolioOS() {
           y={contextMenu.y}
           items={[
             {
-              label: "🖼️ Change Wallpaper...",
+              icon: <FiImage size={14} />,
+              label: "Change Wallpaper...",
               onClick: () => setShowWallpaperPicker(true),
             },
           ]}

@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useRef, useCallback } from "react"
+import { FiMonitor } from "react-icons/fi"
 import { WINDOW_CONFIGS } from "@/data/windowConfigs"
 import Image from "next/image"
 
@@ -122,7 +123,7 @@ export function MenuBar({
         const cfg = WINDOW_CONFIGS[id]
         const isFocused = id === focusedWindow
         dynamicItems.push({
-          label: `${isFocused ? "✓ " : ""}${cfg?.icon || "📄"} ${cfg?.title || id}`,
+          label: `${isFocused ? "✓ " : ""}${cfg?.title || id}`,
           action: `focus-${id}`,
         })
       })
@@ -150,7 +151,7 @@ export function MenuBar({
       className="absolute top-0 left-0 right-0 h-6.5 bg-[rgba(5,10,18,0.7)] backdrop-blur-xl border-b border-white/6 flex items-center justify-between px-4 z-9999"
     >
       <div className="flex gap-0 items-stretch h-full">
-        <span className="text-sm flex items-center mr-1">🖥️</span>
+        <span className="text-sm flex items-center mr-1"><FiMonitor size={15} /></span>
         {builtMenus.map((menu) => (
           <div
             key={menu.label}

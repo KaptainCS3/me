@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { FiFolder, FiExternalLink, FiGithub, FiChevronRight, FiClock } from "react-icons/fi"
 import { PROJECTS } from "@/data/projects"
 
 function FadeIn({ children, show }: { children: React.ReactNode; show: boolean }) {
@@ -45,7 +46,7 @@ export function ProjectsContent() {
               borderLeft: active === i ? `2px solid ${p.accent}` : "2px solid transparent",
             }}
           >
-            📁 {p.name}
+            <FiFolder size={14} /> {p.name}
           </button>
         ))}
       </div>
@@ -66,7 +67,7 @@ export function ProjectsContent() {
           </option>
           {PROJECTS.map((p, i) => (
             <option key={i} value={i} className="bg-[#060d14] text-white">
-              📁 {p.name}
+              <FiFolder size={14} /> {p.name}
             </option>
           ))}
         </select>
@@ -74,7 +75,7 @@ export function ProjectsContent() {
       <div className="flex-1 overflow-y-auto p-5">
         {active === null ? (
           <div className="flex flex-col items-center justify-center h-full text-[#2a4a5a]">
-            <p className="text-4xl mb-3">📁</p>
+            <p className="text-4xl mb-3"><FiFolder size={40} /></p>
             <p className="text-sm">Select a project from the sidebar</p>
           </div>
         ) : (
@@ -87,7 +88,7 @@ export function ProjectsContent() {
                     <h3 className="text-base font-bold text-white">{p.name}</h3>
                     {p.period && (
                       <span className="text-[10px] shrink-0 px-2 py-0.5 rounded bg-[#0d1f16] text-[#6b8fa0] border border-[#1e3a2a]/50">
-                        ⏱ {p.period}
+                        <FiClock size={10} /> {p.period}
                       </span>
                     )}
                   </div>
@@ -108,7 +109,7 @@ export function ProjectsContent() {
                     <div className="flex flex-wrap gap-x-3 gap-y-1 mb-3">
                       {p.skills.map((s) => (
                         <span key={s} className="text-xs text-[#a8c4d0]">
-                          ▸ {s}
+                          <FiChevronRight size={10} /> {s}
                         </span>
                       ))}
                     </div>
@@ -125,7 +126,7 @@ export function ProjectsContent() {
                           rel="noopener noreferrer"
                           className="text-xs px-3 py-1 rounded bg-[#0d1f16] text-[#34d399] border border-[#1e3a2a]/50 hover:bg-[#1a3a2a] transition-colors"
                         >
-                          🔗 Live Demo
+                          <FiExternalLink size={12} /> Live Demo
                         </a>
                       )}
                       {p.github && (
@@ -135,7 +136,7 @@ export function ProjectsContent() {
                           rel="noopener noreferrer"
                           className="text-xs px-3 py-1 rounded bg-[#0d1f16] text-[#c084fc] border border-[#1e3a2a]/50 hover:bg-[#2a1a3a] transition-colors"
                         >
-                          🐙 Source
+                          <FiGithub size={12} /> Source
                         </a>
                       )}
                     </div>

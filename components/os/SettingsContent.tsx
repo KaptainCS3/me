@@ -1,5 +1,6 @@
 "use client"
 
+import { FiMoon, FiMonitor, FiSave, FiHeart } from "react-icons/fi"
 import { useAppStore } from "@/stores/appStore"
 
 const ACCENT_COLORS = [
@@ -12,9 +13,9 @@ const ACCENT_COLORS = [
 ]
 
 const THEMES = [
-  { id: "dark", name: "Default Dark", icon: "🌙" },
-  { id: "matrix", name: "The Matrix", icon: "📟" },
-  { id: "retro", name: "Classic 95", icon: "💾" },
+  { id: "dark", icon: <FiMoon />, name: "Default Dark" },
+  { id: "matrix", icon: <FiMonitor />, name: "The Matrix" },
+  { id: "retro", icon: <FiSave />, name: "Classic 95" },
 ]
 
 export function SettingsContent() {
@@ -91,7 +92,7 @@ export function SettingsContent() {
       <div className="mt-auto pt-8 text-center text-[10px] text-slate-600">
         PortfolioOS v1.0.0-stable
         <br />
-        Designed with ❤️ in Douala
+        Designed with <FiHeart size={10} className="inline" /> in Douala
       </div>
     </div>
   )

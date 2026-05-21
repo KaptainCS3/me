@@ -1,6 +1,7 @@
 "use client"
 
 import { useRef, useEffect } from "react"
+import { FiX, FiCheck, FiFolder } from "react-icons/fi"
 import { WALLPAPER_PRESETS } from "@/data/wallpaper"
 import type { WallpaperPreset } from "@/types/portfolio"
 
@@ -59,7 +60,7 @@ export function WallpaperPicker({ current, onSelect, onReset, onClose }: Wallpap
             onClick={onClose}
             className="text-white/40 hover:text-white/80 transition-colors text-lg cursor-pointer"
           >
-            ✕
+            <FiX />
           </button>
         </div>
 
@@ -81,8 +82,8 @@ export function WallpaperPicker({ current, onSelect, onReset, onClose }: Wallpap
                   {preset.name}
                 </span>
                 {isPresetActive(preset) && (
-                  <span className="absolute top-1.5 right-2 text-[10px] text-[#34d399] drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
-                    ✓
+                  <span className="absolute top-1.5 right-2 text-xs text-[#34d399] drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
+                    <FiCheck size={12} />
                   </span>
                 )}
               </button>
@@ -102,7 +103,7 @@ export function WallpaperPicker({ current, onSelect, onReset, onClose }: Wallpap
               onClick={() => fileRef.current?.click()}
               className="w-full py-2.5 px-4 rounded-lg text-sm text-white bg-white/8 hover:bg-white/12 border border-white/10 transition-colors cursor-pointer"
             >
-              📁 Upload Image
+              <FiFolder size={14} className="inline mr-1" /> Upload Image
             </button>
           </div>
         </div>

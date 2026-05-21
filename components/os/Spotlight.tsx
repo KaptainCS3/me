@@ -1,6 +1,8 @@
 "use client"
 
 import { useState, useEffect, useRef, useMemo } from "react"
+import { FiSearch, FiFolder, FiZap } from "react-icons/fi"
+import type { ReactNode } from "react"
 import { useAppStore } from "@/stores/appStore"
 import { WINDOW_CONFIGS } from "@/data/windowConfigs"
 import { PROJECTS } from "@/data/projects"
@@ -10,7 +12,7 @@ interface SpotlightItem {
   id: string
   type: "app" | "project" | "skill"
   label: string
-  icon: string
+  icon: ReactNode
   description?: string
 }
 
@@ -21,20 +23,17 @@ export function Spotlight({ isOpen, onClose, onOpenApp }: { isOpen: boolean, onC
 
   const items: SpotlightItem[] = useMemo(() => {
     const list: SpotlightItem[] = []
-    
-    // Add Apps
+
     Object.entries(WINDOW_CONFIGS).forEach(([id, cfg]) => {
       list.push({ id, type: "app", label: cfg.title, icon: cfg.icon })
     })
 
-    // Add Projects
     PROJECTS.forEach((p) => {
-      list.push({ id: "projects", type: "project", label: p.name, icon: "📁", description: p.desc })
+      list.push({ id: "projects", type: "project", label: p.name, icon: <FiFolder />, description: p.desc })
     })
 
-    // Add Skills
     SKILLS.forEach((s) => {
-      list.push({ id: "skills", type: "skill", label: s.cat, icon: "⚡", description: s.items.join(", ") })
+      list.push({ id: "skills", type: "skill", label: s.cat, icon: <FiZap />, description: s.items.join(", ") })
     })
 
     return list
@@ -93,7 +92,7 @@ export function Spotlight({ isOpen, onClose, onOpenApp }: { isOpen: boolean, onC
         onClick={e => e.stopPropagation()}
       >
         <div className="flex items-center gap-3 p-4 border-b border-white/5">
-          <span className="text-xl">🔍</span>
+          <span className="text-xl"><FiSearch /></span>
           <input
             ref={inputRef}
             type="text"
@@ -118,7 +117,7 @@ export function Spotlight({ isOpen, onClose, onOpenApp }: { isOpen: boolean, onC
                   selectedIndex === idx ? "bg-accent/20 text-white" : "text-slate-400 hover:bg-white/5"
                 }`}
               >
-                <span className="text-2xl w-8 h-8 flex items-center justify-center bg-white/5 rounded-lg border border-white/10">
+                <span className="text-lg w-8 h-8 flex items-center justify-center bg-white/5 rounded-lg border border-white/10">
                   {item.icon}
                 </span>
                 <div className="flex-1 min-w-0">
@@ -139,7 +138,7 @@ export function Spotlight({ isOpen, onClose, onOpenApp }: { isOpen: boolean, onC
             ))
           ) : (
             <div className="p-8 text-center text-slate-500 italic">
-              No results for "{query}"
+              No results for &ldquo;{query}&rdquo;
             </div>
           )}
         </div>

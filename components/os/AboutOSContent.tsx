@@ -1,9 +1,11 @@
 "use client"
 
+import { FiMonitor } from "react-icons/fi"
+
 export function AboutOSContent() {
   return (
     <div className="h-full flex flex-col items-center justify-center p-8 text-center font-mono">
-      <div className="text-5xl mb-4">🖥️</div>
+      <div className="text-5xl mb-4"><FiMonitor size={48} /></div>
       <h2 className="text-lg font-bold text-white mb-1">Portfolio OS</h2>
       <p className="text-xs text-[#6b8fa0] mb-5">v1.0.0</p>
 

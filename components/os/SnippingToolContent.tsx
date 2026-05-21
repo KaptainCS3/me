@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { FiCamera } from "react-icons/fi"
 import { useAppStore } from "@/stores/appStore"
 import html2canvas from "html2canvas"
 
@@ -41,7 +42,7 @@ export function SnippingToolContent() {
       // Add to Desktop
       mergeDesktopItems([{
         id,
-        icon: "🖼️",
+        icon: "",
         label: filename,
         x: 100,
         y: 100,
@@ -66,7 +67,7 @@ export function SnippingToolContent() {
   return (
     <div className="p-8 flex flex-col items-center justify-center h-full bg-[#0a1520] text-slate-200 gap-6">
       <div className="w-24 h-24 rounded-3xl bg-accent/20 flex items-center justify-center text-5xl border border-accent/30 shadow-[0_0_30px_var(--accent-soft)]">
-        📸
+        <FiCamera size={48} />
       </div>
       <div className="text-center">
         <h2 className="text-xl font-bold mb-2">Snipping Tool</h2>

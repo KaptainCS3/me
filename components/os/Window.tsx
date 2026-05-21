@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useRef, useCallback, useEffect } from "react"
+import { FiX, FiMinus, FiMaximize2 } from "react-icons/fi"
 import type { WindowConfig } from "@/types/portfolio"
 import { WindowContent } from "./WindowContent"
 import { useAppStore } from "@/stores/appStore"
@@ -28,7 +29,7 @@ function TrafficBtn({
 }: {
   color: string
   hoverColor: string
-  icon: string
+  icon: React.ReactNode
   onClick: () => void
 }) {
   const [hovered, setHovered] = useState(false)
@@ -42,7 +43,7 @@ function TrafficBtn({
       style={{ background: color }}
     >
       {hovered && (
-        <span className="text-[10px] sm:text-[7px] font-bold leading-none" style={{ color: hoverColor }}>
+        <span className="text-[10px] sm:text-[7px] font-bold leading-none flex items-center" style={{ color: hoverColor }}>
           {icon}
         </span>
       )}
@@ -165,7 +166,11 @@ export function Window({
         top: isMaximized ? 0 : position.y,
         left: isMaximized ? 0 : position.x,
         width: isMaximized ? "100%" : size.w,
-        height: isMaximized ? (isMobile ? "calc(100% - 90px)" : "100%") : size.h,
+        height: isMaximized
+          ? isMobile
+            ? "calc(100% - 90px)"
+            : "100%"
+          : size.h,
         zIndex,
         borderRadius: isMaximized ? 0 : 12,
         overflow: "hidden",
@@ -179,36 +184,38 @@ export function Window({
         onTouchStart={onTouchStart}
         className="h-11 sm:h-9 flex items-center px-3 cursor-default select-none shrink-0 bg-[#0d1f2d] border-b border-[#1e3a4a]/50"
       >
-        <div className="flex gap-[7px] mr-3">
+        <div className="flex gap-1.75 mr-3">
           <TrafficBtn
             color="#ff5f57"
             hoverColor="#400"
-            icon="✕"
+            icon={<FiX />}
             onClick={onClose}
           />
           <TrafficBtn
             color="#febc2e"
             hoverColor="#400"
-            icon="−"
+            icon={<FiMinus />}
             onClick={onMinimize}
           />
           <TrafficBtn
             color="#28c840"
             hoverColor="#040"
-            icon="⤢"
+            icon={<FiMaximize2 />}
             onClick={() => setIsMaximized((m) => !m)}
           />
         </div>
         <span className="text-xs text-[#6b8fa0] flex-1 text-center truncate mx-2">
-          {config.icon} {config.title}
+          {config.title}
         </span>
         {id !== "source-viewer" && (
-          <button 
-            onClick={() => useAppStore.getState().addWindow("source-viewer", { 
-              pos: { x: position.x + 40, y: position.y + 40 }, 
-              minimized: false, 
-              z: useAppStore.getState().getNextZ() 
-            })}
+          <button
+            onClick={() =>
+              useAppStore.getState().addWindow("source-viewer", {
+                pos: { x: position.x + 40, y: position.y + 40 },
+                minimized: false,
+                z: useAppStore.getState().getNextZ(),
+              })
+            }
             className="text-[#6b8fa0] hover:text-white transition-colors cursor-pointer ml-2 text-sm font-mono"
             title="View Source"
           >
@@ -220,5 +227,5 @@ export function Window({
         <WindowContent id={id} onClose={onClose} />
       </div>
     </div>
-  )
+  );
 }

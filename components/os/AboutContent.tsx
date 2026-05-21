@@ -1,5 +1,6 @@
 "use client"
 
+import { FiUser, FiChevronRight } from "react-icons/fi"
 import { RESUME } from "@/data/about"
 
 export function AboutContent() {
@@ -10,7 +11,7 @@ export function AboutContent() {
           className="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl shrink-0"
           style={{ background: "linear-gradient(135deg, #0a3d2b, #1a6b4a)" }}
         >
-          🧑‍💻
+          <FiUser />
         </div>
         <div>
           <h2 className="text-xl font-bold text-white mb-1">{RESUME.name}</h2>
@@ -108,7 +109,7 @@ export function AboutContent() {
               <ul className="space-y-1">
                 {exp.highlights.map((h) => (
                   <li key={h} className="text-xs text-[#a8c4d0] flex gap-2">
-                    <span className="text-[#34d399] shrink-0">▸</span>
+                    <span className="text-[#34d399] shrink-0"><FiChevronRight size={12} /></span>
                     {h}
                   </li>
                 ))}

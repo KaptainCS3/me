@@ -36,7 +36,7 @@ export interface TerminalLine {
 
 export interface WindowConfig {
   title: string
-  icon: string
+  icon: ReactNode
   w: number
   h: number
   content: string

@@ -2,10 +2,12 @@
 
 import { useEffect, useRef } from "react"
 
+import type { ReactNode } from "react"
+
 interface ContextMenuProps {
   x: number
   y: number
-  items: { label: string; onClick: () => void }[]
+  items: { label: string; onClick: () => void; icon?: ReactNode }[]
   onClose: () => void
 }
 
@@ -50,7 +52,7 @@ export function ContextMenu({ x, y, items, onClose }: ContextMenuProps) {
           }}
           className="w-full text-left px-4 py-2 text-sm text-[#c8d0d8] hover:bg-white/8 hover:text-white transition-colors cursor-pointer"
         >
-          {item.label}
+          <span>{item.icon} {item.label}</span>
         </button>
       ))}
     </div>
