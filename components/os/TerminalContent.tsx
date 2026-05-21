@@ -22,7 +22,7 @@ export function TerminalContent({ onClose }: { onClose?: () => void }) {
   const [histIdx, setHistIdx] = useState(-1)
   const endRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
-  const { wallpaper, setWallpaper } = useWallpaper()
+  const { setWallpaper } = useWallpaper()
   const vfs = useAppStore((s) => s.vfs)
   const updateVfsNode = useAppStore((s) => s.updateVfsNode)
   const deleteVfsNode = useAppStore((s) => s.deleteVfsNode)

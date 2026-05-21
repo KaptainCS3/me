@@ -27,14 +27,15 @@ export const useTerminalStore = create<TerminalStore>()(
       history: [],
 
       addBootLine: (line) =>
-        set((s) => ({ lines: [...s.lines, line], idx: s.idx + 1 })),
+        set((s) => ({ lines: [...s.lines, line].slice(-100), idx: s.idx + 1 })),
 
       advanceBoot: (idx) => set({ idx }),
 
-      addLine: (line) => set((s) => ({ lines: [...s.lines, line] })),
+      addLine: (line) =>
+        set((s) => ({ lines: [...s.lines, line].slice(-100) })),
 
       addLines: (lines) =>
-        set((s) => ({ lines: [...s.lines, ...lines] })),
+        set((s) => ({ lines: [...s.lines, ...lines].slice(-100) })),
 
       popLine: () =>
         set((s) => ({ lines: s.lines.slice(0, -1) })),

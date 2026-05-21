@@ -161,6 +161,7 @@ export function Window({
 
   return (
     <div
+      data-window={id}
       style={{
         position: "absolute",
         top: isMaximized ? 0 : position.y,

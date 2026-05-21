@@ -345,5 +345,33 @@ export function buildCommands(
     },
   })
 
+  reg({
+    name: "contact",
+    desc: "Display contact information or open contact window",
+    usage: "contact [--open|--mail]",
+    handler(args) {
+      if (args.includes("--open")) {
+        actions.openWindow("contact")
+        return lines("Opening Contact window...")
+      }
+      if (args.includes("--mail")) {
+        window.open(`mailto:${RESUME.email}`)
+        return lines("Opening mail client...")
+      }
+
+      const maxLabel = Math.max("LinkedIn".length, "GitHub".length, "Email".length, "Twitter".length)
+      return [
+        lines(col("Contact Methods:", "var(--accent)")).flat(),
+        lines(""),
+        { out: `${"Email:".padEnd(maxLabel + 2)}${RESUME.email}`, color: "#60a5fa" },
+        { out: `${"LinkedIn:".padEnd(maxLabel + 2)}${RESUME.linkedin}`, color: "#34d399" },
+        { out: `${"GitHub:".padEnd(maxLabel + 2)}${RESUME.github}`, color: "#c084fc" },
+        { out: `${"X/Twitter:".padEnd(maxLabel + 2)}@KaptainCS3`, color: "#1da1f2" },
+        lines(""),
+        lines(col("Tip: Run 'contact --open' to send a message via the form.", "#4a6b7a")),
+      ]
+    },
+  })
+
   return cmds
 }

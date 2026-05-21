@@ -1,25 +1,15 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { FiFolder, FiExternalLink, FiGithub, FiChevronRight, FiClock } from "react-icons/fi"
 import { PROJECTS } from "@/data/projects"
 
 function FadeIn({ children, show }: { children: React.ReactNode; show: boolean }) {
-  const [visible, setVisible] = useState(false)
-
-  useEffect(() => {
-    if (show) {
-      const t = setTimeout(() => setVisible(true), 30)
-      return () => clearTimeout(t)
-    }
-    setVisible(false)
-  }, [show])
-
   return (
     <div
       style={{
-        opacity: visible ? 1 : 0,
-        transform: visible ? "translateY(0)" : "translateY(6px)",
+        opacity: show ? 1 : 0,
+        transform: show ? "translateY(0)" : "translateY(6px)",
         transition: "opacity 0.25s ease, transform 0.25s ease",
       }}
     >
@@ -67,7 +57,7 @@ export function ProjectsContent() {
           </option>
           {PROJECTS.map((p, i) => (
             <option key={i} value={i} className="bg-[#060d14] text-white">
-              <FiFolder size={14} /> {p.name}
+              {p.name}
             </option>
           ))}
         </select>

@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { FiMail, FiLinkedin, FiGithub, FiSend } from "react-icons/fi"
+import { FiMail, FiLinkedin, FiGithub, FiSend, FiCopy, FiCheck, FiExternalLink } from "react-icons/fi"
 import { RiTwitterXLine } from "react-icons/ri"
 import { RESUME } from "@/data/about"
 
@@ -11,118 +11,183 @@ export function ContactContent() {
   const [subject, setSubject] = useState("")
   const [message, setMessage] = useState("")
   const [sent, setSent] = useState(false)
+  const [isSending, setIsSending] = useState(false)
+  const [copiedId, setCopiedId] = useState<string | null>(null)
 
   const contacts = [
-    { icon: FiMail, label: "Email", value: RESUME.email, href: `mailto:${RESUME.email}`, color: "#60a5fa" },
-    { icon: FiLinkedin, label: "LinkedIn", value: RESUME.linkedin, href: `https://${RESUME.linkedin}`, color: "#34d399" },
-    { icon: FiGithub, label: "GitHub", value: RESUME.github, href: `https://${RESUME.github}`, color: "#c084fc" },
-    { icon: RiTwitterXLine, label: "X", value: "@KaptainCS3", href: "https://x.com/KaptainCS3", color: "#1da1f2" },
+    { id: "email", icon: FiMail, label: "Email", value: RESUME.email, href: `mailto:${RESUME.email}`, color: "#60a5fa" },
+    { id: "linkedin", icon: FiLinkedin, label: "LinkedIn", value: "leonard-appelgryn", href: `https://${RESUME.linkedin}`, color: "#34d399" },
+    { id: "github", icon: FiGithub, label: "GitHub", value: "kaptaincs3", href: `https://${RESUME.github}`, color: "#c084fc" },
+    { id: "x", icon: RiTwitterXLine, label: "X/Twitter", value: "@KaptainCS3", href: "https://x.com/KaptainCS3", color: "#1da1f2" },
   ]
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleCopy = (val: string, id: string) => {
+    navigator.clipboard.writeText(val)
+    setCopiedId(id)
+    setTimeout(() => setCopiedId(null), 2000)
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setIsSending(true)
+    
+    // Simulate a network delay for better UX
+    await new Promise(r => setTimeout(r, 800))
+    
     const body = `From: ${name}\nEmail: ${email}\n\n${message}`
     window.open(`mailto:${RESUME.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`)
+    
+    setIsSending(false)
     setSent(true)
     setTimeout(() => setSent(false), 3000)
   }
 
   return (
-    <div className="p-6 h-full flex flex-col font-mono overflow-y-auto">
-      <p className="text-xs mb-4 text-[#4a6b7a] shrink-0">// Let&apos;s build something</p>
+    <div className="h-full flex flex-col font-mono text-sm bg-[#06090c] overflow-hidden">
+      {/* Top Header/Breadcrumb */}
+      <div className="px-4 py-2 border-b border-[#1e3a4a]/30 bg-[#0d1117] flex items-center gap-2 text-[10px] text-[#4a6b7a] shrink-0">
+        <span className="opacity-50">portfolio</span>
+        <span>/</span>
+        <span className="text-[#34d399]">contact.tsx</span>
+      </div>
 
-      {/* Desktop: two columns */}
-      <div className="hidden sm:flex gap-4 flex-1 min-h-0">
-        {/* Left: Social links */}
-        <div className="space-y-3 w-56 shrink-0">
-          {contacts.map((c) => (
-            <a
-              key={c.label}
-              href={c.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-3 p-3 rounded-lg bg-[#060d14] border border-[#1e3a4a]/50 hover:bg-[#0a1520] transition-colors"
-            >
-              <c.icon size={18} style={{ color: c.color }} />
-              <div>
-                <p className="text-xs text-[#4a6b7a]">{c.label}</p>
-                <p className="text-sm" style={{ color: c.color }}>{c.value}</p>
+      <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-8 custom-scrollbar">
+        {/* Intro Section */}
+        <section className="space-y-1">
+          <p className="text-[#4a6b7a] text-xs">// Connect with the engineer</p>
+          <h2 className="text-xl font-bold text-white tracking-tight">System.Contact()</h2>
+        </section>
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          {/* Left: Interactive Social Cards (5 cols) */}
+          <div className="lg:col-span-5 space-y-3">
+            {contacts.map((c) => (
+              <div
+                key={c.id}
+                className="group relative flex flex-col p-3 rounded-lg bg-[#0d1117] border border-[#1e3a4a]/30 hover:border-white/20 transition-all duration-300"
+              >
+                <div className="flex items-center justify-between mb-1">
+                  <div className="flex items-center gap-2">
+                    <c.icon className="transition-transform group-hover:scale-110" style={{ color: c.color }} size={16} />
+                    <span className="text-[10px] uppercase tracking-widest text-[#4a6b7a]">{c.label}</span>
+                  </div>
+                  <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <button 
+                      onClick={() => handleCopy(c.value, c.id)}
+                      className="p-1.5 rounded-md hover:bg-white/5 text-[#4a6b7a] hover:text-white transition-colors"
+                      title="Copy"
+                    >
+                      {copiedId === c.id ? <FiCheck className="text-[#34d399]" size={14} /> : <FiCopy size={14} />}
+                    </button>
+                    <a 
+                      href={c.href} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="p-1.5 rounded-md hover:bg-white/5 text-[#4a6b7a] hover:text-white transition-colors"
+                      title="Open link"
+                    >
+                      <FiExternalLink size={14} />
+                    </a>
+                  </div>
+                </div>
+                <div className="flex items-baseline gap-2">
+                   <span className="text-[#c084fc] text-xs">const</span>
+                   <span className="text-[#60a5fa] font-semibold">{c.id}</span>
+                   <span className="text-[#4a6b7a]">=</span>
+                   <span className="text-[#34d399] break-all">"{c.value}"</span>
+                </div>
               </div>
-            </a>
-          ))}
-        </div>
+            ))}
+          </div>
 
-        {/* Right: Contact form */}
-        <form onSubmit={handleSubmit} className="flex-1 flex flex-col gap-3 min-w-0">
-          <input
-            type="text"
-            placeholder="Your Name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-            className="w-full px-3 py-2 rounded-lg bg-[#060d14] border border-[#1e3a4a]/50 text-sm text-white placeholder:text-[#4a6b7a] outline-none focus:border-[#34d399]/50 transition-colors"
-          />
-          <input
-            type="email"
-            placeholder="Your Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            className="w-full px-3 py-2 rounded-lg bg-[#060d14] border border-[#1e3a4a]/50 text-sm text-white placeholder:text-[#4a6b7a] outline-none focus:border-[#34d399]/50 transition-colors"
-          />
-          <input
-            type="text"
-            placeholder="Subject"
-            value={subject}
-            onChange={(e) => setSubject(e.target.value)}
-            required
-            className="w-full px-3 py-2 rounded-lg bg-[#060d14] border border-[#1e3a4a]/50 text-sm text-white placeholder:text-[#4a6b7a] outline-none focus:border-[#34d399]/50 transition-colors"
-          />
-          <textarea
-            placeholder="Your Message"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            required
-            rows={4}
-            className="w-full px-3 py-2 rounded-lg bg-[#060d14] border border-[#1e3a4a]/50 text-sm text-white placeholder:text-[#4a6b7a] outline-none focus:border-[#34d399]/50 transition-colors resize-none"
-          />
-          <button
-            type="submit"
-            className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-[#34d399] text-[#060d14] text-sm font-semibold hover:bg-[#2bbf83] transition-colors cursor-pointer"
-          >
-            <FiSend size={14} />
-            {sent ? "Sent!" : "Send Message"}
-          </button>
-        </form>
-      </div>
+          {/* Right: Contact form (7 cols) */}
+          <form onSubmit={handleSubmit} className="lg:col-span-7 flex flex-col gap-4 bg-[#0d1117]/50 p-5 rounded-xl border border-[#1e3a4a]/20">
+            <div className="space-y-4">
+              <div className="relative">
+                <span className="absolute left-0 top-2 text-[#4a6b7a] text-xs">{">"}</span>
+                <input
+                  type="text"
+                  placeholder="NAME"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                  className="w-full pl-5 pr-3 py-1.5 bg-transparent border-b border-[#1e3a4a]/30 text-white placeholder:text-[#4a6b7a]/50 outline-none focus:border-[#34d399] transition-colors"
+                />
+              </div>
+              <div className="relative">
+                <span className="absolute left-0 top-2 text-[#4a6b7a] text-xs">{">"}</span>
+                <input
+                  type="email"
+                  placeholder="EMAIL"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="w-full pl-5 pr-3 py-1.5 bg-transparent border-b border-[#1e3a4a]/30 text-white placeholder:text-[#4a6b7a]/50 outline-none focus:border-[#34d399] transition-colors"
+                />
+              </div>
+              <div className="relative">
+                <span className="absolute left-0 top-2 text-[#4a6b7a] text-xs">{">"}</span>
+                <input
+                  type="text"
+                  placeholder="SUBJECT"
+                  value={subject}
+                  onChange={(e) => setSubject(e.target.value)}
+                  required
+                  className="w-full pl-5 pr-3 py-1.5 bg-transparent border-b border-[#1e3a4a]/30 text-white placeholder:text-[#4a6b7a]/50 outline-none focus:border-[#34d399] transition-colors"
+                />
+              </div>
+              <div className="relative">
+                <span className="absolute left-0 top-1 text-[#4a6b7a] text-xs">{">"}</span>
+                <textarea
+                  placeholder="MESSAGE..."
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  required
+                  rows={4}
+                  className="w-full pl-5 pr-3 py-1.5 bg-transparent border-b border-[#1e3a4a]/30 text-white placeholder:text-[#4a6b7a]/50 outline-none focus:border-[#34d399] transition-colors resize-none"
+                />
+              </div>
+            </div>
 
-      {/* Mobile: simplified */}
-      <div className="sm:hidden flex flex-col gap-4">
-        <div className="flex justify-center gap-4">
-          {contacts.map((c) => (
-            <a
-              key={c.label}
-              href={c.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-11 h-11 rounded-xl bg-[#060d14] border border-[#1e3a4a]/50 flex items-center justify-center hover:bg-[#0a1520] transition-colors"
-              title={c.label}
+            <button
+              type="submit"
+              disabled={isSending}
+              className={`mt-2 group relative flex items-center justify-center gap-2 px-6 py-3 rounded-lg overflow-hidden transition-all active:scale-95 ${
+                sent ? 'bg-[#34d399] text-[#060d14]' : 'bg-white/5 border border-white/10 hover:bg-white/10 text-white'
+              }`}
             >
-              <c.icon size={18} style={{ color: c.color }} />
-            </a>
-          ))}
+              {isSending ? (
+                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              ) : sent ? (
+                <>
+                  <FiCheck size={16} className="animate-bounce" />
+                  <span className="font-bold">SIGNAL SENT</span>
+                </>
+              ) : (
+                <>
+                  <FiSend size={16} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                  <span className="font-bold tracking-widest uppercase text-xs">Transmit Signal</span>
+                </>
+              )}
+            </button>
+          </form>
         </div>
-        <a
-          href={`mailto:${RESUME.email}`}
-          className="flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-[#34d399] text-[#060d14] text-sm font-semibold hover:bg-[#2bbf83] transition-colors"
-        >
-          <FiSend size={14} />
-          Send Email
-        </a>
       </div>
 
-      <div className="mt-4 p-3 rounded-lg text-center text-xs text-[#34d399] bg-[#0a3d2b]/20 border border-[#1a6b4a]/50 shrink-0">
-        <span className="w-2 h-2 rounded-full bg-green-400 inline-block mr-1.5" /> Available for freelance · EN/FR · Remote
+      {/* Modern Status Bar (Powerline Style) */}
+      <div className="flex items-center bg-[#0d1117] border-t border-[#1e3a4a]/30 h-8 text-[10px] overflow-hidden shrink-0">
+         <div className="flex items-center bg-[#34d399] text-[#060d14] px-3 h-full font-bold relative mr-3">
+            AVAILABLE FOR HIRE
+            <div className="absolute right-[-12px] top-0 bottom-0 w-0 h-0 border-y-[16px] border-y-transparent border-l-[12px] border-l-[#34d399]" />
+         </div>
+         <div className="flex items-center gap-4 text-[#4a6b7a]">
+            <span className="flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#34d399] animate-pulse" />
+              REMOTE
+            </span>
+            <span className="hidden sm:inline">EN/FR</span>
+            <span className="hidden md:inline opacity-50 italic">Tip: type 'contact --open' in terminal</span>
+         </div>
       </div>
     </div>
   )

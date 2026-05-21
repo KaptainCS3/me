@@ -42,7 +42,6 @@ export const RESUME: Resume = {
       role: "Full Stack Engineer",
       period: "Nov 2025 - Present",
       highlights: [
-        "Motto: target the peak | stay humble and cool | in mind 0100",
         "Engineered 8 end-to-end booking modules (flights, hotels, transfers, car rentals, airport lounge, e-SIM, insurance, visa) on a production Next.js 16 platform",
         "Architected advanced Programmatic SEO (pSEO) systems handling hundreds of localized landing pages",
         "Developed custom middleware proxy layers for enhanced security, rate limiting, and bot filtering",

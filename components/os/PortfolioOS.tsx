@@ -6,6 +6,7 @@ import { useWallpaper } from "@/hooks/useWallpaper"
 import { WINDOW_CONFIGS } from "@/data/windowConfigs"
 import { DOCK_APPS } from "@/data/dockApps"
 import { useAppStore } from "@/stores/appStore"
+import { useTerminalStore } from "@/stores/terminalStore"
 import { MenuBar } from "./MenuBar"
 import { DesktopIcons } from "./DesktopIcons"
 import { WelcomeOverlay, BootOverlay } from "./BootOverlay"
@@ -51,6 +52,7 @@ export default function PortfolioOS() {
   const setVfs = useAppStore((s) => s.setVfs)
   const themeMode = useAppStore((s) => s.themeMode)
   const accentColor = useAppStore((s) => s.accentColor)
+  const isBooted = useAppStore((s) => s.isBooted)
 
   useEffect(() => {
     if (Object.keys(vfs).length === 0) {
@@ -85,6 +87,15 @@ export default function PortfolioOS() {
   const [isMobile, setIsMobile] = useState(
     typeof window !== "undefined" ? window.matchMedia("(max-width: 640px)").matches : false,
   )
+
+  useEffect(() => {
+    if (isBooted) {
+      useTerminalStore.getState().reset()
+      const t1 = setTimeout(() => setDockVisible(true))
+      const t2 = setTimeout(() => setDockVisible(false), 3000)
+      return () => { clearTimeout(t1); clearTimeout(t2) }
+    }
+  }, [isBooted])
 
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 640px)")
@@ -122,13 +133,13 @@ export default function PortfolioOS() {
     [windows, getNextZ, addWindow, focusWindow, setWindowMinimized],
   )
 
-  const closeWindow = (id: string) => {
+  const closeWindow = useCallback((id: string) => {
     removeWindow(id)
-  }
+  }, [removeWindow])
 
-  const minimizeWindow = (id: string) => {
+  const minimizeWindow = useCallback((id: string) => {
     setWindowMinimized(id, true)
-  }
+  }, [setWindowMinimized])
 
   const handleMenuAction = useCallback(
     (action: string) => {
@@ -193,7 +204,7 @@ export default function PortfolioOS() {
           break
       }
     },
-    [focusedWindow, openWindow, windows],
+    [focusedWindow, openWindow, windows, closeWindow, focusWindow, minimizeWindow],
   )
 
   const handleDropFiles = useCallback(
@@ -347,27 +358,16 @@ export default function PortfolioOS() {
     setContextMenu({ x: e.clientX, y: e.clientY })
   }, [])
 
-  const handleMouseMove = useCallback((e: React.MouseEvent) => {
-    const bottomThreshold = 10
-    const nearBottom = e.clientY >= window.innerHeight - bottomThreshold
-    if (dockTimeoutRef.current) clearTimeout(dockTimeoutRef.current)
-    if (nearBottom) {
-      setDockVisible(true)
-    } else if (!dockHoveredRef.current) {
-      dockTimeoutRef.current = window.setTimeout(() => setDockVisible(false), 500)
-    }
-  }, [])
-
   const showDock = useCallback(() => {
     dockHoveredRef.current = true
     if (dockTimeoutRef.current) clearTimeout(dockTimeoutRef.current)
     setDockVisible(true)
-  }, [])
+  }, [setDockVisible])
 
   const hideDock = useCallback(() => {
     dockHoveredRef.current = false
-    dockTimeoutRef.current = window.setTimeout(() => setDockVisible(false), 300)
-  }, [])
+    dockTimeoutRef.current = window.setTimeout(() => setDockVisible(false), 1500)
+  }, [setDockVisible])
 
   const timeStr = time.toLocaleTimeString("en-US", {
     hour: "2-digit",
@@ -380,7 +380,7 @@ export default function PortfolioOS() {
     day: "numeric",
   })
 
-  const effectiveDockVisible = isMobile || dockVisible
+  const effectiveDockVisible = true
 
   const longPressTimer = useRef<number | null>(null)
 
@@ -409,9 +409,8 @@ export default function PortfolioOS() {
 
   return (
     <div
-      className="w-full h-dvh min-h-dvh relative overflow-hidden select-none"
+      className="w-full h-screen min-h-screen relative overflow-hidden select-none"
       onContextMenu={handleContextMenu}
-      onMouseMove={handleMouseMove}
       style={{
         backgroundImage: wallpaper,
         backgroundRepeat: "no-repeat",
@@ -485,6 +484,13 @@ export default function PortfolioOS() {
       </div>
 
       <div
+        className={`fixed bottom-0 left-0 right-0 h-0.5 pointer-events-none transition-opacity duration-500 z-9998 ${effectiveDockVisible ? "opacity-0" : "opacity-100"}`}
+        style={{
+          background: `linear-gradient(90deg, transparent 0%, var(--accent) 50%, transparent 100%)`,
+          boxShadow: `0 0 6px 1px var(--accent)`,
+        }}
+      />
+      <div
         onMouseEnter={showDock}
         onMouseLeave={hideDock}
         style={{
@@ -499,7 +505,21 @@ export default function PortfolioOS() {
             key={app.id}
             app={app}
             isOpen={!!windows[app.id]}
-            onClick={() => openWindow(app.id)}
+            onClick={() => {
+              if (windows[app.id]) {
+                const win = windows[app.id]
+                if (win.minimized) {
+                  focusWindow(app.id)
+                  setWindowMinimized(app.id, false)
+                } else if (app.id === focusedWindow) {
+                  setWindowMinimized(app.id, true)
+                } else {
+                  focusWindow(app.id)
+                }
+              } else {
+                openWindow(app.id)
+              }
+            }}
           />
         ))}
         <div className="w-px h-9 bg-white/15 mx-1" />
@@ -541,11 +561,11 @@ export default function PortfolioOS() {
         />
       )}
 
-      <Spotlight 
-        isOpen={showSpotlight} 
-        onClose={() => setShowSpotlight(false)} 
+      <Spotlight
+        isOpen={showSpotlight}
+        onClose={() => setShowSpotlight(false)}
         onOpenApp={openWindow}
       />
     </div>
-  )
+  );
 }
