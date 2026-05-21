@@ -204,10 +204,11 @@ export function MenuBar({
 
       <div className="flex gap-3 items-center">
         <span className="hidden sm:inline text-[11px] text-white/50">
-          <Image src="https://flagcdn.com/w20/cm.png" alt="CM" className="inline-block w-4 h-3 align-text-bottom mr-1" width={100} height={100} />
-          Douala
+          <img src="https://flagcdn.com/w20/cm.png" alt="CM" className="inline-block w-4 h-3 align-text-bottom mr-1" />
+          Buea
         </span>
         <span className="hidden sm:inline text-[11px] text-white/70">{dateStr}</span>
+
         <span className="text-xs font-medium text-white/90">{timeStr}</span>
       </div>
     </div>

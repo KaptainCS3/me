@@ -8,6 +8,7 @@ import { AboutOSContent } from "./AboutOSContent"
 import { PdfViewerContent } from "./PdfViewerContent"
 import { SettingsContent } from "./SettingsContent"
 import { SourceViewerContent } from "./SourceViewerContent"
+import { SnippingToolContent } from "./SnippingToolContent"
 
 interface WindowContentProps {
   id: string
@@ -30,6 +31,8 @@ export const WindowContent: FC<WindowContentProps> = ({ id, onClose }) => {
       return <SettingsContent />
     case "source-viewer":
       return <SourceViewerContent />
+    case "snipping-tool":
+      return <SnippingToolContent />
     case "about-os":
       return <AboutOSContent />
     case "resume-viewer":

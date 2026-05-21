@@ -13,16 +13,6 @@ interface Command {
   aliases?: string[]
 }
 
-const COW = `\
-   ╱  ────  ╲
-  ╱  (  ◠  ◠  )  ╲
- │   ╲  ══╤══  ╱  │
-  ╲   ───┴───   ╱
-   ╲           ╱
-     ╲       ╱
-       ─────
-      (_____)`
-
 const ENV = {
   USER: "appelgryn",
   HOME: "/home/appelgryn",
@@ -75,6 +65,13 @@ function showHelp(name: string, commands: Map<string, Command>): TerminalLine[] 
 export function buildCommands(
   vfs: Record<string, VfsNode>,
   updateVfsNode: (path: string, node: VfsNode) => void,
+  deleteVfsNode: (path: string) => void,
+  actions: {
+    setThemeMode: (mode: any) => void
+    setAccentColor: (color: string) => void
+    setWallpaper: (wp: string) => void
+    openWindow: (id: string) => void
+  }
 ): Map<string, Command> {
   const cmds = new Map<string, Command>()
 
@@ -223,13 +220,52 @@ export function buildCommands(
   })
 
   reg({
+    name: "rm",
+    desc: "Remove a file or directory",
+    usage: "rm [-r] <path>",
+    handler(args) {
+      const recursive = args.includes("-r") || args.includes("-rf")
+      const target = args.filter((a) => !a.startsWith("-"))[0]
+      if (!target) return lines("rm: missing operand")
+      const path = resolvePath(target)
+      const node = getNode(path)
+      if (!node) return lines(`rm: cannot remove '${target}': No such file or directory`)
+      if (node.type === "dir" && !recursive) return lines(`rm: cannot remove '${target}': Is a directory`)
+      
+      const parentPath = path.split("/").slice(0, -1).join("/") || "/"
+      const parentNode = getNode(parentPath)
+      
+      deleteVfsNode(path)
+      if (parentNode && parentNode.children) {
+        const name = path.split("/").pop()!
+        updateVfsNode(parentPath, { ...parentNode, children: parentNode.children.filter(c => c !== name) })
+      }
+      return lines("")
+    },
+  })
+
+  reg({
+    name: "theme",
+    desc: "Change system theme",
+    usage: "theme [dark|matrix|retro|light]",
+    handler(args) {
+      const mode = args[0]
+      if (!["dark", "matrix", "retro", "light"].includes(mode)) {
+        return lines("Usage: theme [dark|matrix|retro|light]")
+      }
+      actions.setThemeMode(mode)
+      return lines(`Theme changed to ${mode}`)
+    },
+  })
+
+  reg({
     name: "whoami",
     desc: "Display current user identity",
     usage: "whoami",
     handler() {
       return lines(
         RESUME.name,
-        col(RESUME.title, "var(--accent)"),
+        col("Software Engineer | KaptainCS3", "var(--accent)"),
         col("Buea, Cameroon ", "#60a5fa"),
         { out: "", flag: "cm" },
         "",
@@ -270,12 +306,14 @@ export function buildCommands(
         ).flat(),
         lines(""),
         lines(
-          `appelgryn@portfolio`,
+          `${ENV.USER}@portfolio`,
           `OS: PortfolioOS 1.0 x86_64`,
+          `Host: Leonard Appelgryn (KaptainCS3)`,
           `Shell: bash 5.2`,
           `Editor: nvim`,
-          `Languages: TypeScript, JavaScript, Python`,
-          `Terminal: xterm-256color`,
+          `Location: Buea, Cameroon`,
+          `Motto: target the peak | stay humble and cool`,
+          `Languages: ${RESUME.languages.join(", ")}`,
           `Date: ${d.toLocaleDateString()}`,
         ),
       ].flat()

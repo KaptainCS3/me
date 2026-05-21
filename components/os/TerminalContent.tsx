@@ -1,10 +1,12 @@
 "use client"
 
-import { useState, useRef, useEffect, useMemo } from "react"
+import { useState, useRef, useEffect, useMemo, useCallback } from "react"
 import { TERMINAL_LINES } from "@/data/terminalLines"
 import { buildCommands } from "@/data/commands"
 import { useTerminalStore } from "@/stores/terminalStore"
 import { useAppStore } from "@/stores/appStore"
+import { useWallpaper } from "@/hooks/useWallpaper"
+import { WINDOW_CONFIGS } from "@/data/windowConfigs"
 
 export function TerminalContent({ onClose }: { onClose?: () => void }) {
   const lines = useTerminalStore((s) => s.lines)
@@ -20,9 +22,43 @@ export function TerminalContent({ onClose }: { onClose?: () => void }) {
   const [histIdx, setHistIdx] = useState(-1)
   const endRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
+  const { wallpaper, setWallpaper } = useWallpaper()
   const vfs = useAppStore((s) => s.vfs)
   const updateVfsNode = useAppStore((s) => s.updateVfsNode)
-  const commands = useMemo(() => buildCommands(vfs, updateVfsNode), [vfs, updateVfsNode])
+  const deleteVfsNode = useAppStore((s) => s.deleteVfsNode)
+  const setThemeMode = useAppStore((s) => s.setThemeMode)
+  const setAccentColor = useAppStore((s) => s.setAccentColor)
+  
+  // We need a way to trigger openWindow from terminal.
+  // We can't easily pass the openWindow from PortfolioOS directly unless we use a store action for it.
+  // Actually, opening a window is just adding it to the store.
+  const addWindow = useAppStore((s) => s.addWindow)
+  const windows = useAppStore((s) => s.windows)
+  const focusWindow = useAppStore((s) => s.focusWindow)
+  const setWindowMinimized = useAppStore((s) => s.setWindowMinimized)
+  const getNextZ = useAppStore((s) => s.getNextZ)
+
+  const openWindow = useCallback((id: string) => {
+    const cfg = WINDOW_CONFIGS[id]
+    if (!cfg) return
+    if (windows[id]) {
+      focusWindow(id)
+      setWindowMinimized(id, false)
+    } else {
+      addWindow(id, {
+        pos: { x: 100, y: 100 },
+        minimized: false,
+        z: getNextZ()
+      })
+    }
+  }, [windows, addWindow, focusWindow, setWindowMinimized, getNextZ])
+
+  const commands = useMemo(() => buildCommands(vfs, updateVfsNode, deleteVfsNode, {
+    setThemeMode,
+    setAccentColor,
+    setWallpaper,
+    openWindow
+  }), [vfs, updateVfsNode, deleteVfsNode, setThemeMode, setAccentColor, setWallpaper, openWindow])
 
   useEffect(() => {
     if (idx < TERMINAL_LINES.length - 1) {

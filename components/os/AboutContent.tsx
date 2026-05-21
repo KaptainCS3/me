@@ -18,6 +18,16 @@ export function AboutContent() {
         </div>
       </div>
 
+      <div className="bg-white/5 border border-white/10 rounded-xl p-4 italic text-sm text-slate-300">
+        "target the peak | stay humble and cool | in mind 0100"
+      </div>
+
+      <div className="text-sm text-slate-400 leading-relaxed px-1">
+        I am a Software Engineer based in Buea, Cameroon, with a passion for building high-scale, secure, and performant web applications. 
+        My expertise lies in the **Next.js** and **TypeScript** ecosystem, where I've architected complex systems ranging from **Programmatic SEO (pSEO)** engines 
+        to unified fintech payment integrations. I pride myself on writing clean, maintainable code and staying at the bleeding edge of web technology.
+      </div>
+
       <div className="flex flex-wrap gap-4 text-xs">
         <div>
           <p className="text-[#4a6b7a] mb-1">Languages</p>

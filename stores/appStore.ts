@@ -3,8 +3,8 @@ import { persist } from "zustand/middleware"
 import type { WindowState, DesktopItem, VfsNode } from "@/types/portfolio"
 
 const DEFAULT_DESKTOP_ITEMS: DesktopItem[] = [
-  { id: "resume", icon: "📄", label: "Resume.pdf", x: 0, y: 32, fileMeta: {type: 'application/pdf', name: 'resume.pdf', size: 1028}},
-  { id: "about", icon: "👤", label: "About.md", x: 0, y: 116, fileMeta: {type: 'md', name: 'about.md', size: 512}},
+  { id: "resume", icon: "📄", label: "Resume.pdf", x: 0, y: 32, vfsPath: "/home/appelgryn/about.md", fileMeta: {type: 'application/pdf', name: 'resume.pdf', size: 1028}},
+  { id: "about", icon: "👤", label: "About.md", x: 0, y: 116, vfsPath: "/home/appelgryn/about/readme.md", fileMeta: {type: 'md', name: 'about.md', size: 512}},
 ]
 
 interface AppStore {
@@ -41,6 +41,7 @@ interface AppStore {
   setIsMuted: (muted: boolean) => void
   setVfs: (vfs: Record<string, VfsNode>) => void
   updateVfsNode: (path: string, node: VfsNode) => void
+  deleteVfsNode: (path: string) => void
 }
 
 function gridKey(x: number, y: number): string {
@@ -155,6 +156,11 @@ export const useAppStore = create<AppStore>()(
       setVfs: (vfs) => set({ vfs }),
       updateVfsNode: (path, node) =>
         set((s) => ({ vfs: { ...s.vfs, [path]: node } })),
+      deleteVfsNode: (path) =>
+        set((s) => {
+          const { [path]: _, ...rest } = s.vfs
+          return { vfs: rest }
+        }),
     }),
     {
       name: "portfolio-app-state",

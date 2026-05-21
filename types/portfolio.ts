@@ -1,6 +1,8 @@
+import type { ReactNode } from "react"
+
 export interface DockApp {
   id: string
-  icon: string
+  icon: ReactNode
   label: string
 }
 
@@ -71,5 +73,6 @@ export interface DesktopItem {
   label: string
   x: number
   y: number
+  vfsPath?: string
   fileMeta?: FileMeta
 }

@@ -64,4 +64,11 @@ export const WINDOW_CONFIGS: Record<string, WindowConfig> = {
     h: 500,
     content: "source-viewer",
   },
+  "snipping-tool": {
+    title: "Snipping Tool",
+    icon: "📸",
+    w: 400,
+    h: 500,
+    content: "snipping-tool",
+  },
 }

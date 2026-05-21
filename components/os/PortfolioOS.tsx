@@ -15,6 +15,7 @@ import { ContextMenu } from "./ContextMenu"
 import { WallpaperPicker } from "./WallpaperPicker"
 import { FileInfoModal } from "./FileInfoModal"
 import { Spotlight } from "./Spotlight"
+import { FiGithub } from "react-icons/fi"
 import type { DesktopItem } from "@/types/portfolio"
 import { INITIAL_VFS } from "@/data/initialVfs"
 
@@ -513,7 +514,7 @@ export default function PortfolioOS() {
         ))}
         <div className="w-px h-9 bg-white/15 mx-1" />
         <DockItem
-          app={{ id: "github", icon: "🐙", label: "GitHub" }}
+          app={{ id: "github", icon: <FiGithub />, label: "GitHub" }}
           isOpen={false}
           onClick={() => window.open("https://github.com/kaptaincs3", "_blank")}
         />
