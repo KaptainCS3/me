@@ -19,6 +19,9 @@ export interface Project {
   period?: string
   metrics?: string[]
   context?: string
+  type?: "web" | "mobile" | "api"
+  isCompany?: boolean
+  iframeBlocked?: boolean
 }
 
 export interface SkillCategory {

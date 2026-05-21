@@ -496,9 +496,9 @@ export default function PortfolioOS() {
         style={{
           transform: `translateX(-50%) ${effectiveDockVisible ? "translateY(0)" : "translateY(120%)"}`,
           transition: "transform 0.35s cubic-bezier(0.4, 0, 0.2, 1)",
-          bottom: `calc(${DOCK_BOTTOM_GAP}px + env(safe-area-inset-bottom, 0px))`,
+          bottom: `calc(${isMobile ? 24 : DOCK_BOTTOM_GAP}px + env(safe-area-inset-bottom, 0px))`,
         }}
-        className="absolute left-1/2 bg-white/7 backdrop-blur-2xl border border-white/12 rounded-[18px] px-4 py-4 flex items-end gap-2.5 z-9999 shadow-[0_8px_32px_rgba(0,0,0,0.5)]"
+        className="fixed left-1/2 bg-white/7 backdrop-blur-2xl border border-white/12 rounded-[18px] px-4 py-4 flex items-end gap-2.5 z-9999 shadow-[0_8px_32px_rgba(0,0,0,0.5)]"
       >
         {DOCK_APPS.map((app) => (
           <DockItem
