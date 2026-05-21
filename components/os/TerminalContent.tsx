@@ -24,7 +24,12 @@ export function TerminalContent({ onClose }: { onClose?: () => void }) {
   const endRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const { setWallpaper } = useWallpaper()
-  const { time } = useTime()
+  const timeDate = useTime()
+  const time = timeDate.toLocaleTimeString("en-US", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+  })
   const vfs = useAppStore((s) => s.vfs)
   const updateVfsNode = useAppStore((s) => s.updateVfsNode)
   const deleteVfsNode = useAppStore((s) => s.deleteVfsNode)

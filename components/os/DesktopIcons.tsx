@@ -27,12 +27,25 @@ export function DesktopIcons({ items, onMoveItem, onDropFiles, onItemClick }: De
   const [isTouch, setIsTouch] = useState(false)
 
   useEffect(() => {
+    // Determine touch capability. Note: 'pointer: coarse' is a good proxy for touch-enabled devices.
     const mq = window.matchMedia("(pointer: coarse)")
     setIsTouch(mq.matches)
     const handler = (e: MediaQueryListEvent) => setIsTouch(e.matches)
     mq.addEventListener("change", handler)
     return () => mq.removeEventListener("change", handler)
   }, [])
+
+  const handleClick = (id: string) => {
+    if (isTouch) {
+      onItemClick(id)
+    }
+  }
+
+  const handleDoubleClick = (id: string) => {
+    if (!isTouch) {
+      onItemClick(id)
+    }
+  }
 
   const handleDragStart = useCallback(
     (e: React.DragEvent, id: string) => {
@@ -91,7 +104,8 @@ export function DesktopIcons({ items, onMoveItem, onDropFiles, onItemClick }: De
           key={item.id}
           draggable={!isTouch}
           onDragStart={(e) => handleDragStart(e, item.id)}
-          onClick={() => onItemClick(item.id)}
+          onClick={() => handleClick(item.id)}
+          onDoubleClick={() => handleDoubleClick(item.id)}
           className="absolute flex flex-col items-center gap-0.5 cursor-pointer group"
           style={{ left: item.x, top: item.y, width: 56 }}
         >
