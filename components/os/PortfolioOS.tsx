@@ -11,6 +11,7 @@ import { DesktopIcons } from "./DesktopIcons"
 import { WelcomeOverlay, BootOverlay } from "./BootOverlay"
 import { Window } from "./Window"
 import { DockItem } from "./DockItem"
+import { Starfield } from "./Starfield"
 import { ContextMenu } from "./ContextMenu"
 import { WallpaperPicker } from "./WallpaperPicker"
 import { FileInfoModal } from "./FileInfoModal"
@@ -419,18 +420,7 @@ export default function PortfolioOS() {
           "-apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif",
       }}
     >
-      <svg className="absolute inset-0 w-full h-full pointer-events-none">
-        {Array.from({ length: 60 }, (_, i) => (
-          <circle
-            key={i}
-            cx={`${(i * 37 + 11) % 100}%`}
-            cy={`${(i * 53 + 7) % 100}%`}
-            r={i % 5 === 0 ? 1.5 : 0.8}
-            fill="white"
-            opacity={0.1 + (i % 4) * 0.08}
-          />
-        ))}
-      </svg>
+      <Starfield />
 
       <div
         className="absolute w-75 h-75 rounded-full pointer-events-none"

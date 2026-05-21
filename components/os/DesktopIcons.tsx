@@ -1,7 +1,9 @@
 "use client"
 
 import { useRef, useState, useCallback, useEffect } from "react"
-import type { DesktopItem} from "@/types/portfolio"
+import { FiImage, FiFile, FiVideo, FiMusic, FiFolder } from "react-icons/fi"
+import type { ReactNode } from "react"
+import type { DesktopItem } from "@/types/portfolio"
 
 interface DesktopIconsProps {
   items: DesktopItem[]
@@ -10,13 +12,13 @@ interface DesktopIconsProps {
   onItemClick: (id: string) => void
 }
 
-function getFileIcon(icons: DesktopItem)  {
-  if (icons?.fileMeta?.type.startsWith("image/")) return "🖼️"
-  if (icons?.fileMeta?.type.startsWith("text/")) return "📝"
-  if (icons.fileMeta?.type === "application/pdf") return "📄"
-  if (icons?.fileMeta?.type.startsWith("video/")) return "🎬"
-  if (icons?.fileMeta?.type.startsWith("audio/")) return "🎵"
-  return "📁"
+function getFileIcon(item: DesktopItem): ReactNode {
+  if (item.fileMeta?.type.startsWith("image/")) return <FiImage />
+  if (item.fileMeta?.type.startsWith("text/")) return <FiFile />
+  if (item.fileMeta?.type === "application/pdf") return <FiFile />
+  if (item.fileMeta?.type.startsWith("video/")) return <FiVideo />
+  if (item.fileMeta?.type.startsWith("audio/")) return <FiMusic />
+  return <FiFolder />
 }
 
 export function DesktopIcons({ items, onMoveItem, onDropFiles, onItemClick }: DesktopIconsProps) {
