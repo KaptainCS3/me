@@ -47,8 +47,8 @@ export const WINDOW_CONFIGS: Record<string, WindowConfig> = {
   "about-os": {
     title: "About PortfolioOS",
     icon: <FiInfo />,
-    w: 420,
-    h: 300,
+    w: 520,
+    h: 360,
     content: "about-os",
   },
   "resume-viewer": {
