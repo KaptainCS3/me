@@ -1,17 +1,11 @@
 import { NextResponse } from "next/server"
+import { getUpstreamUrl, getProxyPrefix } from "@/data/proxyConfig"
 
-const ORIGIN = "https://globalbushtratour.com"
-const PROXY_PREFIX = "/api/proxy/global-bush"
-
-function rewriteHtml(html: string): string {
-  // Rewrite relative paths in common attributes to go through our proxy.
-  // This avoids CORS/CORB blocking when loading subresources cross-origin.
-  // Exclude protocol-relative URLs (starting with //)
+function rewriteHtml(html: string, prefix: string): string {
   let result = html.replace(
     /(href|src|action)(=(["']))\/(?!\/)/g,
-    `$1$2${PROXY_PREFIX}/`,
+    `$1$2${prefix}/`,
   )
-  // Handle srcset (comma-separated URLs with optional descriptors)
   result = result.replace(
     /srcset=(["'])([^"']+)\1/g,
     (match, quote, value) => {
@@ -22,7 +16,7 @@ function rewriteHtml(html: string): string {
           const pieces = trimmed.split(/\s+/)
           const url = pieces[0]
           if (url.startsWith("/")) {
-            pieces[0] = `${PROXY_PREFIX}${url}`
+            pieces[0] = `${prefix}${url}`
           }
           return pieces.join(" ")
         })
@@ -30,21 +24,30 @@ function rewriteHtml(html: string): string {
       return `srcset=${quote}${rewritten}${quote}`
     },
   )
-  // Handle meta content attributes that are relative paths
   result = result.replace(
     /(content=(["']))\/(?!\/)/g,
-    `$1${PROXY_PREFIX}/`,
+    `$1${prefix}/`,
   )
   return result
 }
 
-export async function GET() {
+export async function GET(
+  _request: Request,
+  { params }: { params: Promise<{ slug: string }> },
+) {
+  const { slug } = await params
+  const origin = getUpstreamUrl(slug)
+  if (!origin) {
+    return new NextResponse("Unknown proxy target", { status: 404 })
+  }
+
   try {
-    const res = await fetch(ORIGIN, {
+    const res = await fetch(origin, {
       next: { revalidate: 3600 },
     })
     const body = await res.text()
-    const modified = rewriteHtml(body)
+    const prefix = getProxyPrefix(slug)
+    const modified = rewriteHtml(body, prefix)
 
     return new NextResponse(modified, {
       headers: {

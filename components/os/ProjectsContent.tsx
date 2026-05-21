@@ -5,6 +5,7 @@ import {
   FiFolder,
   FiGithub,
   FiChevronRight,
+  FiChevronLeft,
   FiShield,
   FiGlobe,
   FiLayers,
@@ -13,10 +14,14 @@ import {
   FiExternalLink,
 } from "react-icons/fi";
 import { PROJECTS } from "@/data/projects";
+import { isProxyUrl, getActualUrl } from "@/data/proxyConfig";
 
 export function ProjectsContent() {
   const [active, setActive] = useState(0);
-  
+  const [sidebarOpen, setSidebarOpen] = useState(
+    typeof window !== "undefined" && window.innerWidth >= 640,
+  );
+
   // 3D Tilt Effect Refs
   const cardRef = useRef<HTMLDivElement>(null);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
@@ -34,46 +39,37 @@ export function ProjectsContent() {
   };
 
   const p = PROJECTS[active];
+  const actualUrl = p.url && isProxyUrl(p.url) ? getActualUrl(p.url) : p.url;
 
   return (
     <div className="h-full flex flex-col sm:flex-row font-mono text-sm bg-[#06090c] overflow-hidden">
-      {/* Sidebar: Project Explorer */}
-      <aside className="hidden sm:flex w-64 flex-col border-r border-[#1e3a4a]/30 bg-[#0d1117] shrink-0">
-        <div className="p-4 border-b border-[#1e3a4a]/20">
-          <p className="text-[10px] uppercase tracking-[0.2em] text-[#4a6b7a] font-bold">
-            Project Explorer
-          </p>
+      {/* Mobile sidebar overlay */}
+      {sidebarOpen && (
+        <div className="fixed inset-0 z-50 sm:hidden" onClick={() => setSidebarOpen(false)}>
+          <div className="absolute inset-0 bg-black/50" />
+          <aside
+            className="absolute left-0 top-0 bottom-0 w-64 flex flex-col bg-[#0d1117] border-r border-[#1e3a4a]/30"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <SidebarContent
+              active={active}
+              onSelect={(i) => { setActive(i); setSidebarOpen(false) }}
+            />
+          </aside>
         </div>
-        <div className="flex-1 overflow-y-auto py-2 custom-scrollbar">
-          {PROJECTS.map((project, i) => (
-            <button
-              key={i}
-              onClick={() => setActive(i)}
-              className={`w-full text-left px-4 py-3 flex items-center gap-3 transition-all relative group ${
-                active === i ? "bg-[#1e3a4a]/20" : "hover:bg-white/5"
-              }`}
-            >
-              {active === i && (
-                <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#34d399]" />
-              )}
-              <FiFolder
-                size={16}
-                className={active === i ? "text-[#34d399]" : "text-[#4a6b7a] group-hover:text-white transition-colors"}
-              />
-              <div className="min-w-0">
-                <p className={`text-xs truncate font-medium ${active === i ? "text-white" : "text-[#6b8fa0] group-hover:text-white"}`}>
-                  {project.name}
-                </p>
-                <p className="text-[9px] text-[#4a6b7a] uppercase tracking-wider">{project.period}</p>
-              </div>
-            </button>
-          ))}
-        </div>
-        <div className="p-4 bg-[#06090c] border-t border-[#1e3a4a]/20">
-          <div className="flex items-center gap-2 text-[10px] text-[#4a6b7a]">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#34d399] animate-pulse" />
-            SECURE_LINK: ACTIVE
-          </div>
+      )}
+
+      {/* Desktop sidebar */}
+      <aside
+        className={`hidden sm:flex flex-col border-r border-[#1e3a4a]/30 bg-[#0d1117] shrink-0 transition-all duration-200 overflow-hidden ${
+          sidebarOpen ? "w-64" : "w-0"
+        }`}
+      >
+        <div className="min-w-64 flex-1 flex flex-col">
+          <SidebarContent
+            active={active}
+            onSelect={setActive}
+          />
         </div>
       </aside>
 
@@ -86,16 +82,23 @@ export function ProjectsContent() {
 
         {/* Header / Navigation */}
         <header className="px-6 py-3 border-b border-[#1e3a4a]/30 bg-[#0d1117]/80 backdrop-blur-md flex items-center justify-between shrink-0 z-20">
-          <div className="flex items-center gap-2 text-[10px] text-[#4a6b7a]">
-            <span>portfolio</span>
-            <span>/</span>
-            <span className="text-white">projects</span>
-            <span>/</span>
-            <span className="text-[#34d399]">{p.name.toLowerCase().replace(/\s+/g, "-")}.sys</span>
+          <div className="flex items-center gap-1 sm:gap-2">
+            <button
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              className="p-1 text-[#4a6b7a] hover:text-white transition-colors"
+              title={sidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
+            >
+              {sidebarOpen ? <FiChevronLeft size={12} /> : <FiChevronRight size={12} />}
+            </button>
+            <span className="text-[10px] text-[#4a6b7a]">portfolio</span>
+            <span className="text-[10px] text-[#4a6b7a]">/</span>
+            <span className="text-[10px] text-white">projects</span>
+            <span className="text-[10px] text-[#4a6b7a]">/</span>
+            <span className="text-[10px] text-[#34d399]">{p.name.toLowerCase().replace(/\s+/g, "-")}.sys</span>
           </div>
           <div className="flex gap-4">
             {p.url && (
-              <a href={p.url.startsWith('/proxy') ? 'https://globalbushtratour.com' : p.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-[10px] text-[#34d399] hover:underline">
+              <a href={actualUrl || p.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-[10px] text-[#34d399] hover:underline">
                 <FiGlobe size={12} /> LIVE_DEMO
               </a>
             )}
@@ -144,7 +147,7 @@ export function ProjectsContent() {
                       <div className="w-2.5 h-2.5 rounded-full bg-[#27c93f]" />
                     </div>
                     <div className="flex-1 bg-[#0d1117] rounded-md px-3 py-1 text-[9px] text-[#4a6b7a] flex items-center justify-between">
-                      <span className="truncate">{p.url?.startsWith('/proxy') ? 'https://globalbushtratour.com' : (p.url || 'localhost:3000')}</span>
+                      <span className="truncate">{actualUrl || p.url || "localhost:3000"}</span>
                       <FiMaximize2 size={10} />
                     </div>
                   </div>
@@ -162,8 +165,8 @@ export function ProjectsContent() {
                               <p className="text-xs text-white font-bold uppercase tracking-widest">Proxy Tunnel Active</p>
                               <p className="text-[10px] text-[#4a6b7a]">Establishing a secure proxy link. Launch directly if the interface is restricted by production headers.</p>
                            </div>
-                           <button 
-                             onClick={() => window.open(p.url?.startsWith('/proxy') ? 'https://globalbushtratour.com' : p.url, '_blank')}
+                            <button 
+                              onClick={() => window.open(actualUrl || p.url!, '_blank')}
                              className="px-6 py-2 rounded-full bg-[#34d399] text-[#060d14] text-[10px] font-bold hover:scale-105 transition-all flex items-center gap-2"
                            >
                               LAUNCH_SYSTEM_DIRECTLY <FiExternalLink size={12} />
@@ -290,7 +293,7 @@ export function ProjectsContent() {
               Next_Project
             </button>
             {p.url && (
-              <button onClick={() => window.open(p.url!.startsWith('/api/proxy') ? 'https://globalbushtratour.com' : p.url!, "_blank")} className="px-6 py-2 rounded bg-[#34d399] text-[#060d14] text-[10px] font-bold hover:scale-105 transition-all shadow-[0_0_15px_rgba(52,211,153,0.3)] tracking-widest uppercase">
+              <button onClick={() => window.open(actualUrl || p.url!, "_blank")} className="px-6 py-2 rounded bg-[#34d399] text-[#060d14] text-[10px] font-bold hover:scale-105 transition-all shadow-[0_0_15px_rgba(52,211,153,0.3)] tracking-widest uppercase">
                 Deploy_Live
               </button>
             )}
@@ -306,5 +309,48 @@ export function ProjectsContent() {
         .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #34d399; }
       `}</style>
     </div>
+  );
+}
+
+function SidebarContent({ active, onSelect }: { active: number; onSelect: (i: number) => void }) {
+  return (
+    <>
+      <div className="p-4 border-b border-[#1e3a4a]/20">
+        <p className="text-[10px] uppercase tracking-[0.2em] text-[#4a6b7a] font-bold">
+          Project Explorer
+        </p>
+      </div>
+      <div className="flex-1 overflow-y-auto py-2 custom-scrollbar">
+        {PROJECTS.map((project, i) => (
+          <button
+            key={i}
+            onClick={() => onSelect(i)}
+            className={`w-full text-left px-4 py-3 flex items-center gap-3 transition-all relative group ${
+              active === i ? "bg-[#1e3a4a]/20" : "hover:bg-white/5"
+            }`}
+          >
+            {active === i && (
+              <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#34d399]" />
+            )}
+            <FiFolder
+              size={16}
+              className={active === i ? "text-[#34d399]" : "text-[#4a6b7a] group-hover:text-white transition-colors"}
+            />
+            <div className="min-w-0">
+              <p className={`text-xs truncate font-medium ${active === i ? "text-white" : "text-[#6b8fa0] group-hover:text-white"}`}>
+                {project.name}
+              </p>
+              <p className="text-[9px] text-[#4a6b7a] uppercase tracking-wider">{project.period}</p>
+            </div>
+          </button>
+        ))}
+      </div>
+      <div className="p-4 bg-[#06090c] border-t border-[#1e3a4a]/20">
+        <div className="flex items-center gap-2 text-[10px] text-[#4a6b7a]">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#34d399] animate-pulse" />
+          SECURE_LINK: ACTIVE
+        </div>
+      </div>
+    </>
   );
 }

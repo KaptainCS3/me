@@ -1,11 +1,17 @@
 import { NextRequest, NextResponse } from "next/server"
+import { getUpstreamUrl } from "@/data/proxyConfig"
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ path: string[] }> },
+  { params }: { params: Promise<{ slug: string; path: string[] }> },
 ) {
-  const { path } = await params
-  const upstreamUrl = `https://globalbushtratour.com/${path.join("/")}${request.nextUrl.search}`
+  const { slug, path } = await params
+  const origin = getUpstreamUrl(slug)
+  if (!origin) {
+    return new NextResponse("Unknown proxy target", { status: 404 })
+  }
+
+  const upstreamUrl = `${origin}/${path.join("/")}${request.nextUrl.search}`
 
   try {
     const res = await fetch(upstreamUrl, {
