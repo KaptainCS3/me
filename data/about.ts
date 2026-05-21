@@ -25,7 +25,7 @@ export interface Resume {
 
 export const RESUME: Resume = {
   name: "Leonard Appelgryn",
-  title: "Software Engineer | KaptainCS3",
+  title: "Junior Software Engineer | KaptainCS3",
   email: "mbiapplegryn@gmail.com",
   linkedin: "linkedin.com/in/leonard-appelgryn",
   github: "github.com/kaptaincs3",
