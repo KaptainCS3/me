@@ -59,7 +59,6 @@ export function Window({
   isMinimized,
   isFocused,
   zoomSignal,
-  isMobile,
   onClose,
   onMinimize,
   onFocus,

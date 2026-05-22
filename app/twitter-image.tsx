@@ -7,14 +7,6 @@ export const contentType = "image/png"
 const AVATAR_URL = "https://avatars.githubusercontent.com/kaptaincs3"
 
 export default async function TwitterImage() {
-  let avatarDataUri = ""
-  try {
-    const res = await fetch(AVATAR_URL)
-    const buf = await res.arrayBuffer()
-    const base64 = Buffer.from(buf).toString("base64")
-    avatarDataUri = `data:image/png;base64,${base64}`
-  } catch {}
-
   return new ImageResponse(
     <div
       style={{
@@ -37,18 +29,16 @@ export default async function TwitterImage() {
           marginBottom: 16,
         }}
       >
-        {avatarDataUri && (
-          <img
-            src={avatarDataUri}
-            alt=""
-            width={60}
-            height={60}
-            style={{
-              borderRadius: 12,
-              border: "2px solid rgba(52, 211, 153, 0.4)",
-            }}
-          />
-        )}
+        <img
+          src={AVATAR_URL}
+          alt=""
+          width={60}
+          height={60}
+          style={{
+            borderRadius: 12,
+            border: "2px solid rgba(52, 211, 153, 0.4)",
+          }}
+        />
       </div>
       <div
         style={{

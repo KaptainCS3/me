@@ -52,7 +52,7 @@ export function ContextMenu({ x, y, items, onClose }: ContextMenuProps) {
           }}
           className="w-full text-left px-4 py-2 text-sm text-[#c8d0d8] hover:bg-white/8 hover:text-white transition-colors cursor-pointer"
         >
-          <span>{item.icon} {item.label}</span>
+          <span className="flex gap-2 items-center">{item.icon} {item.label}</span>
         </button>
       ))}
     </div>

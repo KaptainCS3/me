@@ -1,29 +1,29 @@
-"use client"
+"use client";
 
-import { useState, useEffect, useRef, useCallback } from "react"
-import { FiMonitor } from "react-icons/fi"
-import { WINDOW_CONFIGS } from "@/data/windowConfigs"
-import Image from "next/image"
+import { useState, useEffect, useRef, useCallback } from "react";
+import { FiMonitor } from "react-icons/fi";
+import { WINDOW_CONFIGS } from "@/data/windowConfigs";
+import Image from "next/image";
 
 interface MenuItemDef {
-  label: string
-  action?: string
-  shortcut?: string
-  disabled?: boolean
+  label: string;
+  action?: string;
+  shortcut?: string;
+  disabled?: boolean;
 }
 
 type MenuGroup = {
-  label: string
-  items: (MenuItemDef | "separator")[]
-}
+  label: string;
+  items: (MenuItemDef | "separator")[];
+};
 
 interface MenuBarProps {
-  dateStr: string
-  timeStr: string
-  onAction: (action: string) => void
-  focusedWindow: string | null
-  openWindows: string[]
-  onFocusWindow: (id: string) => void
+  dateStr: string;
+  timeStr: string;
+  onAction: (action: string) => void;
+  focusedWindow: string | null;
+  openWindows: string[];
+  onFocusWindow: (id: string) => void;
 }
 
 const STATIC_MENUS: MenuGroup[] = [
@@ -57,7 +57,7 @@ const STATIC_MENUS: MenuGroup[] = [
       { label: "View on GitHub", action: "github" },
     ],
   },
-]
+];
 
 export function MenuBar({
   dateStr,
@@ -67,83 +67,83 @@ export function MenuBar({
   openWindows,
   onFocusWindow,
 }: MenuBarProps) {
-  const [activeMenu, setActiveMenu] = useState<string | null>(null)
-  const barRef = useRef<HTMLDivElement>(null)
+  const [activeMenu, setActiveMenu] = useState<string | null>(null);
+  const barRef = useRef<HTMLDivElement>(null);
 
   const closeMenus = useCallback(() => {
-    setActiveMenu(null)
-  }, [])
+    setActiveMenu(null);
+  }, []);
 
   useEffect(() => {
-    if (!activeMenu) return
+    if (!activeMenu) return;
     const handleClick = (e: MouseEvent) => {
       if (barRef.current && !barRef.current.contains(e.target as Node)) {
-        closeMenus()
+        closeMenus();
       }
-    }
+    };
     const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === "Escape") closeMenus()
-    }
-    document.addEventListener("mousedown", handleClick)
-    document.addEventListener("keydown", handleEscape)
+      if (e.key === "Escape") closeMenus();
+    };
+    document.addEventListener("mousedown", handleClick);
+    document.addEventListener("keydown", handleEscape);
     return () => {
-      document.removeEventListener("mousedown", handleClick)
-      document.removeEventListener("keydown", handleEscape)
-    }
-  }, [activeMenu, closeMenus])
+      document.removeEventListener("mousedown", handleClick);
+      document.removeEventListener("keydown", handleEscape);
+    };
+  }, [activeMenu, closeMenus]);
 
   const handleMenuClick = (label: string) => {
-    setActiveMenu((prev) => (prev === label ? null : label))
-  }
+    setActiveMenu((prev) => (prev === label ? null : label));
+  };
 
   const handleMenuHover = (label: string) => {
     if (activeMenu && activeMenu !== label) {
-      setActiveMenu(label)
+      setActiveMenu(label);
     }
-  }
+  };
 
   const handleItemClick = (item: MenuItemDef) => {
-    if (item.disabled) return
+    if (item.disabled) return;
     if (item.action?.startsWith("focus-")) {
-      onFocusWindow(item.action.slice(6))
+      onFocusWindow(item.action.slice(6));
     } else if (item.action) {
-      onAction(item.action)
+      onAction(item.action);
     }
-    closeMenus()
-  }
+    closeMenus();
+  };
 
   const builtMenus = STATIC_MENUS.map((menu) => {
-    if (menu.label !== "Window") return menu
-    const dynamicItems: (MenuItemDef | "separator")[] = []
+    if (menu.label !== "Window") return menu;
+    const dynamicItems: (MenuItemDef | "separator")[] = [];
 
     if (openWindows.length === 0) {
-      dynamicItems.push({ label: "No Open Windows", disabled: true })
+      dynamicItems.push({ label: "No Open Windows", disabled: true });
     } else {
       openWindows.forEach((id) => {
-        const cfg = WINDOW_CONFIGS[id]
-        const isFocused = id === focusedWindow
+        const cfg = WINDOW_CONFIGS[id];
+        const isFocused = id === focusedWindow;
         dynamicItems.push({
           label: `${isFocused ? "✓ " : ""}${cfg?.title || id}`,
           action: `focus-${id}`,
-        })
-      })
+        });
+      });
     }
 
-    dynamicItems.push("separator")
+    dynamicItems.push("separator");
     dynamicItems.push({
       label: "Minimize",
       shortcut: "⌘M",
       action: "minimize",
       disabled: !focusedWindow,
-    })
+    });
     dynamicItems.push({
       label: "Zoom",
       action: "zoom",
       disabled: !focusedWindow,
-    })
+    });
 
-    return { ...menu, items: dynamicItems }
-  })
+    return { ...menu, items: dynamicItems };
+  });
 
   return (
     <div
@@ -151,7 +151,9 @@ export function MenuBar({
       className="absolute top-0 left-0 right-0 h-6.5 bg-[rgba(5,10,18,0.7)] backdrop-blur-xl border-b border-white/6 flex items-center justify-between px-4 z-9999"
     >
       <div className="flex gap-0 items-stretch h-full">
-        <span className="text-sm flex items-center mr-1"><FiMonitor size={15} /></span>
+        <span className="text-sm flex items-center mr-1">
+          <FiMonitor size={15} />
+        </span>
         {builtMenus.map((menu) => (
           <div
             key={menu.label}
@@ -171,7 +173,7 @@ export function MenuBar({
 
             {activeMenu === menu.label && (
               <div
-                className="absolute top-full left-0 min-w-[200px] rounded-lg overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.6)] border border-white/10 backdrop-blur-2xl py-1"
+                className="absolute top-full left-0 min-w-50 rounded-lg overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.6)] border border-white/10 backdrop-blur-2xl py-1"
                 style={{ background: "rgba(20, 25, 35, 0.95)" }}
               >
                 {menu.items.map((item, i) =>
@@ -206,12 +208,20 @@ export function MenuBar({
       <div className="flex gap-3 items-center">
         <span className="hidden sm:inline text-[11px] text-white/50">
           Douala
-          <img src="https://flagcdn.com/w20/cm.png" alt="CM" className="inline-block w-4 h-3 align-text-bottom ml-1" />
+          <Image
+            width={100}
+            height={100}
+            src="https://flagcdn.com/w20/cm.png"
+            alt="CM"
+            className="inline-block w-4 h-3 align-text-bottom ml-1"
+          />
         </span>
-        <span className="hidden sm:inline text-[11px] text-white/70">{dateStr}</span>
+        <span className="hidden sm:inline text-[11px] text-white/70">
+          {dateStr}
+        </span>
 
         <span className="text-xs font-medium text-white/90">{timeStr}</span>
       </div>
     </div>
-  )
+  );
 }

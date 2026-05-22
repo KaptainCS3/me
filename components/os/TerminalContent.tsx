@@ -8,6 +8,23 @@ import { useAppStore } from "@/stores/appStore"
 import { useWallpaper } from "@/hooks/useWallpaper"
 import { useTime } from "@/hooks/useTime"
 import { WINDOW_CONFIGS } from "@/data/windowConfigs"
+import Image from "next/image"
+
+function Prompt({ cmd }: { cmd?: string }) {
+  return (
+    <div className="flex items-center flex-wrap mb-1">
+      <div className="flex items-center bg-[#34d399] text-[#060d14] px-2 h-5 font-bold relative mr-3 text-[10px]">
+        kaptain@portfolio
+        <div className="absolute -right-2.5 top-0 bottom-0 w-0 h-0 border-y-10 border-y-transparent border-l-10 border-l-[#34d399]" />
+      </div>
+      <div className="flex items-center bg-[#1e3a4a] text-[#34d399] px-2 h-5 font-bold relative mr-3 text-[10px]">
+        ~
+        <div className="absolute -right-2.5 top-0 bottom-0 w-0 h-0 border-y-10 border-y-transparent border-l-10 border-l-[#1e3a4a]" />
+      </div>
+      <span className="text-[#e2e8f0] ml-1">{cmd}</span>
+    </div>
+  )
+}
 
 export function TerminalContent({ onClose }: { onClose?: () => void }) {
   const lines = useTerminalStore((s) => s.lines)
@@ -162,20 +179,6 @@ export function TerminalContent({ onClose }: { onClose?: () => void }) {
     addLines(await command.handler(args))
     }
 
-  const Prompt = ({ cmd }: { cmd?: string }) => (
-    <div className="flex items-center flex-wrap mb-1">
-      <div className="flex items-center bg-[#34d399] text-[#060d14] px-2 h-5 font-bold relative mr-3 text-[10px]">
-        kaptain@portfolio
-        <div className="absolute right-[-10px] top-0 bottom-0 w-0 h-0 border-y-[10px] border-y-transparent border-l-[10px] border-l-[#34d399]" />
-      </div>
-      <div className="flex items-center bg-[#1e3a4a] text-[#34d399] px-2 h-5 font-bold relative mr-3 text-[10px]">
-        ~
-        <div className="absolute right-[-10px] top-0 bottom-0 w-0 h-0 border-y-[10px] border-y-transparent border-l-[10px] border-l-[#1e3a4a]" />
-      </div>
-      <span className="text-[#e2e8f0] ml-1">{cmd}</span>
-    </div>
-  )
-
   return (
     <div className="h-full flex flex-col bg-[#06090c] font-mono select-none" onClick={() => inputRef.current?.focus()}>
       {/* Terminal Viewport */}
@@ -191,7 +194,9 @@ export function TerminalContent({ onClose }: { onClose?: () => void }) {
             >
               {line.out || ""}
               {line.flag && (
-                <img
+                <Image
+                width={100}
+                height={100}
                   src={`https://flagcdn.com/w20/${line.flag}.png`}
                   alt={line.flag.toUpperCase()}
                   className="inline-block w-4 h-3 align-text-bottom ml-1 opacity-80"

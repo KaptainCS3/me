@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react"
 import { FiInfo, FiX, FiImage, FiFile, FiVideo, FiMusic, FiFolder } from "react-icons/fi"
 import type { ReactNode } from "react"
 import type { DesktopItem } from "@/types/portfolio"
+import Image from "next/image"
 
 interface FileInfoModalProps {
   item: DesktopItem
@@ -50,10 +51,10 @@ export function FileInfoModal({ item, onClose }: FileInfoModalProps) {
   const meta = item.fileMeta
 
   return (
-    <div className="fixed inset-0 z-[10001] flex items-center justify-center bg-black/40 backdrop-blur-sm">
+    <div className="fixed inset-0 z-10001 flex items-center justify-center bg-black/40 backdrop-blur-sm">
       <div
         ref={dialogRef}
-        className="w-[90vw] max-w-[340px] rounded-xl overflow-hidden shadow-[0_32px_80px_rgba(0,0,0,0.7)] border border-white/10"
+        className="w-[90vw] max-w-85 rounded-xl overflow-hidden shadow-[0_32px_80px_rgba(0,0,0,0.7)] border border-white/10"
         style={{ background: "rgba(15, 20, 30, 0.95)" }}
       >
         <div className="flex items-center justify-between px-5 py-3 border-b border-white/8">
@@ -69,10 +70,12 @@ export function FileInfoModal({ item, onClose }: FileInfoModalProps) {
         <div className="p-5 space-y-4">
           {meta?.dataUrl && meta.type.startsWith("image/") && (
             <div className="rounded-lg overflow-hidden border border-white/8">
-              <img
+              <Image
+                              width={100}
+                              height={100}
                 src={meta.dataUrl}
                 alt={meta.name}
-                className="w-full h-auto max-h-[160px] object-contain bg-black/40"
+                className="w-full h-auto max-h-40 object-contain bg-black/40"
               />
             </div>
           )}
@@ -86,7 +89,7 @@ export function FileInfoModal({ item, onClose }: FileInfoModalProps) {
           <div className="space-y-2 text-xs font-mono">
             <div className="flex justify-between">
               <span className="text-[#4a6b7a]">Name</span>
-              <span className="text-[#c8d0d8] text-right max-w-[220px] truncate">
+              <span className="text-[#c8d0d8] text-right max-w-55 truncate">
                 {meta?.name || item.label}
               </span>
             </div>

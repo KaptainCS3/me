@@ -48,10 +48,10 @@ export function WallpaperPicker({ current, onSelect, onReset, onClose }: Wallpap
   const isPresetActive = (preset: WallpaperPreset) => current === preset.value
 
   return (
-    <div className="fixed inset-0 z-[10001] flex items-center justify-center bg-black/40 backdrop-blur-sm">
+    <div className="fixed inset-0 z-10001 flex items-center justify-center bg-black/40 backdrop-blur-sm">
       <div
         ref={dialogRef}
-        className="w-[90vw] max-w-[420px] max-h-[85vh] rounded-xl overflow-hidden shadow-[0_32px_80px_rgba(0,0,0,0.7)] border border-white/10"
+        className="w-[90vw] max-w-105 max-h-[85vh] rounded-xl overflow-hidden shadow-[0_32px_80px_rgba(0,0,0,0.7)] border border-white/10"
         style={{ background: "rgba(15, 20, 30, 0.95)" }}
       >
         <div className="flex items-center justify-between px-5 py-3 border-b border-white/8">
@@ -121,5 +121,5 @@ export function WallpaperPicker({ current, onSelect, onReset, onClose }: Wallpap
         </div>
       </div>
     </div>
-  )
+  );
 }
