@@ -20,11 +20,8 @@ const BOOT_LOGS = [
   "Boot sequence complete.",
 ]
 
-export function WelcomeOverlay({ visible }: { visible: boolean }) {
-  // This is the old welcome overlay, I should replace its content or create a new BootOverlay
-  // Actually, the plan says create components/os/BootOverlay.tsx
-  // But there is already a WelcomeOverlay.tsx in components/os/
-  return null // I'll create BootOverlay instead
+export function WelcomeOverlay({ visible: _visible }: { visible: boolean }) {
+  return null
 }
 
 export function BootOverlay() {
@@ -43,10 +40,10 @@ export function BootOverlay() {
         current++
       } else {
         clearInterval(interval)
-        setTimeout(() => setDone(true), 500)
-        setTimeout(() => setIsBooted(true), 1200)
+        setTimeout(() => setDone(true), 300)
+        setTimeout(() => setIsBooted(true), 700)
       }
-    }, 80)
+    }, 60)
 
     return () => clearInterval(interval)
   }, [isBooted, setIsBooted])
@@ -55,20 +52,20 @@ export function BootOverlay() {
 
   return (
     <div 
-      className={`fixed inset-0 z-99999 bg-black font-mono text-sm p-8 flex flex-col gap-1 transition-opacity duration-1000 ${done ? "opacity-0" : "opacity-100"}`}
+      className={`fixed inset-0 z-99999 bg-black font-mono text-sm p-8 flex flex-col gap-0.5 transition-opacity duration-700 ${done ? "opacity-0" : "opacity-100"}`}
       style={{ color: "#34d399" }}
     >
-      <div className="flex flex-col gap-0.5">
-        {logs.map((log, i) => (
-          <div key={i} className="min-h-[1.2rem]">
-            {log}
-          </div>
-        ))}
-        {!done && <div className="animate-pulse inline-block w-2 h-4 bg-[#34d399] ml-1" />}
-      </div>
+      {logs.map((log, i) => (
+        log ? (
+          <div key={i}>{log}</div>
+        ) : (
+          <div key={i} className="h-3" />
+        )
+      ))}
+      {!done && <div className="animate-pulse inline-block w-2 h-4 bg-[#34d399] mt-0.5" />}
       
       {done && (
-        <div className="mt-8 text-white animate-pulse">
+        <div className="mt-6 text-white animate-pulse text-sm">
           Starting Portfolio OS...
         </div>
       )}

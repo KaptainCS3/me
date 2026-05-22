@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image"
 import { FiUser, FiChevronRight, FiLinkedin, FiGithub, FiMail, FiMapPin, FiCalendar, FiTerminal, FiCpu, FiShield, FiZap, FiBookOpen } from "react-icons/fi"
 import { RESUME } from "@/data/about"
 
@@ -30,8 +31,18 @@ export function AboutContent() {
             <div className="space-y-4">
               <div className="relative w-20 h-20 group">
                 <div className="absolute inset-0 bg-[#34d399]/20 blur-xl rounded-full animate-pulse" />
-                <div className="relative w-full h-full rounded-2xl bg-[#0a3d2b] border border-[#34d399]/30 flex items-center justify-center text-[#34d399] shadow-2xl">
-                  <FiUser size={40} />
+                <div className="relative w-full h-full rounded-2xl bg-[#0a3d2b] border border-[#34d399]/30 flex items-center justify-center text-[#34d399] shadow-2xl overflow-hidden">
+                  {RESUME.avatar ? (
+                    <Image
+                      src={RESUME.avatar}
+                      alt={RESUME.name}
+                      fill
+                      className="object-cover"
+                      sizes="80px"
+                    />
+                  ) : (
+                    <FiUser size={40} />
+                  )}
                 </div>
               </div>
               <div className="space-y-1">

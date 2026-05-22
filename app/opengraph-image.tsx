@@ -4,7 +4,17 @@ export const alt = "Mbi Enow Leonard Appelgryn — Software Engineer Portfolio"
 export const size = { width: 1200, height: 630 }
 export const contentType = "image/png"
 
-export default function OgImage() {
+const AVATAR_URL = "https://avatars.githubusercontent.com/kaptaincs3"
+
+export default async function OgImage() {
+  let avatarDataUri = ""
+  try {
+    const res = await fetch(AVATAR_URL)
+    const buf = await res.arrayBuffer()
+    const base64 = Buffer.from(buf).toString("base64")
+    avatarDataUri = `data:image/png;base64,${base64}`
+  } catch {}
+
   return new ImageResponse(
     <div
       style={{
@@ -23,19 +33,39 @@ export default function OgImage() {
         style={{
           display: "flex",
           alignItems: "center",
-          justifyContent: "center",
-          width: 80,
-          height: 80,
-          borderRadius: 20,
-          background: "rgba(52, 211, 153, 0.1)",
-          border: "1px solid rgba(52, 211, 153, 0.3)",
-          fontSize: 40,
-          fontWeight: 700,
-          color: "#34d399",
-          marginBottom: 24,
+          gap: 20,
+          marginBottom: 20,
         }}
       >
-        K
+        {avatarDataUri && (
+          <img
+            src={avatarDataUri}
+            alt=""
+            width={72}
+            height={72}
+            style={{
+              borderRadius: 16,
+              border: "2px solid rgba(52, 211, 153, 0.4)",
+            }}
+          />
+        )}
+        <div
+          style={{
+            width: 80,
+            height: 80,
+            borderRadius: 20,
+            background: "rgba(52, 211, 153, 0.1)",
+            border: "1px solid rgba(52, 211, 153, 0.3)",
+            fontSize: 40,
+            fontWeight: 700,
+            color: "#34d399",
+            display: avatarDataUri ? "none" : "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          K
+        </div>
       </div>
       <div
         style={{

@@ -4,7 +4,17 @@ export const alt = "Mbi Enow Leonard Appelgryn — Software Engineer"
 export const size = { width: 1200, height: 600 }
 export const contentType = "image/png"
 
-export default function TwitterImage() {
+const AVATAR_URL = "https://avatars.githubusercontent.com/kaptaincs3"
+
+export default async function TwitterImage() {
+  let avatarDataUri = ""
+  try {
+    const res = await fetch(AVATAR_URL)
+    const buf = await res.arrayBuffer()
+    const base64 = Buffer.from(buf).toString("base64")
+    avatarDataUri = `data:image/png;base64,${base64}`
+  } catch {}
+
   return new ImageResponse(
     <div
       style={{
@@ -19,6 +29,27 @@ export default function TwitterImage() {
         fontFamily: "monospace",
       }}
     >
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 16,
+          marginBottom: 16,
+        }}
+      >
+        {avatarDataUri && (
+          <img
+            src={avatarDataUri}
+            alt=""
+            width={60}
+            height={60}
+            style={{
+              borderRadius: 12,
+              border: "2px solid rgba(52, 211, 153, 0.4)",
+            }}
+          />
+        )}
+      </div>
       <div
         style={{
           fontSize: 56,

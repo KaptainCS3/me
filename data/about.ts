@@ -13,6 +13,7 @@ export interface Resume {
   email: string
   linkedin: string
   github: string
+  avatar?: string
   languages: string[]
   tools: string[]
   versionControl: string[]
@@ -29,6 +30,7 @@ export const RESUME: Resume = {
   email: "mbiapplegryn@gmail.com",
   linkedin: "linkedin.com/in/leonard-appelgryn",
   github: "github.com/kaptaincs3",
+  avatar: "https://avatars.githubusercontent.com/kaptaincs3",
   languages: ["JavaScript / TypeScript", "SQL", "HTML5", "CSS3", "Python"],
   tools: ["React", "Next.js", "React Native", "Redux", "Tailwind CSS", "AWS", "Zustand", "Expo", "React Query", "Prisma", "PostgreSQL", "Zod", "Redis"],
   versionControl: ["Git"],
