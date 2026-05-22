@@ -89,9 +89,9 @@ export function ContactContent() {
         <span className="text-[#34d399]">contact.tsx</span>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-8 custom-scrollbar">
+      <div className="flex-1 overflow-y-auto p-4 sm:p-6 pb-24 sm:pb-32 space-y-8 custom-scrollbar">
         <section className="space-y-1">
-          <p className="text-[#4a6b7a] text-xs">// Connect with the engineer</p>
+          <p className="text-[#4a6b7a] text-xs">{"// Connect with the engineer"}</p>
           <h2 className="text-xl font-bold text-white tracking-tight">System.Contact()</h2>
         </section>
 
@@ -130,7 +130,7 @@ export function ContactContent() {
                   <span className="text-[#c084fc] text-xs">const</span>
                   <span className="text-[#60a5fa] font-semibold">{c.id}</span>
                   <span className="text-[#4a6b7a]">=</span>
-                  <span className="text-[#34d399] break-all">"{c.value}"</span>
+                  <span className="text-[#34d399] break-all">&quot;{c.value}&quot;</span>
                 </div>
               </div>
             ))}
@@ -223,7 +223,7 @@ export function ContactContent() {
             REMOTE
           </span>
           <span className="hidden sm:inline">EN/FR</span>
-          <span className="hidden md:inline opacity-50 italic">Tip: type 'contact --open' in terminal</span>
+          <span className="hidden md:inline opacity-50 italic">Tip: type &apos;contact --open&apos; in terminal</span>
         </div>
       </div>
     </div>
