@@ -153,7 +153,7 @@ export function ProjectsContent() {
                   </div>
 
                   {/* Viewport Content */}
-                  <div className="min-h-[280px] sm:aspect-video bg-[#06090c] relative overflow-hidden">
+                  <div className="h-[450px] sm:h-auto sm:aspect-video bg-[#06090c] relative overflow-hidden">
                     {p.type === "web" && p.url ? (
                       <div className="w-full h-full relative">
                         {/* Fallback View (Always in background) */}
