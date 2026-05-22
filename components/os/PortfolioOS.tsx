@@ -49,7 +49,10 @@ export default function PortfolioOS() {
   const getNextZ = useAppStore((s) => s.getNextZ)
   const mergeDesktopItems = useAppStore((s) => s.mergeDesktopItems)
   const moveDesktopItem = useAppStore((s) => s.moveDesktopItem)
-  const updateDesktopItem = useAppStore((s) => s.updateDesktopItem)
+  const trashDesktopItem = useAppStore((s) => s.trashDesktopItem)
+
+  const selectedIdsRef = useRef<Set<string>>(new Set())
+  const trashBinRef = useRef(trashDesktopItem)
 
   const vfs = useAppStore((s) => s.vfs)
   const setVfs = useAppStore((s) => s.setVfs)
@@ -87,6 +90,7 @@ export default function PortfolioOS() {
   const [showSpotlight, setShowSpotlight] = useState(false)
   const [dockVisible, setDockVisible] = useState(false)
   const [fileInfoItem, setFileInfoItem] = useState<DesktopItem | null>(null)
+  const [selectedDesktopIds, setSelectedDesktopIds] = useState<Set<string>>(new Set())
   const [isMobile, setIsMobile] = useState(
     typeof window !== "undefined" ? window.matchMedia("(max-width: 640px)").matches : false,
   )
@@ -251,7 +255,16 @@ export default function PortfolioOS() {
   )
 
   const handleMoveItem = useCallback((id: string, x: number, y: number) => {
-    moveDesktopItem(id, x, y)
+    const container = desktopRef.current
+    if (!container) { moveDesktopItem(id, x, y); return }
+    const cw = container.offsetWidth
+    const ch = container.offsetHeight
+    const ICON_W = 56
+    const maxX = Math.floor((cw - ICON_W) / GRID_SIZE) * GRID_SIZE
+    const maxY = Math.floor((ch - 140) / GRID_SIZE) * GRID_SIZE
+    const clampedX = Math.max(0, Math.min(x, maxX))
+    const clampedY = Math.max(0, Math.min(y, maxY))
+    moveDesktopItem(id, clampedX, clampedY)
   }, [moveDesktopItem])
 
   const handleDesktopIconClick = useCallback(
@@ -276,13 +289,37 @@ export default function PortfolioOS() {
     [openWindow, desktopItems],
   )
 
+  const handleSelectDesktopItem = useCallback((id: string, e?: React.MouseEvent) => {
+    if (e?.metaKey || e?.ctrlKey) {
+      setSelectedDesktopIds((prev) => {
+        const next = new Set(prev)
+        if (next.has(id)) next.delete(id)
+        else next.add(id)
+        return next
+      })
+    } else {
+      setSelectedDesktopIds(new Set([id]))
+    }
+  }, [])
+
   useEffect(() => {
     actionRef.current = handleMenuAction
+    selectedIdsRef.current = selectedDesktopIds
+    trashBinRef.current = trashDesktopItem
   })
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const mod = e.metaKey || e.ctrlKey
+
+      if (!mod && (e.key === "Delete" || e.key === "Backspace")) {
+        const ids = selectedIdsRef.current
+        if (ids.size > 0) {
+          ids.forEach((id) => trashBinRef.current(id))
+          setSelectedDesktopIds(new Set())
+        }
+        return
+      }
 
       if (mod && e.key.toLowerCase() === "k") {
         e.preventDefault()
@@ -468,12 +505,17 @@ export default function PortfolioOS() {
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
         onTouchMove={handleTouchMove}
+        onClick={(e) => {
+          if (e.target === desktopRef.current) setSelectedDesktopIds(new Set())
+        }}
       >
         <DesktopIcons
           items={desktopItems}
           onMoveItem={handleMoveItem}
           onDropFiles={handleDropFiles}
           onItemClick={handleDesktopIconClick}
+          onSelectItem={handleSelectDesktopItem}
+          selectedIds={selectedDesktopIds}
         />
         <TrashBin onOpenTrash={() => openWindow("trash")} />
         {Object.entries(windows).map(([id, state]) => (

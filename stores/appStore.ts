@@ -48,6 +48,7 @@ interface AppStore {
   trashDesktopItem: (id: string) => void
   restoreDesktopItem: (id: string) => void
   emptyTrash: () => void
+  permanentDeleteDesktopItem: (id: string) => void
 }
 
 function gridKey(x: number, y: number): string {
@@ -190,6 +191,11 @@ export const useAppStore = create<AppStore>()(
         }),
 
       emptyTrash: () => set({ trashItems: [] }),
+
+      permanentDeleteDesktopItem: (id) =>
+        set((s) => ({
+          trashItems: s.trashItems.filter((ti) => ti.id !== id),
+        })),
     }),
     {
       name: "portfolio-app-state",
@@ -205,6 +211,7 @@ export const useAppStore = create<AppStore>()(
                 size: item.fileMeta.size,
                 type: item.fileMeta.type,
                 thumbnail: item.fileMeta.thumbnail,
+                storageId: item.fileMeta.storageId,
               }
             : undefined,
         })),
@@ -216,6 +223,7 @@ export const useAppStore = create<AppStore>()(
                 size: item.fileMeta.size,
                 type: item.fileMeta.type,
                 thumbnail: item.fileMeta.thumbnail,
+                storageId: item.fileMeta.storageId,
               }
             : undefined,
         })),
