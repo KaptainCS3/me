@@ -91,8 +91,12 @@ export function ContactContent() {
 
       <div className="flex-1 overflow-y-auto p-4 sm:p-6 pb-16 sm:pb-24 space-y-8 custom-scrollbar">
         <section className="space-y-1">
-          <p className="text-[#4a6b7a] text-xs">{"// Connect with the engineer"}</p>
-          <h2 className="text-xl font-bold text-white tracking-tight">System.Contact()</h2>
+          <p className="text-[#4a6b7a] text-xs">
+            {"// Connect with the engineer"}
+          </p>
+          <h2 className="text-xl font-bold text-white tracking-tight">
+            System.Contact()
+          </h2>
         </section>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
@@ -104,8 +108,14 @@ export function ContactContent() {
               >
                 <div className="flex items-center justify-between mb-1">
                   <div className="flex items-center gap-2">
-                    <c.icon className="transition-transform group-hover:scale-110" style={{ color: c.color }} size={16} />
-                    <span className="text-[10px] uppercase tracking-widest text-[#4a6b7a]">{c.label}</span>
+                    <c.icon
+                      className="transition-transform group-hover:scale-110"
+                      style={{ color: c.color }}
+                      size={16}
+                    />
+                    <span className="text-[10px] uppercase tracking-widest text-[#4a6b7a]">
+                      {c.label}
+                    </span>
                   </div>
                   <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                     <button
@@ -113,7 +123,11 @@ export function ContactContent() {
                       className="p-1.5 rounded-md hover:bg-white/5 text-[#4a6b7a] hover:text-white transition-colors"
                       title="Copy"
                     >
-                      {copiedId === c.id ? <FiCheck className="text-[#34d399]" size={14} /> : <FiCopy size={14} />}
+                      {copiedId === c.id ? (
+                        <FiCheck className="text-[#34d399]" size={14} />
+                      ) : (
+                        <FiCopy size={14} />
+                      )}
                     </button>
                     <a
                       href={c.href}
@@ -130,68 +144,144 @@ export function ContactContent() {
                   <span className="text-[#c084fc] text-xs">const</span>
                   <span className="text-[#60a5fa] font-semibold">{c.id}</span>
                   <span className="text-[#4a6b7a]">=</span>
-                  <span className="text-[#34d399] break-all">&quot;{c.value}&quot;</span>
+                  <span className="text-[#34d399] break-all">
+                    &quot;{c.value}&quot;
+                  </span>
                 </div>
               </div>
             ))}
           </div>
 
-          <form onSubmit={handleSubmit(onSubmit)} className="lg:col-span-7 flex flex-col gap-4 bg-[#0d1117]/50 p-5 rounded-xl border border-[#1e3a4a]/20">
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="lg:col-span-7 flex flex-col gap-4 bg-[#0d1117]/50 p-5 rounded-xl border border-[#1e3a4a]/20"
+          >
             <div className="space-y-4">
               <div className="space-y-1.5">
-                <Label htmlFor="name" className="text-[10px] text-[#4a6b7a] uppercase tracking-widest">Name</Label>
-                <Input id="name" placeholder="Your name" {...register("name")} />
-                {errors.name && <p className="text-[10px] text-red-400">{errors.name.message}</p>}
+                <Label
+                  htmlFor="name"
+                  className="text-[10px] text-[#4a6b7a] uppercase tracking-widest"
+                >
+                  Name
+                </Label>
+                <Input
+                  id="name"
+                  placeholder="Your name"
+                  {...register("name")}
+                />
+                {errors.name && (
+                  <p className="text-[10px] text-red-400">
+                    {errors.name.message}
+                  </p>
+                )}
               </div>
 
               <div className="space-y-1.5">
-                <Label htmlFor="email" className="text-[10px] text-[#4a6b7a] uppercase tracking-widest">Email</Label>
-                <Input id="email" type="email" placeholder="you@example.com" {...register("email")} />
-                {errors.email && <p className="text-[10px] text-red-400">{errors.email.message}</p>}
+                <Label
+                  htmlFor="email"
+                  className="text-[10px] text-[#4a6b7a] uppercase tracking-widest"
+                >
+                  Email
+                </Label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="you@example.com"
+                  {...register("email")}
+                />
+                {errors.email && (
+                  <p className="text-[10px] text-red-400">
+                    {errors.email.message}
+                  </p>
+                )}
               </div>
 
               <div className="space-y-1.5">
-                <Label htmlFor="service" className="text-[10px] text-[#4a6b7a] uppercase tracking-widest">Service Interested In</Label>
+                <Label
+                  htmlFor="service"
+                  className="text-[10px] text-[#4a6b7a] uppercase tracking-widest"
+                >
+                  Service Interested In
+                </Label>
                 <Select
                   value={selectedService}
-                  onValueChange={(val) => setValue("service", val, { shouldValidate: true })}
+                  onValueChange={(val) =>
+                    setValue("service", val, { shouldValidate: true })
+                  }
                 >
                   <SelectTrigger id="service">
                     <SelectValue placeholder="Select a service..." />
                   </SelectTrigger>
                   <SelectContent>
                     {SERVICE_OPTIONS.map((opt) => (
-                      <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
+                      <SelectItem key={opt.value} value={opt.value}>
+                        {opt.label}
+                      </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
-                {errors.service && <p className="text-[10px] text-red-400">{errors.service.message}</p>}
+                {errors.service && (
+                  <p className="text-[10px] text-red-400">
+                    {errors.service.message}
+                  </p>
+                )}
               </div>
 
               {selectedService === "other" && (
                 <div className="space-y-1.5 animate-in fade-in slide-in-from-top-1 duration-200">
-                  <Label htmlFor="customSubject" className="text-[10px] text-[#4a6b7a] uppercase tracking-widest">Custom Subject</Label>
-                  <Input id="customSubject" placeholder="Describe your inquiry..." {...register("customSubject")} />
-                  {errors.customSubject && <p className="text-[10px] text-red-400">{errors.customSubject.message}</p>}
+                  <Label
+                    htmlFor="customSubject"
+                    className="text-[10px] text-[#4a6b7a] uppercase tracking-widest"
+                  >
+                    Custom Subject
+                  </Label>
+                  <Input
+                    id="customSubject"
+                    placeholder="Describe your inquiry..."
+                    {...register("customSubject")}
+                  />
+                  {errors.customSubject && (
+                    <p className="text-[10px] text-red-400">
+                      {errors.customSubject.message}
+                    </p>
+                  )}
                 </div>
               )}
 
               <div className="space-y-1.5">
-                <Label htmlFor="message" className="text-[10px] text-[#4a6b7a] uppercase tracking-widest">Message</Label>
-                <Textarea id="message" placeholder="Your message..." rows={4} {...register("message")} />
-                {errors.message && <p className="text-[10px] text-red-400">{errors.message.message}</p>}
+                <Label
+                  htmlFor="message"
+                  className="text-[10px] text-[#4a6b7a] uppercase tracking-widest"
+                >
+                  Message
+                </Label>
+                <Textarea
+                  id="message"
+                  placeholder="Your message..."
+                  rows={4}
+                  {...register("message")}
+                />
+                {errors.message && (
+                  <p className="text-[10px] text-red-400">
+                    {errors.message.message}
+                  </p>
+                )}
               </div>
             </div>
 
             {apiError && (
-              <p className="text-[10px] text-red-400 bg-red-400/10 border border-red-400/20 rounded px-3 py-2">{apiError}</p>
+              <p className="text-[10px] text-red-400 bg-red-400/10 border border-red-400/20 rounded px-3 py-2">
+                {apiError}
+              </p>
             )}
 
             <button
               type="submit"
               disabled={isSending}
               className={`mt-2 group relative flex items-center justify-center gap-2 px-6 py-3 rounded-lg overflow-hidden transition-all active:scale-95 ${
-                sent ? "bg-[#34d399] text-[#060d14]" : "bg-white/5 border border-white/10 hover:bg-white/10 text-white"
+                sent
+                  ? "bg-[#34d399] text-[#060d14]"
+                  : "bg-white/5 border border-white/10 hover:bg-white/10 text-white"
               }`}
             >
               {isSending ? (
@@ -203,8 +293,13 @@ export function ContactContent() {
                 </>
               ) : (
                 <>
-                  <FiSend size={16} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                  <span className="font-bold tracking-widest uppercase text-xs">Transmit Signal</span>
+                  <FiSend
+                    size={16}
+                    className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"
+                  />
+                  <span className="font-bold tracking-widest uppercase text-xs">
+                    Transmit Signal
+                  </span>
                 </>
               )}
             </button>
@@ -215,7 +310,7 @@ export function ContactContent() {
       <div className="flex items-center bg-[#0d1117] border-t border-[#1e3a4a]/30 h-8 text-[10px] overflow-hidden shrink-0">
         <div className="flex items-center bg-[#34d399] text-[#060d14] px-3 h-full font-bold relative mr-3">
           AVAILABLE FOR HIRE
-          <div className="absolute right-3 top-0 bottom-0 w-0 h-0 border-y-16 border-y-transparent border-l-3 border-l-[#34d399]" />
+          <div className="absolute right-[-12px] top-0 bottom-0 w-0 h-0 border-y-[16px] border-y-transparent border-l-[12px] border-l-[#34d399]" />
         </div>
         <div className="flex items-center gap-4 text-[#4a6b7a]">
           <span className="flex items-center gap-1">
@@ -223,9 +318,11 @@ export function ContactContent() {
             REMOTE
           </span>
           <span className="hidden sm:inline">EN/FR</span>
-          <span className="hidden md:inline opacity-50 italic">Tip: type &apos;contact --open&apos; in terminal</span>
+          <span className="hidden md:inline opacity-50 italic">
+            Tip: type &apos;contact --open&apos; in terminal
+          </span>
         </div>
       </div>
     </div>
-  )
+  );
 }
