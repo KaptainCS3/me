@@ -103,7 +103,7 @@ export function AboutOSContent() {
 
         <div className="flex items-center gap-4">
           <a
-            href="https://github.com/kaptaincs3/portoflio"
+            href="https://github.com/KaptainCS3/portfolio"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-1.5 text-[11px] text-[#4a6b7a] hover:text-white transition-colors group"
