@@ -322,7 +322,7 @@ export function buildCommands(
 
   reg({
     name: "fortune",
-    desc: "Display a random advice",
+    desc: "Display random advice",
     usage: "fortune",
     async handler() {
       try {

@@ -19,7 +19,7 @@ export function SkillsContent() {
         {/* Intro Section */}
         <section className="space-y-1">
           <p className="text-[#4a6b7a] text-xs">// System capability matrix — high priority modules</p>
-          <h2 className="text-xl font-bold text-white tracking-tight uppercase">Capability_Matrix.v1</h2>
+          <h2 className="text-xl font-bold text-white tracking-tight uppercase">Capability Matrix v1</h2>
         </section>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-6">
@@ -34,7 +34,7 @@ export function SkillsContent() {
                   {s.icon}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h3 className="text-[10px] text-[#4a6b7a] font-bold uppercase tracking-widest leading-none mb-1">Module_0{idx + 1}</h3>
+                  <h3 className="text-[10px] text-[#4a6b7a] font-bold uppercase tracking-widest leading-none mb-1">Module 0{idx + 1}</h3>
                   <h4 className="text-xs text-white font-bold truncate uppercase">{s.cat}</h4>
                 </div>
               </div>
@@ -42,7 +42,7 @@ export function SkillsContent() {
               {/* System Load Bar (Proficiency) */}
               <div className="space-y-1.5 mb-5">
                 <div className="flex justify-between items-center text-[9px] text-[#4a6b7a] font-bold">
-                  <span>SYSTEM_LOAD</span>
+                  <span>SYSTEM LOAD</span>
                   <span className={s.level && s.level > 90 ? "text-[#34d399]" : "text-[#60a5fa]"}>{s.level}%</span>
                 </div>
                 <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden flex border border-white/5">
@@ -76,7 +76,7 @@ export function SkillsContent() {
          <div className="flex items-center gap-4 text-[#4a6b7a]">
             <span className="flex items-center gap-1 font-bold">
               <span className="w-1.5 h-1.5 rounded-full bg-[#34d399] animate-pulse" />
-              STABLE_RELEASE
+              STABLE RELEASE
             </span>
             <span className="hidden sm:inline opacity-50 italic tracking-wider uppercase">Runtime: Production</span>
          </div>

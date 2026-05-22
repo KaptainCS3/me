@@ -99,12 +99,12 @@ export function ProjectsContent() {
           <div className="flex gap-4">
             {p.url && (
               <a href={actualUrl || p.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-[10px] text-[#34d399] hover:underline">
-                <FiGlobe size={12} /> LIVE_DEMO
+                <FiGlobe size={12} /> LIVE DEMO
               </a>
             )}
             {p.github && !p.isCompany && (
               <a href={p.github} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-[10px] text-[#c084fc] hover:underline">
-                <FiGithub size={12} /> SOURCE_CODE
+                <FiGithub size={12} /> SOURCE CODE
               </a>
             )}
           </div>
@@ -115,7 +115,7 @@ export function ProjectsContent() {
           <section className="space-y-4">
             <div className="space-y-1">
               <div className="flex items-center gap-2">
-                <span className="px-2 py-0.5 rounded bg-[#34d399]/10 text-[#34d399] text-[9px] font-bold border border-[#34d399]/20 uppercase tracking-widest">Production_Env</span>
+                <span className="px-2 py-0.5 rounded bg-[#34d399]/10 text-[#34d399] text-[9px] font-bold border border-[#34d399]/20 uppercase tracking-widest">Production Env</span>
                 <span className="text-[#4a6b7a] text-[10px]">{p.period}</span>
               </div>
               <h2 className="text-3xl font-bold text-white tracking-tighter">{p.name}</h2>
@@ -169,7 +169,7 @@ export function ProjectsContent() {
                               onClick={() => window.open(actualUrl || p.url!, '_blank')}
                              className="px-6 py-2 rounded-full bg-[#34d399] text-[#060d14] text-[10px] font-bold hover:scale-105 transition-all flex items-center gap-2"
                            >
-                              LAUNCH_SYSTEM_DIRECTLY <FiExternalLink size={12} />
+                              LAUNCH SYSTEM DIRECTLY <FiExternalLink size={12} />
                            </button>
                         </div>
                         
@@ -204,7 +204,7 @@ export function ProjectsContent() {
                         </div>
                         <div className="absolute inset-0 flex items-center justify-center">
                           <button className="px-6 py-2.5 rounded-full bg-white/5 border border-white/10 text-white text-[10px] font-bold tracking-widest hover:bg-white/10 transition-all uppercase">
-                            Preview_Not_Available
+                            Preview Not Available
                           </button>
                         </div>
                       </div>
@@ -216,7 +216,7 @@ export function ProjectsContent() {
               {/* Architecture Blueprint */}
               <div className="p-5 rounded-xl bg-[#0d1117]/50 border border-[#1e3a4a]/20 space-y-4">
                 <h3 className="text-[10px] text-[#4a6b7a] font-bold uppercase tracking-wider flex items-center gap-2">
-                  <FiLayers size={14} /> Architecture_Blueprint
+                  <FiLayers size={14} /> Architecture Blueprint
                 </h3>
                 <div className="grid grid-cols-3 gap-4 text-center">
                   <div className="p-3 rounded bg-white/5 border border-white/5">
@@ -240,11 +240,11 @@ export function ProjectsContent() {
             <div className="lg:col-span-5 space-y-6">
               {/* Performance Metrics */}
               <section className="space-y-4">
-                <h3 className="text-[10px] text-[#4a6b7a] font-bold uppercase tracking-wider">System_Performance</h3>
+                <h3 className="text-[10px] text-[#4a6b7a] font-bold uppercase tracking-wider">System Performance</h3>
                 <div className="grid grid-cols-2 gap-3">
                   {p.metrics?.map((m, i) => (
                     <div key={i} className="p-3 rounded-lg bg-[#0d1117] border border-[#1e3a4a]/30 hover:border-[#34d399]/40 transition-all cursor-default">
-                      <p className="text-[9px] text-[#4a6b7a] mb-1 uppercase tracking-tight">Metric_0{i + 1}</p>
+                      <p className="text-[9px] text-[#4a6b7a] mb-1 uppercase tracking-tight">Metric 0{i + 1}</p>
                       <p className="text-xs text-white font-bold leading-tight">{m}</p>
                     </div>
                   ))}
@@ -254,7 +254,7 @@ export function ProjectsContent() {
               {/* Dependency Graph */}
               <section className="space-y-4">
                 <div className="flex items-center justify-between border-b border-[#1e3a4a]/20 pb-1">
-                  <h3 className="text-[10px] text-[#4a6b7a] font-bold uppercase tracking-wider">Dependency_Graph</h3>
+                  <h3 className="text-[10px] text-[#4a6b7a] font-bold uppercase tracking-wider">Dependency Graph</h3>
                   <span className="text-[9px] text-[#34d399]">config.json</span>
                 </div>
                 <div className="space-y-2">
@@ -284,17 +284,17 @@ export function ProjectsContent() {
         <footer className="px-6 py-4 bg-[#0d1117] border-t border-[#1e3a4a]/30 flex items-center justify-between shrink-0 z-20">
           <div className="flex items-center gap-6">
             <div className="flex flex-col">
-              <span className="text-[9px] text-[#4a6b7a] uppercase">Current_Selection</span>
+              <span className="text-[9px] text-[#4a6b7a] uppercase">Current Selection</span>
               <span className="text-xs text-white font-bold">{p.name}</span>
             </div>
           </div>
           <div className="flex gap-3">
             <button onClick={() => setActive((active + 1) % PROJECTS.length)} className="px-4 py-2 rounded bg-white/5 border border-white/10 text-[10px] text-white hover:bg-white/10 transition-all font-bold tracking-widest uppercase">
-              Next_Project
+              Next Project
             </button>
             {p.url && (
               <button onClick={() => window.open(actualUrl || p.url!, "_blank")} className="px-6 py-2 rounded bg-[#34d399] text-[#060d14] text-[10px] font-bold hover:scale-105 transition-all shadow-[0_0_15px_rgba(52,211,153,0.3)] tracking-widest uppercase">
-                Deploy_Live
+                Deploy Live
               </button>
             )}
           </div>
@@ -348,7 +348,7 @@ function SidebarContent({ active, onSelect }: { active: number; onSelect: (i: nu
       <div className="p-4 bg-[#06090c] border-t border-[#1e3a4a]/20">
         <div className="flex items-center gap-2 text-[10px] text-[#4a6b7a]">
           <span className="w-1.5 h-1.5 rounded-full bg-[#34d399] animate-pulse" />
-          SECURE_LINK: ACTIVE
+          SECURE LINK: ACTIVE
         </div>
       </div>
     </>

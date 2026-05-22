@@ -408,7 +408,7 @@ export default function PortfolioOS() {
   }, [])
 
   return (
-    <div
+    <main
       className="w-full h-screen min-h-screen relative overflow-hidden select-none"
       onContextMenu={handleContextMenu}
       style={{
@@ -566,6 +566,6 @@ export default function PortfolioOS() {
         onClose={() => setShowSpotlight(false)}
         onOpenApp={openWindow}
       />
-    </div>
+    </main>
   );
 }

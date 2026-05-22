@@ -72,7 +72,7 @@ export function SettingsContent() {
         <div className="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/10">
           <div className="flex flex-col">
             <span className="text-sm font-medium">System Sounds</span>
-            <span className="text-xs text-slate-500">Enable UI interactions sounds</span>
+            <span className="text-xs text-slate-500">Enable UI interaction sounds</span>
           </div>
           <button
             onClick={() => setIsMuted(!isMuted)}

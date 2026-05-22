@@ -6,7 +6,7 @@ export const TERMINAL_LINES: TerminalLine[] = [
   { out: "Running system diagnostics...", color: "#4a6b7a" },
   { out: "Identity: Leonard Appelgryn (Junior Software Engineer)", color: "#60a5fa" },
   { out: "Location: Douala, Cameroon", color: "#60a5fa" },
-  { out: "Status: SYSTEM_READY", color: "#34d399" },
+  { out: "Status: SYSTEM READY", color: "#34d399" },
   { out: "" },
   { ps: true, cmd: "whoami" },
   { out: "Mbi Enow Leonard Appelgryn — Software Engineer, Douala, CM ", flag: "cm" },

@@ -89,7 +89,7 @@ export function AboutContent() {
             <section className="space-y-6">
               <div className="flex items-center justify-between">
                 <h3 className="text-[10px] text-[#34d399] font-bold uppercase tracking-widest flex items-center gap-2">
-                  <FiTerminal /> Professional_History.log
+                  <FiTerminal /> Professional History.log
                 </h3>
                 <span className="text-[9px] text-[#4a6b7a] hidden sm:inline uppercase tracking-widest italic">Sorted by Recency</span>
               </div>
@@ -137,7 +137,7 @@ export function AboutContent() {
             {/* Academic Layer */}
             <section className="space-y-6 pt-6 border-t border-[#1e3a4a]/10">
               <h3 className="text-[10px] text-[#34d399] font-bold uppercase tracking-widest flex items-center gap-2">
-                <FiBookOpen /> Academic_Infrastructure
+                <FiBookOpen /> Academic Infrastructure
               </h3>
               <div className="space-y-4">
                 {RESUME.education.map((edu, i) => (
@@ -167,7 +167,7 @@ export function AboutContent() {
          <div className="flex items-center gap-4 text-[#4a6b7a]">
             <span className="flex items-center gap-1 font-bold">
               <span className="w-1.5 h-1.5 rounded-full bg-[#34d399] animate-pulse" />
-              TRANSMITTING_EXPERTISE
+              TRANSMITTING EXPERTISE
             </span>
             <span className="hidden sm:inline opacity-50 italic tracking-wider uppercase">Build: Stable.v3</span>
          </div>
