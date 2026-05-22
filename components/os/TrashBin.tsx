@@ -28,9 +28,13 @@ export function TrashBin({ onOpenTrash }: TrashBinProps) {
     (e: React.DragEvent) => {
       e.preventDefault()
       setDragOver(false)
-      const draggedId = e.dataTransfer.getData("text/plain")
-      if (draggedId) {
-        trashDesktopItem(draggedId)
+      const data = e.dataTransfer.getData("text/plain")
+      if (!data) return
+      try {
+        const ids: string[] = JSON.parse(data)
+        if (Array.isArray(ids)) ids.forEach((id) => trashDesktopItem(id))
+      } catch {
+        trashDesktopItem(data)
       }
     },
     [trashDesktopItem],

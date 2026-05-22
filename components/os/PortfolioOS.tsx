@@ -506,7 +506,10 @@ export default function PortfolioOS() {
         onTouchEnd={handleTouchEnd}
         onTouchMove={handleTouchMove}
         onClick={(e) => {
-          if (e.target === desktopRef.current) setSelectedDesktopIds(new Set())
+          const target = e.target as HTMLElement
+          if (!target.closest("[data-desktop-icon]") && !target.closest("[data-window]")) {
+            setSelectedDesktopIds(new Set())
+          }
         }}
       >
         <DesktopIcons

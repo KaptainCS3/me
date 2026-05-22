@@ -155,6 +155,7 @@ export function DesktopIcons({ items, onMoveItem, onDropFiles, onItemClick, onSe
       {items.map((item) => (
           <div
             key={item.id}
+            data-desktop-icon
             draggable={!isTouch}
             onDragStart={(e) => handleDragStart(e, item.id)}
             onClick={(e) => handleClick(item.id, e)}

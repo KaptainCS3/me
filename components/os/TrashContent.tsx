@@ -94,7 +94,15 @@ export function TrashContent() {
         confirmLabel="Empty Trash"
         cancelLabel="Cancel"
         variant="danger"
-        onConfirm={() => { emptyTrash(); setShowEmptyConfirm(false) }}
+        onConfirm={async () => {
+          for (const item of trashItems) {
+            if (item.fileMeta?.storageId) {
+              try { await deleteBlob(item.fileMeta.storageId) } catch { /* ignore */ }
+            }
+          }
+          emptyTrash();
+          setShowEmptyConfirm(false)
+        }}
         onCancel={() => setShowEmptyConfirm(false)}
       />
     </div>
