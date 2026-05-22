@@ -15,7 +15,7 @@ export function SkillsContent() {
         <span className="text-[#34d399]">expertise.bin</span>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-8 custom-scrollbar">
+      <div className="flex-1 overflow-y-auto p-4 sm:p-6 pb-16 sm:pb-24 space-y-8 custom-scrollbar">
         {/* Intro Section */}
         <section className="space-y-1">
           <p className="text-[#4a6b7a] text-xs">// System capability matrix — high priority modules</p>

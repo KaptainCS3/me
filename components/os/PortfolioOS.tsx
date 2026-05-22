@@ -354,6 +354,11 @@ export default function PortfolioOS() {
   }, [])
 
   const handleContextMenu = useCallback((e: React.MouseEvent) => {
+    const target = e.target as HTMLElement
+    if (target.closest("[data-window]") || target.closest(".os-dock")) {
+      return
+    }
+
     e.preventDefault()
     setContextMenu({ x: e.clientX, y: e.clientY })
   }, [])
@@ -498,7 +503,7 @@ export default function PortfolioOS() {
           transition: "transform 0.35s cubic-bezier(0.4, 0, 0.2, 1)",
           bottom: `calc(${isMobile ? 0 : DOCK_BOTTOM_GAP}px + env(safe-area-inset-bottom, 0px))`,
         }}
-        className="fixed left-1/2 bg-white/7 backdrop-blur-2xl border border-white/12 rounded-[18px] px-4 py-4 flex items-end gap-2.5 z-9999 shadow-[0_8px_32px_rgba(0,0,0,0.5)]"
+        className="fixed left-1/2 bg-white/7 backdrop-blur-2xl border border-white/12 rounded-[18px] px-4 py-4 flex items-end gap-2.5 z-9999 shadow-[0_8px_32px_rgba(0,0,0,0.5)] os-dock"
       >
         {DOCK_APPS.map((app) => (
           <DockItem

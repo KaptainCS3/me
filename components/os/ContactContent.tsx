@@ -89,7 +89,7 @@ export function ContactContent() {
         <span className="text-[#34d399]">contact.tsx</span>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-4 sm:p-6 pb-24 sm:pb-32 space-y-8 custom-scrollbar">
+      <div className="flex-1 overflow-y-auto p-4 sm:p-6 pb-16 sm:pb-24 space-y-8 custom-scrollbar">
         <section className="space-y-1">
           <p className="text-[#4a6b7a] text-xs">{"// Connect with the engineer"}</p>
           <h2 className="text-xl font-bold text-white tracking-tight">System.Contact()</h2>

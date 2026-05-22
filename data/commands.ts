@@ -266,7 +266,7 @@ export function buildCommands(
       return lines(
         RESUME.name,
         col("Software Engineer | KaptainCS3", "var(--accent)"),
-        col("Buea, Cameroon ", "#60a5fa"),
+        col("Douala, Cameroon ", "#60a5fa"),
         { out: "", flag: "cm" },
         "",
         `Languages:  ${RESUME.languages.join(", ")}`,
@@ -311,7 +311,7 @@ export function buildCommands(
           `Host: Leonard Appelgryn (KaptainCS3)`,
           `Shell: bash 5.2`,
           `Editor: nvim`,
-          `Location: Buea, Cameroon`,
+          `Location: Douala, Cameroon`,
           `Motto: target the peak | stay humble and cool`,
           `Languages: ${RESUME.languages.join(", ")}`,
           `Date: ${d.toLocaleDateString()}`,
@@ -329,7 +329,8 @@ export function buildCommands(
         const res = await fetch("/api/fortune")
         const data = await res.json()
         const q = data.advice
-        const maxW = 40
+        const isMobile = typeof window !== "undefined" && window.innerWidth < 640
+        const maxW = isMobile ? 30 : 45
         const wrapped = wrapText(q, maxW)
         const boxW = maxW + 2
         const border = "─".repeat(boxW)

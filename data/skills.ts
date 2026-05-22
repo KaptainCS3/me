@@ -19,7 +19,7 @@ export const SKILLS: SkillCategory[] = [
     cat: "Cloud & DevOps",
     level: 82,
     icon: React.createElement(FiCloud),
-    items: ["AWS (S3, EC2, Lambda)", "Docker / Containerization", "Vercel / GitHub Actions", "CI/CD Pipelines", "Terraform / IaC", "Cloudflare Edge"],
+    items: ["AWS (S3)", "Docker / Containerization", "Vercel / GitHub Actions", "CI/CD Pipelines", ],
   },
   {
     cat: "Security & Protocol",

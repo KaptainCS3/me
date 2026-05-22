@@ -168,9 +168,7 @@ export function Window({
         left: isMaximized ? 0 : position.x,
         width: isMaximized ? "100%" : size.w,
         height: isMaximized
-          ? isMobile
-            ? "calc(100% - 90px)"
-            : "100%"
+          ? "100%"
           : size.h,
         zIndex,
         borderRadius: isMaximized ? 0 : 12,

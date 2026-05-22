@@ -94,7 +94,7 @@ export function AboutContent() {
           </aside>
 
           {/* Right Column: Professional Log (8 cols) */}
-          <main className="lg:col-span-8 p-6 sm:p-8 space-y-10">
+          <main className="lg:col-span-8 p-6 sm:p-8 pb-16 sm:pb-24 space-y-10">
             
             {/* Experience Timeline */}
             <section className="space-y-6">

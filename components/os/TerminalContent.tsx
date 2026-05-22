@@ -151,12 +151,16 @@ export function TerminalContent({ onClose }: { onClose?: () => void }) {
     }
 
     if (args.includes("--help")) {
-      addLines(await command.handler(["--help"]))
+      addLines(await command.handler(await args.filter(a => a !== "--help")))
       return
     }
 
+    if (name === "fortune") {
+      addLine({ out: "Consulting the oracle..." })
+    }
+
     addLines(await command.handler(args))
-  }
+    }
 
   const Prompt = ({ cmd }: { cmd?: string }) => (
     <div className="flex items-center flex-wrap mb-1">
