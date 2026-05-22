@@ -1,0 +1,71 @@
+"use client"
+
+import { FiTrash2, FiRotateCcw } from "react-icons/fi"
+import { useAppStore } from "@/stores/appStore"
+
+function formatSize(bytes: number): string {
+  if (bytes < 1024) return `${bytes} B`
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
+}
+
+export function TrashContent() {
+  const trashItems = useAppStore((s) => s.trashItems)
+  const restoreDesktopItem = useAppStore((s) => s.restoreDesktopItem)
+  const emptyTrash = useAppStore((s) => s.emptyTrash)
+
+  if (trashItems.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center h-full text-slate-500 gap-2">
+        <span className="text-5xl opacity-40">🗑️</span>
+        <p className="text-sm">Trash is empty</p>
+      </div>
+    )
+  }
+
+  return (
+    <div className="flex flex-col h-full">
+      <div className="flex items-center justify-between px-4 py-2 border-b border-white/8">
+        <span className="text-xs text-slate-400">
+          {trashItems.length} {trashItems.length === 1 ? "item" : "items"}
+        </span>
+        <button
+          onClick={() => { if (confirm("Permanently empty the trash?")) emptyTrash() }}
+          className="flex items-center gap-1.5 px-3 py-1 text-xs text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-colors cursor-pointer"
+        >
+          <FiTrash2 size={12} />
+          Empty Trash
+        </button>
+      </div>
+      <div className="flex-1 overflow-y-auto p-2 space-y-0.5">
+        {trashItems.map((item) => (
+          <div
+            key={item.id}
+            className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/5 transition-colors group"
+          >
+            <div className="w-8 h-8 rounded-md bg-white/7 border border-white/10 flex items-center justify-center text-sm overflow-hidden shrink-0">
+              {item.fileMeta?.thumbnail ? (
+                <img src={item.fileMeta.thumbnail} alt="" className="w-full h-full object-cover" />
+              ) : (
+                <span>{item.icon || "📄"}</span>
+              )}
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="text-sm text-slate-200 truncate">{item.label}</div>
+              {item.fileMeta && (
+                <div className="text-[10px] text-slate-500">{formatSize(item.fileMeta.size)}</div>
+              )}
+            </div>
+            <button
+              onClick={() => restoreDesktopItem(item.id)}
+              className="flex items-center gap-1.5 px-2.5 py-1 text-xs text-accent hover:bg-accent/10 rounded-lg transition-colors opacity-0 group-hover:opacity-100 cursor-pointer"
+            >
+              <FiRotateCcw size={11} />
+              Restore
+            </button>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}

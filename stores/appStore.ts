@@ -20,6 +20,7 @@ interface AppStore {
   themeMode: "dark" | "light" | "matrix" | "retro"
   isMuted: boolean
   vfs: Record<string, VfsNode>
+  trashItems: DesktopItem[]
 
   // Existing actions
   addWindow: (id: string, state: WindowState) => void
@@ -42,6 +43,11 @@ interface AppStore {
   setVfs: (vfs: Record<string, VfsNode>) => void
   updateVfsNode: (path: string, node: VfsNode) => void
   deleteVfsNode: (path: string) => void
+
+  // Trash actions
+  trashDesktopItem: (id: string) => void
+  restoreDesktopItem: (id: string) => void
+  emptyTrash: () => void
 }
 
 function gridKey(x: number, y: number): string {
@@ -61,6 +67,7 @@ export const useAppStore = create<AppStore>()(
       themeMode: "dark",
       isMuted: false,
       vfs: {},
+      trashItems: [],
 
       addWindow: (id, state) =>
         set((s) => ({ windows: { ...s.windows, [id]: state } })),
@@ -161,6 +168,28 @@ export const useAppStore = create<AppStore>()(
           const { [path]: _, ...rest } = s.vfs
           return { vfs: rest }
         }),
+
+      trashDesktopItem: (id) =>
+        set((s) => {
+          const item = s.desktopItems.find((di) => di.id === id)
+          if (!item) return s
+          return {
+            desktopItems: s.desktopItems.filter((di) => di.id !== id),
+            trashItems: [...s.trashItems, item],
+          }
+        }),
+
+      restoreDesktopItem: (id) =>
+        set((s) => {
+          const item = s.trashItems.find((ti) => ti.id === id)
+          if (!item) return s
+          return {
+            trashItems: s.trashItems.filter((ti) => ti.id !== id),
+            desktopItems: [...s.desktopItems, item],
+          }
+        }),
+
+      emptyTrash: () => set({ trashItems: [] }),
     }),
     {
       name: "portfolio-app-state",
@@ -171,7 +200,23 @@ export const useAppStore = create<AppStore>()(
         desktopItems: state.desktopItems.map((item) => ({
           ...item,
           fileMeta: item.fileMeta
-            ? { name: item.fileMeta.name, size: item.fileMeta.size, type: item.fileMeta.type }
+            ? {
+                name: item.fileMeta.name,
+                size: item.fileMeta.size,
+                type: item.fileMeta.type,
+                thumbnail: item.fileMeta.thumbnail,
+              }
+            : undefined,
+        })),
+        trashItems: state.trashItems.map((item) => ({
+          ...item,
+          fileMeta: item.fileMeta
+            ? {
+                name: item.fileMeta.name,
+                size: item.fileMeta.size,
+                type: item.fileMeta.type,
+                thumbnail: item.fileMeta.thumbnail,
+              }
             : undefined,
         })),
         accentColor: state.accentColor,

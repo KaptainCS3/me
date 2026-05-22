@@ -4,6 +4,7 @@ import { useRef, useState, useCallback, useEffect } from "react"
 import { FiImage, FiFile, FiVideo, FiMusic, FiFolder } from "react-icons/fi"
 import type { ReactNode } from "react"
 import type { DesktopItem } from "@/types/portfolio"
+import { fileTypeBadge } from "@/lib/fileThumbnails"
 
 interface DesktopIconsProps {
   items: DesktopItem[]
@@ -13,6 +14,17 @@ interface DesktopIconsProps {
 }
 
 function getFileIcon(item: DesktopItem): ReactNode {
+  if (item.fileMeta?.thumbnail) {
+    const badge = fileTypeBadge(item.fileMeta.type)
+    return (
+      <div className="relative w-full h-full">
+        <img src={item.fileMeta.thumbnail} alt="" className="w-full h-full object-cover rounded-lg" />
+        <span className="absolute -bottom-0.5 -right-0.5 text-[7px] font-bold bg-black/70 text-white px-0.5 rounded leading-tight">
+          {badge}
+        </span>
+      </div>
+    )
+  }
   if (item.fileMeta?.type.startsWith("image/")) return <FiImage />
   if (item.fileMeta?.type.startsWith("text/")) return <FiFile />
   if (item.fileMeta?.type === "application/pdf") return <FiFile />

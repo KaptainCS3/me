@@ -17,9 +17,12 @@ import { ContextMenu } from "./ContextMenu"
 import { WallpaperPicker } from "./WallpaperPicker"
 import { FileInfoModal } from "./FileInfoModal"
 import { Spotlight } from "./Spotlight"
+import { TrashBin } from "./TrashBin"
 import { FiGithub, FiImage } from "react-icons/fi"
 import type { DesktopItem } from "@/types/portfolio"
 import { INITIAL_VFS } from "@/data/initialVfs"
+import { generateThumbnail } from "@/lib/fileThumbnails"
+import { storeBlob } from "@/lib/idb"
 
 const DOCK_BOTTOM_GAP = 10
 const GRID_SIZE = 84
@@ -208,19 +211,26 @@ export default function PortfolioOS() {
   )
 
   const handleDropFiles = useCallback(
-    (files: FileList, dropX: number, dropY: number) => {
+    async (files: FileList, dropX: number, dropY: number) => {
       const sx = snapToGrid(dropX)
       const sy = snapToGrid(dropY)
-      const newItems: DesktopItem[] = Array.from(files).map((file, i) => {
+      const newItems: DesktopItem[] = []
+
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i]
         const id = `dropped-${Date.now()}-${i}`
-        const icon = file.type.startsWith("image/")
-          ? ""
-          : file.type === "application/pdf"
-            ? ""
-            : ""
+        const storageId = `blob-${id}`
+        const thumbnail = await generateThumbnail(file)
+
+        try {
+          await storeBlob(storageId, file)
+        } catch {
+          // IndexedDB unavailable — proceed without blob storage
+        }
+
         const item: DesktopItem = {
           id,
-          icon,
+          icon: "",
           label: file.name,
           x: sx + i * GRID_SIZE,
           y: sy + i * GRID_SIZE,
@@ -228,24 +238,16 @@ export default function PortfolioOS() {
             name: file.name,
             size: file.size,
             type: file.type,
+            thumbnail,
+            storageId,
           },
         }
-        if (file.type.startsWith("image/")) {
-          const reader = new FileReader()
-          reader.onload = () => {
-            if (reader.result) {
-              updateDesktopItem(id, {
-                fileMeta: { name: file.name, size: file.size, type: file.type, dataUrl: reader.result as string },
-              })
-            }
-          }
-          reader.readAsDataURL(file)
-        }
-        return item
-      })
+        newItems.push(item)
+      }
+
       mergeDesktopItems(newItems)
     },
-    [mergeDesktopItems, updateDesktopItem],
+    [mergeDesktopItems],
   )
 
   const handleMoveItem = useCallback((id: string, x: number, y: number) => {
@@ -260,6 +262,10 @@ export default function PortfolioOS() {
       }
       if (id === "about") {
         openWindow("about")
+        return
+      }
+      if (id === "trash") {
+        openWindow("trash")
         return
       }
       if (id.startsWith("dropped-")) {
@@ -469,6 +475,7 @@ export default function PortfolioOS() {
           onDropFiles={handleDropFiles}
           onItemClick={handleDesktopIconClick}
         />
+        <TrashBin onOpenTrash={() => openWindow("trash")} />
         {Object.entries(windows).map(([id, state]) => (
           <Window
             key={id}

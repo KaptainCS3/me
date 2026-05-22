@@ -9,6 +9,7 @@ import { PdfViewerContent } from "./PdfViewerContent"
 import { SettingsContent } from "./SettingsContent"
 import { SourceViewerContent } from "./SourceViewerContent"
 import { SnippingToolContent } from "./SnippingToolContent"
+import { TrashContent } from "./TrashContent"
 
 interface WindowContentProps {
   id: string
@@ -37,6 +38,8 @@ export const WindowContent: FC<WindowContentProps> = ({ id, onClose }) => {
       return <AboutOSContent />
     case "resume-viewer":
       return <PdfViewerContent />
+    case "trash":
+      return <TrashContent />
     default:
       return null
   }

@@ -64,6 +64,8 @@ export interface FileMeta {
   size: number
   type: string
   dataUrl?: string
+  thumbnail?: string
+  storageId?: string
 }
 
 export interface VfsNode {

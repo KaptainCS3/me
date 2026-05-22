@@ -1,4 +1,4 @@
-import { FiUser, FiFolder, FiZap, FiMail, FiMonitor, FiSettings, FiInfo, FiFile, FiCode, FiCamera } from "react-icons/fi"
+import { FiUser, FiFolder, FiZap, FiMail, FiMonitor, FiSettings, FiInfo, FiFile, FiCode, FiCamera, FiTrash2 } from "react-icons/fi"
 import type { WindowConfig } from "@/types/portfolio"
 
 export const WINDOW_CONFIGS: Record<string, WindowConfig> = {
@@ -71,5 +71,12 @@ export const WINDOW_CONFIGS: Record<string, WindowConfig> = {
     w: 400,
     h: 500,
     content: "snipping-tool",
+  },
+  trash: {
+    title: "Trash",
+    icon: <FiTrash2 />,
+    w: 480,
+    h: 420,
+    content: "trash",
   },
 }
