@@ -108,7 +108,7 @@ export function ContactEmail({ name, email, service, subject, message }: Contact
 
           <Section style={footerSection}>
             <Text style={footerText}>
-              This signal was encrypted and transmitted via <Link href="https://leonard.appelgryn.com" style={footerLink}>Portfolio OS</Link>.
+              This signal was encrypted and transmitted via <Link href="https://kaptaincs3.dev" style={footerLink}>Portfolio OS</Link>.
             </Text>
             <Text style={copyrightText}>
               &copy; {new Date().getFullYear()} Leonard Appelgryn. All systems operational.

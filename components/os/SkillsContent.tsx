@@ -71,7 +71,7 @@ export function SkillsContent() {
       <div className="flex items-center bg-[#0d1117] border-t border-[#1e3a4a]/30 h-8 text-[10px] overflow-hidden shrink-0">
          <div className="flex items-center bg-[#34d399] text-[#060d14] px-3 h-full font-bold relative mr-3 uppercase">
             Optimization: Peak
-            <div className="absolute right-[-12px] top-0 bottom-0 w-0 h-0 border-y-[16px] border-y-transparent border-l-[12px] border-l-[#34d399]" />
+            <div className="absolute right-3 top-0 bottom-0 w-0 h-0 border-y-16 border-y-transparent border-l-3 border-l-[#34d399]" />
          </div>
          <div className="flex items-center gap-4 text-[#4a6b7a]">
             <span className="flex items-center gap-1 font-bold">

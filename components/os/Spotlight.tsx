@@ -3,7 +3,6 @@
 import { useState, useEffect, useRef, useMemo } from "react"
 import { FiSearch, FiFolder, FiZap } from "react-icons/fi"
 import type { ReactNode } from "react"
-import { useAppStore } from "@/stores/appStore"
 import { WINDOW_CONFIGS } from "@/data/windowConfigs"
 import { PROJECTS } from "@/data/projects"
 import { SKILLS } from "@/data/skills"
@@ -16,7 +15,7 @@ interface SpotlightItem {
   description?: string
 }
 
-export function Spotlight({ isOpen, onClose, onOpenApp }: { isOpen: boolean, onClose: () => void, onOpenApp: (id: string) => void }) {
+export function Spotlight({ onClose, onOpenApp }: { onClose: () => void, onOpenApp: (id: string) => void }) {
   const [query, setQuery] = useState("")
   const [selectedIndex, setSelectedIndex] = useState(0)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -49,16 +48,7 @@ export function Spotlight({ isOpen, onClose, onOpenApp }: { isOpen: boolean, onC
   }, [query, items])
 
   useEffect(() => {
-    if (isOpen) {
-      setQuery("")
-      setSelectedIndex(0)
-      setTimeout(() => inputRef.current?.focus(), 10)
-    }
-  }, [isOpen])
-
-  useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (!isOpen) return
       if (e.key === "Escape") onClose()
       if (e.key === "ArrowDown") {
         e.preventDefault()
@@ -78,17 +68,15 @@ export function Spotlight({ isOpen, onClose, onOpenApp }: { isOpen: boolean, onC
     }
     window.addEventListener("keydown", handleKeyDown)
     return () => window.removeEventListener("keydown", handleKeyDown)
-  }, [isOpen, filteredItems, selectedIndex, onClose, onOpenApp])
-
-  if (!isOpen) return null
+  }, [filteredItems, selectedIndex, onClose, onOpenApp])
 
   return (
     <div 
-      className="fixed inset-0 z-[10000] flex items-start justify-center pt-[15vh] px-4 bg-black/40 backdrop-blur-sm"
+      className="fixed inset-0 z-10000 flex items-start justify-center pt-[15vh] px-4 bg-black/40 backdrop-blur-sm"
       onClick={onClose}
     >
       <div 
-        className="w-full max-w-[600px] bg-[#0a1520]/95 border border-white/10 rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200"
+        className="w-full max-w-150 bg-[#0a1520]/95 border border-white/10 rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200"
         onClick={e => e.stopPropagation()}
       >
         <div className="flex items-center gap-3 p-4 border-b border-white/5">
@@ -98,6 +86,7 @@ export function Spotlight({ isOpen, onClose, onOpenApp }: { isOpen: boolean, onC
             type="text"
             value={query}
             onChange={e => setQuery(e.target.value)}
+            autoFocus
             placeholder="Search for projects, skills, or apps..."
             className="flex-1 bg-transparent border-none outline-none text-slate-100 placeholder:text-slate-500 text-lg"
           />
@@ -106,7 +95,7 @@ export function Spotlight({ isOpen, onClose, onOpenApp }: { isOpen: boolean, onC
           </div>
         </div>
 
-        <div className="max-h-[400px] overflow-y-auto py-2">
+        <div className="max-h-100 overflow-y-auto py-2">
           {filteredItems.length > 0 ? (
             filteredItems.map((item, idx) => (
               <button

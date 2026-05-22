@@ -9,7 +9,6 @@ import {
   FiShield,
   FiGlobe,
   FiLayers,
-  FiLayout,
   FiMaximize2,
   FiExternalLink,
 } from "react-icons/fi";
@@ -45,7 +44,10 @@ export function ProjectsContent() {
     <div className="h-full flex flex-col sm:flex-row font-mono text-sm bg-[#06090c] overflow-hidden">
       {/* Mobile sidebar overlay */}
       {sidebarOpen && (
-        <div className="fixed inset-0 z-50 sm:hidden" onClick={() => setSidebarOpen(false)}>
+        <div
+          className="fixed inset-0 z-50 sm:hidden"
+          onClick={() => setSidebarOpen(false)}
+        >
           <div className="absolute inset-0 bg-black/50" />
           <aside
             className="absolute left-0 top-0 bottom-0 w-64 flex flex-col bg-[#0d1117] border-r border-[#1e3a4a]/30"
@@ -53,7 +55,10 @@ export function ProjectsContent() {
           >
             <SidebarContent
               active={active}
-              onSelect={(i) => { setActive(i); setSidebarOpen(false) }}
+              onSelect={(i) => {
+                setActive(i);
+                setSidebarOpen(false);
+              }}
             />
           </aside>
         </div>
@@ -66,10 +71,7 @@ export function ProjectsContent() {
         }`}
       >
         <div className="min-w-64 flex-1 flex flex-col">
-          <SidebarContent
-            active={active}
-            onSelect={setActive}
-          />
+          <SidebarContent active={active} onSelect={setActive} />
         </div>
       </aside>
 
@@ -77,7 +79,9 @@ export function ProjectsContent() {
       <main className="flex-1 flex flex-col overflow-hidden relative">
         <div
           className="absolute inset-0 opacity-[0.03] pointer-events-none transition-all duration-1000"
-          style={{ background: `radial-gradient(circle at 50% 50%, ${p.accent}, transparent 70%)` }}
+          style={{
+            background: `radial-gradient(circle at 50% 50%, ${p.accent}, transparent 70%)`,
+          }}
         />
 
         {/* Header / Navigation */}
@@ -88,22 +92,38 @@ export function ProjectsContent() {
               className="p-1 text-[#4a6b7a] hover:text-white transition-colors"
               title={sidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
             >
-              {sidebarOpen ? <FiChevronLeft size={12} /> : <FiChevronRight size={12} />}
+              {sidebarOpen ? (
+                <FiChevronLeft size={12} />
+              ) : (
+                <FiChevronRight size={12} />
+              )}
             </button>
             <span className="text-[10px] text-[#4a6b7a]">portfolio</span>
             <span className="text-[10px] text-[#4a6b7a]">/</span>
             <span className="text-[10px] text-white">projects</span>
             <span className="text-[10px] text-[#4a6b7a]">/</span>
-            <span className="text-[10px] text-[#34d399]">{p.name.toLowerCase().replace(/\s+/g, "-")}.sys</span>
+            <span className="text-[10px] text-[#34d399]">
+              {p.name.toLowerCase().replace(/\s+/g, "-")}.sys
+            </span>
           </div>
           <div className="flex gap-4">
             {p.url && (
-              <a href={actualUrl || p.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-[10px] text-[#34d399] hover:underline">
+              <a
+                href={actualUrl || p.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 text-[10px] text-[#34d399] hover:underline"
+              >
                 <FiGlobe size={12} /> LIVE DEMO
               </a>
             )}
             {p.github && !p.isCompany && (
-              <a href={p.github} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-[10px] text-[#c084fc] hover:underline">
+              <a
+                href={p.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 text-[10px] text-[#c084fc] hover:underline"
+              >
                 <FiGithub size={12} /> SOURCE CODE
               </a>
             )}
@@ -115,11 +135,17 @@ export function ProjectsContent() {
           <section className="space-y-4">
             <div className="space-y-1">
               <div className="flex items-center gap-2">
-                <span className="px-2 py-0.5 rounded bg-[#34d399]/10 text-[#34d399] text-[9px] font-bold border border-[#34d399]/20 uppercase tracking-widest">Production Env</span>
+                <span className="px-2 py-0.5 rounded bg-[#34d399]/10 text-[#34d399] text-[9px] font-bold border border-[#34d399]/20 uppercase tracking-widest">
+                  Production Env
+                </span>
                 <span className="text-[#4a6b7a] text-[10px]">{p.period}</span>
               </div>
-              <h2 className="text-3xl font-bold text-white tracking-tighter">{p.name}</h2>
-              <p className="text-sm text-[#a8c4d0] leading-relaxed max-w-2xl">{p.desc}</p>
+              <h2 className="text-3xl font-bold text-white tracking-tighter">
+                {p.name}
+              </h2>
+              <p className="text-sm text-[#a8c4d0] leading-relaxed max-w-2xl">
+                {p.desc}
+              </p>
             </div>
           </section>
 
@@ -134,9 +160,9 @@ export function ProjectsContent() {
               >
                 <div
                   className="rounded-xl border border-[#1e3a4a]/40 bg-[#0d1117] overflow-hidden shadow-2xl transition-transform duration-200 ease-out"
-                  style={{ 
+                  style={{
                     transform: `rotateY(${tilt.x}deg) rotateX(${tilt.y}deg)`,
-                    boxShadow: `0 20px 50px -12px ${p.accent}20`
+                    boxShadow: `0 20px 50px -12px ${p.accent}20`,
                   }}
                 >
                   {/* Browser Chrome */}
@@ -147,47 +173,64 @@ export function ProjectsContent() {
                       <div className="w-2.5 h-2.5 rounded-full bg-[#27c93f]" />
                     </div>
                     <div className="flex-1 bg-[#0d1117] rounded-md px-3 py-1 text-[9px] text-[#4a6b7a] flex items-center justify-between">
-                      <span className="truncate">{actualUrl || p.url || "localhost:3000"}</span>
+                      <span className="truncate">
+                        {actualUrl || p.url || "localhost:3000"}
+                      </span>
                       <FiMaximize2 size={10} />
                     </div>
                   </div>
 
                   {/* Viewport Content */}
-                  <div className="h-[450px] sm:h-auto sm:aspect-video bg-[#06090c] relative overflow-hidden">
+                  <div className="h-112.5 sm:h-auto sm:aspect-video bg-[#06090c] relative overflow-hidden">
                     {p.type === "web" && p.url ? (
                       <div className="w-full h-full relative">
                         {/* Fallback View (Always in background) */}
                         <div className="absolute inset-0 flex flex-col items-center justify-center bg-[#0d1117] p-8 text-center space-y-4">
-                           <div className="p-4 rounded-full bg-[#34d399]/10 text-[#34d399] border border-[#34d399]/20">
-                              <FiGlobe size={32} />
-                           </div>
-                           <div className="space-y-1 max-w-[280px]">
-                              <p className="text-xs text-white font-bold uppercase tracking-widest">Proxy Tunnel Active</p>
-                              <p className="text-[10px] text-[#4a6b7a]">Establishing a secure proxy link. Launch directly if the interface is restricted by production headers.</p>
-                           </div>
-                            <button 
-                              onClick={() => window.open(actualUrl || p.url!, '_blank')}
-                             className="px-6 py-2 rounded-full bg-[#34d399] text-[#060d14] text-[10px] font-bold hover:scale-105 transition-all flex items-center gap-2"
-                           >
-                              LAUNCH SYSTEM DIRECTLY <FiExternalLink size={12} />
-                           </button>
-                        </div>
-                        
-                        {/* Loading State Overlay */}
-                        <div className="absolute inset-0 flex items-center justify-center bg-[#06090c] z-20 pointer-events-none transition-opacity duration-1000" id={`loader-${active}`}>
-                           <div className="flex flex-col items-center gap-2">
-                              <div className="w-8 h-8 border-2 border-[#34d399]/30 border-t-[#34d399] rounded-full animate-spin" />
-                              <span className="text-[10px] text-[#4a6b7a] tracking-widest animate-pulse uppercase">Connecting via Proxy...</span>
-                           </div>
+                          <div className="p-4 rounded-full bg-[#34d399]/10 text-[#34d399] border border-[#34d399]/20">
+                            <FiGlobe size={32} />
+                          </div>
+                          <div className="space-y-1 max-w-70">
+                            <p className="text-xs text-white font-bold uppercase tracking-widest">
+                              Proxy Tunnel Active
+                            </p>
+                            <p className="text-[10px] text-[#4a6b7a]">
+                              Establishing a secure proxy link. Launch directly
+                              if the interface is restricted by production
+                              headers.
+                            </p>
+                          </div>
+                          <button
+                            onClick={() =>
+                              window.open(actualUrl || p.url!, "_blank")
+                            }
+                            className="px-6 py-2 rounded-full bg-[#34d399] text-[#060d14] text-[10px] font-bold hover:scale-105 transition-all flex items-center gap-2"
+                          >
+                            LAUNCH SYSTEM DIRECTLY <FiExternalLink size={12} />
+                          </button>
                         </div>
 
-                        <iframe 
-                          src={p.url} 
+                        {/* Loading State Overlay */}
+                        <div
+                          className="absolute inset-0 flex items-center justify-center bg-[#06090c] z-20 pointer-events-none transition-opacity duration-1000"
+                          id={`loader-${active}`}
+                        >
+                          <div className="flex flex-col items-center gap-2">
+                            <div className="w-8 h-8 border-2 border-[#34d399]/30 border-t-[#34d399] rounded-full animate-spin" />
+                            <span className="text-[10px] text-[#4a6b7a] tracking-widest animate-pulse uppercase">
+                              Connecting via Proxy...
+                            </span>
+                          </div>
+                        </div>
+
+                        <iframe
+                          src={p.url}
                           className="w-full h-full border-none relative z-10 opacity-0 transition-opacity duration-700 bg-white"
                           onLoad={(e) => {
-                             e.currentTarget.style.opacity = "1";
-                             const loader = document.getElementById(`loader-${active}`);
-                             if (loader) loader.style.opacity = "0";
+                            e.currentTarget.style.opacity = "1";
+                            const loader = document.getElementById(
+                              `loader-${active}`,
+                            );
+                            if (loader) loader.style.opacity = "0";
                           }}
                           title={p.name}
                         />
@@ -220,18 +263,32 @@ export function ProjectsContent() {
                 </h3>
                 <div className="grid grid-cols-3 gap-4 text-center">
                   <div className="p-3 rounded bg-white/5 border border-white/5">
-                    <p className="text-[9px] text-[#4a6b7a] mb-1 uppercase">Frontend</p>
-                    <p className="text-xs text-white font-medium">{p.tech[0]}</p>
+                    <p className="text-[9px] text-[#4a6b7a] mb-1 uppercase">
+                      Frontend
+                    </p>
+                    <p className="text-xs text-white font-medium">
+                      {p.tech[0]}
+                    </p>
                   </div>
                   <div className="p-3 rounded bg-white/5 border border-white/5 relative">
-                    <p className="text-[9px] text-[#4a6b7a] mb-1 uppercase">Compute</p>
+                    <p className="text-[9px] text-[#4a6b7a] mb-1 uppercase">
+                      Compute
+                    </p>
                     <p className="text-xs text-white font-medium">Serverless</p>
-                    <div className="absolute -left-2.5 top-1/2 -translate-y-1/2 text-[#1e3a4a]">→</div>
-                    <div className="absolute -right-2.5 top-1/2 -translate-y-1/2 text-[#1e3a4a]">→</div>
+                    <div className="absolute -left-2.5 top-1/2 -translate-y-1/2 text-[#1e3a4a]">
+                      →
+                    </div>
+                    <div className="absolute -right-2.5 top-1/2 -translate-y-1/2 text-[#1e3a4a]">
+                      →
+                    </div>
                   </div>
                   <div className="p-3 rounded bg-white/5 border border-white/5">
-                    <p className="text-[9px] text-[#4a6b7a] mb-1 uppercase">Database</p>
-                    <p className="text-xs text-white font-medium">{p.tech[4] || "NoSQL"}</p>
+                    <p className="text-[9px] text-[#4a6b7a] mb-1 uppercase">
+                      Database
+                    </p>
+                    <p className="text-xs text-white font-medium">
+                      {p.tech[4] || "NoSQL"}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -240,12 +297,21 @@ export function ProjectsContent() {
             <div className="lg:col-span-5 space-y-6">
               {/* Performance Metrics */}
               <section className="space-y-4">
-                <h3 className="text-[10px] text-[#4a6b7a] font-bold uppercase tracking-wider">System Performance</h3>
+                <h3 className="text-[10px] text-[#4a6b7a] font-bold uppercase tracking-wider">
+                  System Performance
+                </h3>
                 <div className="grid grid-cols-2 gap-3">
                   {p.metrics?.map((m, i) => (
-                    <div key={i} className="p-3 rounded-lg bg-[#0d1117] border border-[#1e3a4a]/30 hover:border-[#34d399]/40 transition-all cursor-default">
-                      <p className="text-[9px] text-[#4a6b7a] mb-1 uppercase tracking-tight">Metric 0{i + 1}</p>
-                      <p className="text-xs text-white font-bold leading-tight">{m}</p>
+                    <div
+                      key={i}
+                      className="p-3 rounded-lg bg-[#0d1117] border border-[#1e3a4a]/30 hover:border-[#34d399]/40 transition-all cursor-default"
+                    >
+                      <p className="text-[9px] text-[#4a6b7a] mb-1 uppercase tracking-tight">
+                        Metric 0{i + 1}
+                      </p>
+                      <p className="text-xs text-white font-bold leading-tight">
+                        {m}
+                      </p>
                     </div>
                   ))}
                 </div>
@@ -254,24 +320,44 @@ export function ProjectsContent() {
               {/* Dependency Graph */}
               <section className="space-y-4">
                 <div className="flex items-center justify-between border-b border-[#1e3a4a]/20 pb-1">
-                  <h3 className="text-[10px] text-[#4a6b7a] font-bold uppercase tracking-wider">Dependency Graph</h3>
+                  <h3 className="text-[10px] text-[#4a6b7a] font-bold uppercase tracking-wider">
+                    Dependency Graph
+                  </h3>
                   <span className="text-[9px] text-[#34d399]">config.json</span>
                 </div>
                 <div className="space-y-2">
                   {p.tech.map((t, i) => (
-                    <div key={i} className="flex items-center justify-between group">
+                    <div
+                      key={i}
+                      className="flex items-center justify-between group"
+                    >
                       <div className="flex items-center gap-2">
-                        <FiChevronRight size={10} className="text-[#34d399] opacity-50" />
-                        <span className="text-xs text-[#a8c4d0] group-hover:text-white transition-colors">{t}</span>
+                        <FiChevronRight
+                          size={10}
+                          className="text-[#34d399] opacity-50"
+                        />
+                        <span className="text-xs text-[#a8c4d0] group-hover:text-white transition-colors">
+                          {t}
+                        </span>
                       </div>
-                      <span className="text-[9px] text-[#4a6b7a]">installed</span>
+                      <span className="text-[9px] text-[#4a6b7a]">
+                        installed
+                      </span>
                     </div>
                   ))}
                 </div>
               </section>
 
-              <div className="p-4 rounded-lg text-xs leading-relaxed italic relative overflow-hidden" style={{ background: `${p.color}22`, borderLeft: `4px solid ${p.accent}` }}>
-                <div className="relative z-10 text-white opacity-80">{p.context}</div>
+              <div
+                className="p-4 rounded-lg text-xs leading-relaxed italic relative overflow-hidden"
+                style={{
+                  background: `${p.color}22`,
+                  borderLeft: `4px solid ${p.accent}`,
+                }}
+              >
+                <div className="relative z-10 text-white opacity-80">
+                  {p.context}
+                </div>
                 <div className="absolute right-2 bottom-2 opacity-10">
                   <FiShield size={40} style={{ color: p.accent }} />
                 </div>
@@ -284,16 +370,24 @@ export function ProjectsContent() {
         <footer className="px-6 py-4 bg-[#0d1117] border-t border-[#1e3a4a]/30 flex items-center justify-between shrink-0 z-20">
           <div className="flex items-center gap-6">
             <div className="flex flex-col">
-              <span className="text-[9px] text-[#4a6b7a] uppercase">Current Selection</span>
+              <span className="text-[9px] text-[#4a6b7a] uppercase">
+                Current Selection
+              </span>
               <span className="text-xs text-white font-bold">{p.name}</span>
             </div>
           </div>
           <div className="flex gap-3">
-            <button onClick={() => setActive((active + 1) % PROJECTS.length)} className="px-4 py-2 rounded bg-white/5 border border-white/10 text-[10px] text-white hover:bg-white/10 transition-all font-bold tracking-widest uppercase">
+            <button
+              onClick={() => setActive((active + 1) % PROJECTS.length)}
+              className="px-4 py-2 rounded bg-white/5 border border-white/10 text-[10px] text-white hover:bg-white/10 transition-all font-bold tracking-widest uppercase"
+            >
               Next Project
             </button>
             {p.url && (
-              <button onClick={() => window.open(actualUrl || p.url!, "_blank")} className="px-6 py-2 rounded bg-[#34d399] text-[#060d14] text-[10px] font-bold hover:scale-105 transition-all shadow-[0_0_15px_rgba(52,211,153,0.3)] tracking-widest uppercase">
+              <button
+                onClick={() => window.open(actualUrl || p.url!, "_blank")}
+                className="px-6 py-2 rounded bg-[#34d399] text-[#060d14] text-[10px] font-bold hover:scale-105 transition-all shadow-[0_0_15px_rgba(52,211,153,0.3)] tracking-widest uppercase"
+              >
                 Deploy Live
               </button>
             )}
@@ -302,11 +396,22 @@ export function ProjectsContent() {
       </main>
 
       <style jsx>{`
-        .perspective-1000 { perspective: 1000px; }
-        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #1e3a4a; border-radius: 10px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #34d399; }
+        .perspective-1000 {
+          perspective: 1000px;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: #1e3a4a;
+          border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: #34d399;
+        }
       `}</style>
     </div>
   );

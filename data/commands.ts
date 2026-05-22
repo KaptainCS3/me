@@ -1,6 +1,4 @@
 import type { TerminalLine, VfsNode } from "@/types/portfolio"
-import { PROJECTS } from "./projects"
-import { SKILLS } from "./skills"
 import { RESUME } from "./about"
 
 type CmdHandler = (args: string[]) => TerminalLine[] | Promise<TerminalLine[]>

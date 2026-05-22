@@ -71,7 +71,7 @@ export function SnippingToolContent() {
       </div>
       <div className="text-center">
         <h2 className="text-xl font-bold mb-2">Snipping Tool</h2>
-        <p className="text-sm text-slate-400 max-w-[240px]">
+        <p className="text-sm text-slate-400 max-w-60">
           Capture a high-quality screenshot of your current Portfolio OS session.
         </p>
       </div>

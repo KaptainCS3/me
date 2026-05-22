@@ -566,11 +566,12 @@ export default function PortfolioOS() {
         />
       )}
 
-      <Spotlight
-        isOpen={showSpotlight}
-        onClose={() => setShowSpotlight(false)}
-        onOpenApp={openWindow}
-      />
+      {showSpotlight && (
+        <Spotlight
+          onClose={() => setShowSpotlight(false)}
+          onOpenApp={openWindow}
+        />
+      )}
     </main>
   );
 }
