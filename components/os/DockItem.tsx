@@ -30,7 +30,7 @@ export function DockItem({ app, isOpen, onClick }: DockItemProps) {
         onClick={handleClick}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
-        className={`w-12 h-12 rounded-xl bg-white/8 border border-white/12 text-2xl cursor-pointer transition-all duration-150 ease-in-out flex items-center justify-center hover:scale-115 hover:-translate-y-1.5 ${
+        className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-white/8 border border-white/12 text-xl sm:text-2xl cursor-pointer transition-all duration-150 ease-in-out flex items-center justify-center hover:scale-115 hover:-translate-y-1.5 ${
           bouncing ? "animate-dock-bounce" : ""
         }`}
       >

@@ -13,11 +13,11 @@ import Image from "next/image"
 function Prompt({ cmd }: { cmd?: string }) {
   return (
     <div className="flex items-center flex-wrap mb-1">
-      <div className="flex items-center bg-[#34d399] text-[#060d14] px-2 h-5 font-bold relative mr-3 text-[10px]">
+      <div className="flex items-center bg-[#34d399] text-[#060d14] px-1.5 sm:px-2 h-5 font-bold relative mr-2 sm:mr-3 text-[10px]">
         kaptain@portfolio
         <div className="absolute -right-2.5 top-0 bottom-0 w-0 h-0 border-y-10 border-y-transparent border-l-10 border-l-[#34d399]" />
       </div>
-      <div className="flex items-center bg-[#1e3a4a] text-[#34d399] px-2 h-5 font-bold relative mr-3 text-[10px]">
+      <div className="flex items-center bg-[#1e3a4a] text-[#34d399] px-2 h-5 font-bold relative mr-2 sm:mr-3 text-[10px]">
         ~
         <div className="absolute -right-2.5 top-0 bottom-0 w-0 h-0 border-y-10 border-y-transparent border-l-10 border-l-[#1e3a4a]" />
       </div>
@@ -182,14 +182,14 @@ export function TerminalContent({ onClose }: { onClose?: () => void }) {
   return (
     <div className="h-full flex flex-col bg-[#06090c] font-mono select-none" onClick={() => inputRef.current?.focus()}>
       {/* Terminal Viewport */}
-      <div className="flex-1 overflow-auto p-4 text-[13px] leading-relaxed custom-scrollbar">
+      <div className="flex-1 overflow-x-hidden overflow-y-auto p-4 text-[13px] leading-relaxed custom-scrollbar">
         {lines.map((line, i) =>
           line.ps ? (
             <Prompt key={i} cmd={line.cmd} />
           ) : line.out !== undefined ? (
             <div
               key={i}
-              className="whitespace-pre-wrap break-all mb-1"
+              className="whitespace-pre-wrap break-words mb-1"
               style={line.out === "" && !line.flag ? { height: "0.5rem" } : line.color ? { color: line.color } : { color: "#a8c4d0" }}
             >
               {line.out || ""}

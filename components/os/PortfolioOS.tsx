@@ -262,12 +262,28 @@ export default function PortfolioOS() {
     const ch = container.offsetHeight
     const ICON_W = 56
     const bottomReserved = isMobile ? 60 : 140
-    const maxX = Math.floor((cw - ICON_W) / GRID_SIZE) * GRID_SIZE
-    const maxY = Math.floor((ch - bottomReserved) / GRID_SIZE) * GRID_SIZE
-    const clampedX = Math.max(0, Math.min(x, maxX))
-    const clampedY = Math.max(0, Math.min(y, maxY))
+    
+    // Safety margins
+    const margin = isMobile ? 8 : 0
+    const maxX = Math.floor((cw - ICON_W - margin) / GRID_SIZE) * GRID_SIZE
+    const maxY = Math.floor((ch - bottomReserved - margin) / GRID_SIZE) * GRID_SIZE
+    
+    const clampedX = Math.max(margin, Math.min(x, maxX))
+    const clampedY = Math.max(margin, Math.min(y, maxY))
+
+    // Mobile Trash Collision Detection
+    if (isMobile) {
+      const trashX = cw - 80 // TrashBin style right: 24, width: 56
+      const trashY = ch - bottomReserved
+      const dist = Math.sqrt(Math.pow(clampedX - trashX, 2) + Math.pow(clampedY - trashY, 2))
+      if (dist < 50) {
+        trashDesktopItem(id)
+        return
+      }
+    }
+
     moveDesktopItem(id, clampedX, clampedY)
-  }, [moveDesktopItem, isMobile])
+  }, [moveDesktopItem, isMobile, trashDesktopItem])
 
   const handleDesktopIconClick = useCallback(
     (id: string) => {
@@ -559,7 +575,7 @@ export default function PortfolioOS() {
           transition: "transform 0.35s cubic-bezier(0.4, 0, 0.2, 1)",
           bottom: `calc(${isMobile ? 0 : DOCK_BOTTOM_GAP}px + env(safe-area-inset-bottom, 0px))`,
         }}
-        className="fixed left-1/2 bg-white/7 backdrop-blur-2xl border border-white/12 rounded-[18px] px-4 py-4 flex items-end gap-2.5 z-9999 shadow-[0_8px_32px_rgba(0,0,0,0.5)] os-dock"
+        className="fixed left-1/2 bg-white/7 backdrop-blur-2xl border border-white/12 rounded-[18px] px-3 sm:px-4 py-3 sm:py-4 flex items-end gap-1.5 sm:gap-2.5 z-9999 shadow-[0_8px_32px_rgba(0,0,0,0.5)] os-dock"
       >
         {DOCK_APPS.map((app) => (
           <DockItem
