@@ -5,9 +5,10 @@ import { useAppStore } from "@/stores/appStore"
 
 interface TrashBinProps {
   onOpenTrash: () => void
+  isMobile?: boolean
 }
 
-export function TrashBin({ onOpenTrash }: TrashBinProps) {
+export function TrashBin({ onOpenTrash, isMobile }: TrashBinProps) {
   const trashItems = useAppStore((s) => s.trashItems)
   const trashDesktopItem = useAppStore((s) => s.trashDesktopItem)
   const [dragOver, setDragOver] = useState(false)
@@ -47,7 +48,7 @@ export function TrashBin({ onOpenTrash }: TrashBinProps) {
       onDrop={handleDrop}
       onDoubleClick={onOpenTrash}
       className="absolute flex flex-col items-center gap-0.5 cursor-pointer group"
-      style={{ right: 24, bottom: 140, width: 56 }}
+      style={{ right: 24, bottom: isMobile ? 60 : 140, width: 56 }}
     >
       <div
         className={`w-14 h-14 rounded-xl flex items-center justify-center text-3xl transition-all duration-200 ${

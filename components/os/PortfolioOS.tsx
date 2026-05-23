@@ -25,6 +25,7 @@ import { generateThumbnail } from "@/lib/fileThumbnails"
 import { storeBlob } from "@/lib/idb"
 
 const DOCK_BOTTOM_GAP = 10
+const DOCK_HEIGHT = 88
 const GRID_SIZE = 84
 
 function snapToGrid(val: number): number {
@@ -260,12 +261,13 @@ export default function PortfolioOS() {
     const cw = container.offsetWidth
     const ch = container.offsetHeight
     const ICON_W = 56
+    const bottomReserved = isMobile ? 60 : 140
     const maxX = Math.floor((cw - ICON_W) / GRID_SIZE) * GRID_SIZE
-    const maxY = Math.floor((ch - 140) / GRID_SIZE) * GRID_SIZE
+    const maxY = Math.floor((ch - bottomReserved) / GRID_SIZE) * GRID_SIZE
     const clampedX = Math.max(0, Math.min(x, maxX))
     const clampedY = Math.max(0, Math.min(y, maxY))
     moveDesktopItem(id, clampedX, clampedY)
-  }, [moveDesktopItem])
+  }, [moveDesktopItem, isMobile])
 
   const handleDesktopIconClick = useCallback(
     (id: string) => {
@@ -501,7 +503,8 @@ export default function PortfolioOS() {
 
       <div
         ref={desktopRef}
-        className={`absolute top-6.5 left-0 right-0 bottom-0 ${isMobile ? "overflow-y-auto" : ""}`}
+        className={`absolute top-6.5 left-0 right-0 ${isMobile ? "overflow-y-auto" : "bottom-0"}`}
+        style={isMobile ? { bottom: DOCK_HEIGHT } : undefined}
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
         onTouchMove={handleTouchMove}
@@ -519,8 +522,9 @@ export default function PortfolioOS() {
           onItemClick={handleDesktopIconClick}
           onSelectItem={handleSelectDesktopItem}
           selectedIds={selectedDesktopIds}
+          isMobile={isMobile}
         />
-        <TrashBin onOpenTrash={() => openWindow("trash")} />
+        <TrashBin isMobile={isMobile} onOpenTrash={() => openWindow("trash")} />
         {Object.entries(windows).map(([id, state]) => (
           <Window
             key={id}

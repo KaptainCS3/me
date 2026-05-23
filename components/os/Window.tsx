@@ -59,6 +59,7 @@ export function Window({
   isMinimized,
   isFocused,
   zoomSignal,
+  isMobile,
   onClose,
   onMinimize,
   onFocus,
@@ -224,6 +225,11 @@ export function Window({
       <div className="flex-1 overflow-hidden bg-[#0a1520]">
         <WindowContent id={id} onClose={onClose} />
       </div>
+      {isMobile && (
+        <div className="h-10 flex items-center justify-center shrink-0 bg-[#0d1f2d] border-t border-[#1e3a4a]/50">
+          <div className="w-9 h-1 rounded-full bg-white/30" />
+        </div>
+      )}
     </div>
   );
 }
