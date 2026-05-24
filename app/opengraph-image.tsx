@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og"
 
-export const alt = "Mbi Enow Leonard Appelgryn — Software Engineer Portfolio"
+export const alt = "Mbi Enow Leonard Appelgryn — Full Stack Software Engineer Portfolio"
 export const size = { width: 1200, height: 630 }
 export const contentType = "image/png"
 
@@ -60,7 +60,7 @@ export default async function OgImage() {
           textTransform: "uppercase",
         }}
       >
-        Software Engineer
+        Full Stack Software Engineer
       </div>
       <div
         style={{

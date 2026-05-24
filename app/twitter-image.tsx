@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og"
 
-export const alt = "Mbi Enow Leonard Appelgryn — Software Engineer"
+export const alt = "Mbi Enow Leonard Appelgryn — Full Stack Software Engineer"
 export const size = { width: 1200, height: 600 }
 export const contentType = "image/png"
 
@@ -60,7 +60,7 @@ export default async function TwitterImage() {
           textTransform: "uppercase",
         }}
       >
-        @KaptainCS3 · Software Engineer
+        @KaptainCS3 · Full Stack Software Engineer
       </div>
     </div>,
     { ...size },

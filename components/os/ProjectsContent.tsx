@@ -174,7 +174,7 @@ export function ProjectsContent() {
                     </div>
                     <div className="flex-1 bg-[#0d1117] rounded-md px-3 py-1 text-[9px] text-[#4a6b7a] flex items-center justify-between">
                       <span className="truncate">
-                        {actualUrl || p.url || "localhost:3000"}
+                        {actualUrl || p.url}
                       </span>
                       <FiMaximize2 size={10} />
                     </div>

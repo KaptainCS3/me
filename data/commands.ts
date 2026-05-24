@@ -263,7 +263,7 @@ export function buildCommands(
     handler() {
       return lines(
         RESUME.name,
-        col("Software Engineer | KaptainCS3", "var(--accent)"),
+        col("Full Stack Software Engineer | KaptainCS3", "var(--accent)"),
         col("Douala, Cameroon ", "#60a5fa"),
         { out: "", flag: "cm" },
         "",

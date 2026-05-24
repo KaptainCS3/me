@@ -5,7 +5,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "KaptainCS3 Portfolio",
     short_name: "KaptainCS3",
     description:
-      "Portfolio of Mbi Enow Leonard Appelgryn, a full-stack software engineer.",
+      "Portfolio of Mbi Enow Leonard Appelgryn, a Full Stack Software Engineer.",
     start_url: "/",
     display: "standalone",
     background_color: "#050a12",

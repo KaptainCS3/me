@@ -47,7 +47,7 @@ export function AboutContent() {
               </div>
               <div className="space-y-1">
                 <h2 className="text-xl font-bold text-white tracking-tight">{RESUME.name}</h2>
-                <p className="text-[10px] text-[#34d399] font-bold uppercase tracking-widest leading-none">Software Engineer</p>
+                <p className="text-[10px] text-[#34d399] font-bold uppercase tracking-widest leading-none">Full Stack Software Engineer</p>
                 <div className="flex items-center gap-2 text-[10px] text-[#4a6b7a] pt-1">
                   <FiMapPin size={10} /> <span>Douala, Cameroon / Remote</span>
                 </div>

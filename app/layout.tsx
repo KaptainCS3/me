@@ -18,13 +18,13 @@ const SITE_URL = "https://portfolio-kaptaincs3.vercel.app";
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Mbi Enow Leonard Appelgryn — Software Engineer",
+    default: "Mbi Enow Leonard Appelgryn — Full Stack Software Engineer",
     template: "%s | Leonard Appelgryn",
   },
   description:
-    "Portfolio of Mbi Enow Leonard Appelgryn, a full-stack software engineer specializing in Next.js, React, and TypeScript. Featuring projects in travel tech, secure systems, and enterprise architecture.",
+    "Portfolio of Mbi Enow Leonard Appelgryn, a Full Stack Software Engineer specializing in Next.js, React, and TypeScript. Featuring projects in travel tech, secure systems, and enterprise architecture.",
   keywords: [
-    "software engineer",
+    "Full Stack Software Engineer",
     "full-stack developer",
     "frontend engineer",
     "Next.js",
@@ -73,15 +73,15 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "/",
     siteName: "KaptainCS3 Portfolio",
-    title: "Mbi Enow Leonard Appelgryn — Software Engineer",
+    title: "Mbi Enow Leonard Appelgryn — Full Stack Software Engineer",
     description:
-      "Full-stack software engineer building with Next.js, React, and TypeScript. Explore projects, skills, and experience.",
+      "Full Stack Software Engineer building with Next.js, React, and TypeScript. Explore projects, skills, and experience.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Mbi Enow Leonard Appelgryn — Software Engineer",
+    title: "Mbi Enow Leonard Appelgryn — Full Stack Software Engineer",
     description:
-      "Full-stack software engineer building with Next.js, React, and TypeScript.",
+      "Full Stack Software Engineer building with Next.js, React, and TypeScript.",
     creator: "@KaptainCS3",
   },
   alternates: {

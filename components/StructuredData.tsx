@@ -8,7 +8,7 @@ export function StructuredData() {
     givenName: "Leonard",
     familyName: "Appelgryn",
     alternateName: "KaptainCS3",
-    jobTitle: "Software Engineer",
+    jobTitle: "Full Stack Software Engineer",
     url: SITE_URL,
     sameAs: [
       "https://github.com/kaptaincs3",
@@ -36,7 +36,7 @@ export function StructuredData() {
     name: "KaptainCS3 Portfolio",
     url: SITE_URL,
     description:
-      "Portfolio of Mbi Enow Leonard Appelgryn, a full-stack software engineer.",
+      "Portfolio of Mbi Enow Leonard Appelgryn, a Full Stack Software Engineer.",
   }
 
   return (
