@@ -4,7 +4,7 @@ export const TERMINAL_LINES: TerminalLine[] = [
   { out: "Initializing PortfolioOS Kernel [v1.0.4-stable]...", color: "#4a6b7a" },
   { out: "Loading system modules: VFS, Terminal-Subsystem, UI-Engine... [OK]", color: "#34d399" },
   { out: "Running system diagnostics...", color: "#4a6b7a" },
-  { out: "Identity: Leonard Appelgryn (Junior Software Engineer)", color: "#60a5fa" },
+  { out: "Identity: Leonard Appelgryn (Software Engineer)", color: "#60a5fa" },
   { out: "Location: Douala, Cameroon", color: "#60a5fa" },
   { out: "Status: SYSTEM READY", color: "#34d399" },
   { out: "" },
