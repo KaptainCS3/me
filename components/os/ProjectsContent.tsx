@@ -388,7 +388,7 @@ export function ProjectsContent() {
                 onClick={() => window.open(actualUrl || p.url!, "_blank")}
                 className="px-6 py-2 rounded bg-[#34d399] text-[#060d14] text-[10px] font-bold hover:scale-105 transition-all shadow-[0_0_15px_rgba(52,211,153,0.3)] tracking-widest uppercase"
               >
-                Deploy Live
+                Live Deployment
               </button>
             )}
           </div>
