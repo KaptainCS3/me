@@ -9,7 +9,7 @@ export const TERMINAL_LINES: TerminalLine[] = [
   { out: "Status: SYSTEM READY", color: "#34d399" },
   { out: "" },
   { ps: true, cmd: "whoami" },
-  { out: "Mbi Enow Leonard Appelgryn — Software Engineer, Douala, CM ", flag: "cm" },
+  { out: "Mbi Enow Leonard Appelgryn — Full Stack Software Engineer, Douala, CM ", flag: "cm" },
   { ps: true, cmd: "ls projects/" },
   { out: "GlobalBush/  SecureImage/  pSEO-Engine/" },
   { ps: true, cmd: "echo $HIRE_STATUS" },
