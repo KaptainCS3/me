@@ -1,10 +1,11 @@
-import { ImageResponse } from "next/og"
+import { ImageResponse } from "next/og";
 
-export const alt = "Mbi Enow Leonard Appelgryn — Full Stack Software Engineer Portfolio"
-export const size = { width: 1200, height: 630 }
-export const contentType = "image/png"
+export const alt =
+  "Mbi Enow Leonard Appelgryn — Full Stack Software Engineer Portfolio";
+export const size = { width: 1200, height: 630 };
+export const contentType = "image/png";
 
-const AVATAR_URL = "https://avatars.githubusercontent.com/kaptaincs3"
+const AVATAR_URL = "/profile.jpg";
 
 export default async function OgImage() {
   return new ImageResponse(
@@ -83,10 +84,11 @@ export default async function OgImage() {
           left: 0,
           right: 0,
           height: 4,
-          background: "linear-gradient(90deg, transparent, #34d399, transparent)",
+          background:
+            "linear-gradient(90deg, transparent, #34d399, transparent)",
         }}
       />
     </div>,
     { ...size },
-  )
+  );
 }

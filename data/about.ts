@@ -1,27 +1,27 @@
 export interface WorkExperience {
-  company: string
-  location: string
-  role: string
-  period: string
-  highlights: string[]
-  tech: string[]
+  company: string;
+  location: string;
+  role: string;
+  period: string;
+  highlights: string[];
+  tech: string[];
 }
 
 export interface Resume {
-  name: string
-  title: string
-  email: string
-  linkedin: string
-  github: string
-  avatar?: string
-  languages: string[]
-  tools: string[]
-  versionControl: string[]
-  currentlyLearning: string[]
-  projectManagement: string[]
-  communication: string[]
-  experience: WorkExperience[]
-  education: { institution: string; degree: string; location: string }[]
+  name: string;
+  title: string;
+  email: string;
+  linkedin: string;
+  github: string;
+  avatar?: string;
+  languages: string[];
+  tools: string[];
+  versionControl: string[];
+  currentlyLearning: string[];
+  projectManagement: string[];
+  communication: string[];
+  experience: WorkExperience[];
+  education: { institution: string; degree: string; location: string }[];
 }
 
 export const RESUME: Resume = {
@@ -30,9 +30,23 @@ export const RESUME: Resume = {
   email: "mbiapplegryn@gmail.com",
   linkedin: "linkedin.com/in/leonard-appelgryn",
   github: "github.com/kaptaincs3",
-  avatar: "https://avatars.githubusercontent.com/kaptaincs3",
+  avatar: "/profile.jpg",
   languages: ["JavaScript / TypeScript", "SQL", "HTML5", "CSS3", "Python"],
-  tools: ["React", "Next.js", "React Native", "Redux", "Tailwind CSS", "AWS", "Zustand", "Expo", "React Query", "Prisma", "PostgreSQL", "Zod", "Redis"],
+  tools: [
+    "React",
+    "Next.js",
+    "React Native",
+    "Redux",
+    "Tailwind CSS",
+    "AWS",
+    "Zustand",
+    "Expo",
+    "React Query",
+    "Prisma",
+    "PostgreSQL",
+    "Zod",
+    "Redis",
+  ],
   versionControl: ["Git"],
   currentlyLearning: ["Go", "AWS", "Cloud Architecture"],
   projectManagement: ["ClickUp", "Trello", "Notion"],
@@ -49,7 +63,17 @@ export const RESUME: Resume = {
         "Developed custom middleware proxy layers for enhanced security, rate limiting, and bot filtering",
         "Lead developer for the car rental and hotel search result UI optimizations",
       ],
-      tech: ["TypeScript", "Next.js", "Tailwind CSS", "Zustand", "React Query", "Prisma", "PostgreSQL", "Redis", "Zod"],
+      tech: [
+        "TypeScript",
+        "Next.js",
+        "Tailwind CSS",
+        "Zustand",
+        "React Query",
+        "Prisma",
+        "PostgreSQL",
+        "Redis",
+        "Zod",
+      ],
     },
     {
       company: "OneMarket",
@@ -74,7 +98,17 @@ export const RESUME: Resume = {
         "Executed a receipt module, reducing checkout time by 40% and improving transaction accuracy by 25%",
         "Developed a digital platform connecting donors with those in need, increasing successful donations by 30% and donor-recipient connections by 50%",
       ],
-      tech: ["JavaScript", "TypeScript", "React", "Next.js", "React Native", "Redux", "Zustand", "Expo", "Tailwind CSS"],
+      tech: [
+        "JavaScript",
+        "TypeScript",
+        "React",
+        "Next.js",
+        "React Native",
+        "Redux",
+        "Zustand",
+        "Expo",
+        "Tailwind CSS",
+      ],
     },
     {
       company: "ProGuide",
@@ -96,4 +130,4 @@ export const RESUME: Resume = {
       degree: "B.Eng Computer Engineering",
     },
   ],
-}
+};

@@ -1,10 +1,10 @@
-import { ImageResponse } from "next/og"
+import { ImageResponse } from "next/og";
 
-export const alt = "Mbi Enow Leonard Appelgryn — Full Stack Software Engineer"
-export const size = { width: 1200, height: 600 }
-export const contentType = "image/png"
+export const alt = "Mbi Enow Leonard Appelgryn — Full Stack Software Engineer";
+export const size = { width: 1200, height: 600 };
+export const contentType = "image/png";
 
-const AVATAR_URL = "https://avatars.githubusercontent.com/kaptaincs3"
+const AVATAR_URL = "/profile.jpg";
 
 export default async function TwitterImage() {
   return new ImageResponse(
@@ -64,5 +64,5 @@ export default async function TwitterImage() {
       </div>
     </div>,
     { ...size },
-  )
+  );
 }
