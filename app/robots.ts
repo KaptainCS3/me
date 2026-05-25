@@ -6,6 +6,6 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: "*",
       allow: "/",
     },
-    sitemap: "https://portfolio-kaptaincs3.vercel.app/sitemap.xml",
+    sitemap: "https://kaptaincs3.dev/sitemap.xml",
   }
 }

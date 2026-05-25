@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const SITE_URL = "https://portfolio-kaptaincs3.vercel.app";
+const SITE_URL = "https://kaptaincs3.dev";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -89,6 +89,9 @@ export const metadata: Metadata = {
   },
   manifest: "/manifest.webmanifest",
   category: "technology",
+  other: {
+    "google-site-verification": "sRXjLJ6ktZ35u_3mS2EoirZbDMNGi_ZH_E1zxo6Clj8",
+  },
 };
 
 export default function RootLayout({
