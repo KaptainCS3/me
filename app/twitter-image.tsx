@@ -4,7 +4,11 @@ export const alt = "Mbi Enow Leonard Appelgryn — Full Stack Software Engineer"
 export const size = { width: 1200, height: 600 };
 export const contentType = "image/png";
 
-const AVATAR_URL = "/profile.jpg";
+const BASE_URL = process.env.VERCEL_URL
+  ? `https://${process.env.VERCEL_URL}`
+  : "https://kaptaincs3.dev";
+
+const AVATAR_URL = `${BASE_URL}/profile.jpg`;
 
 export default async function TwitterImage() {
   return new ImageResponse(
