@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react"
 import { Document, Page, pdfjs } from "react-pdf"
+import { FiDownload } from "react-icons/fi"
 
 pdfjs.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs"
 
@@ -66,6 +67,15 @@ export function PdfViewerContent() {
           >
             +
           </button>
+          <div className="w-px h-4 bg-[#1e3a4a]/50 mx-1" />
+          <a
+            href="/resume.pdf"
+            download
+            className="text-[#6b8fa0] hover:text-white transition-colors"
+            title="Download PDF"
+          >
+            <FiDownload size={14} />
+          </a>
         </div>
       </div>
       <div ref={containerRef} className="flex-1 overflow-auto p-4 flex flex-col items-center gap-4 min-w-0">

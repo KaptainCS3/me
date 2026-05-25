@@ -1,12 +1,13 @@
 "use client"
 
 import Image from "next/image"
-import { FiUser, FiChevronRight, FiLinkedin, FiGithub, FiMail, FiMapPin, FiCalendar, FiTerminal, FiCpu, FiShield, FiZap, FiBookOpen } from "react-icons/fi"
+import Link from 'next/link'
+import { FiUser, FiChevronRight, FiLinkedin, FiGithub, FiMail, FiMapPin, FiCalendar, FiTerminal, FiCpu, FiShield, FiZap, FiBookOpen, FiDownload } from "react-icons/fi"
 import { RESUME } from "@/data/about"
 
 export function AboutContent() {
   const metrics = [
-    { label: "Experience", value: "3+ Years", icon: FiCalendar },
+    { label: "Experience", value: "4+ Years", icon: FiCalendar },
     { label: "Architecture", value: "8+ Modules", icon: FiCpu },
     { label: "Security", value: "E2E Ready", icon: FiShield },
     { label: "Performance", value: "99.9% Focus", icon: FiZap },
@@ -82,14 +83,18 @@ export function AboutContent() {
 
             {/* Action Links */}
             <div className="flex flex-col gap-2 pt-4 border-t border-[#1e3a4a]/20">
-              <a href={`https://${RESUME.linkedin}`} target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-2 rounded-lg bg-white/5 hover:bg-white/10 text-white transition-all text-xs group">
+              <Link href="/resume.pdf" download className="flex items-center justify-between p-2 rounded-lg bg-[#34d399]/10 border border-[#34d399]/30 hover:bg-[#34d399]/20 text-white transition-all text-xs group">
+                <span className="flex items-center gap-2 font-bold"><FiDownload className="text-[#34d399]" /> Download Resume.pdf</span>
+                <FiChevronRight size={12} className="opacity-0 group-hover:opacity-100 transition-opacity" />
+              </Link>
+              <Link href={`https://${RESUME.linkedin}`} target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-2 rounded-lg bg-white/5 hover:bg-white/10 text-white transition-all text-xs group">
                 <span className="flex items-center gap-2"><FiLinkedin className="text-[#60a5fa]" /> LinkedIn</span>
                 <FiChevronRight size={12} className="opacity-0 group-hover:opacity-100 transition-opacity" />
-              </a>
-              <a href={`https://${RESUME.github}`} target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-2 rounded-lg bg-white/5 hover:bg-white/10 text-white transition-all text-xs group">
+              </Link>
+              <Link href={`https://${RESUME.github}`} target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-2 rounded-lg bg-white/5 hover:bg-white/10 text-white transition-all text-xs group">
                 <span className="flex items-center gap-2"><FiGithub className="text-[#c084fc]" /> GitHub</span>
                 <FiChevronRight size={12} className="opacity-0 group-hover:opacity-100 transition-opacity" />
-              </a>
+              </Link>
             </div>
           </aside>
 

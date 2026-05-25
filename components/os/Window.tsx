@@ -66,7 +66,8 @@ export function Window({
   desktopRef,
 }: WindowProps) {
   const [position, setPosition] = useState(pos)
-  const [isMaximized, setIsMaximized] = useState(false)
+  const initialMaximized = useAppStore.getState().windows[id]?.maximized ?? false
+  const [isMaximized, setIsMaximized] = useState(initialMaximized)
   const prevZoom = useRef(zoomSignal)
 
   const [size, setSize] = useState({ w: config.w, h: config.h })

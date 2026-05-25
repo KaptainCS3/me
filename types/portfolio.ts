@@ -50,6 +50,7 @@ export interface WindowConfig {
 export interface WindowState {
   pos: { x: number; y: number }
   minimized: boolean
+  maximized?: boolean
   z: number
 }
 

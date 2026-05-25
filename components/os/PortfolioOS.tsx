@@ -288,7 +288,11 @@ export default function PortfolioOS() {
   const handleDesktopIconClick = useCallback(
     (id: string) => {
       if (id === "resume") {
-        openWindow("resume-viewer")
+        if (isMobile) {
+          window.open("/resume.pdf", "_blank")
+        } else {
+          openWindow("resume-viewer")
+        }
         return
       }
       if (id === "about") {

@@ -58,9 +58,16 @@ function gridKey(x: number, y: number): string {
 export const useAppStore = create<AppStore>()(
   persist(
     (set, get) => ({
-      windows: {},
+      windows: {
+        about: {
+          pos: { x: 50, y: 50 },
+          minimized: false,
+          maximized: true,
+          z: 10,
+        },
+      },
       zCounter: 10,
-      focusedWindow: null,
+      focusedWindow: "about",
       desktopItems: DEFAULT_DESKTOP_ITEMS,
 
       isBooted: false,
@@ -71,7 +78,7 @@ export const useAppStore = create<AppStore>()(
       trashItems: [],
 
       addWindow: (id, state) =>
-        set((s) => ({ windows: { ...s.windows, [id]: state } })),
+        set((s) => ({ windows: { ...s.windows, [id]: { ...state, maximized: state.maximized ?? false } } })),
 
       removeWindow: (id) =>
         set((s) => {
